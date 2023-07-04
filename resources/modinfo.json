@@ -1,0 +1,10 @@
+{
+    "type": "code",
+    "side": "client",
+    "modid": "extrainfo",
+    "name": "Extra Info",
+    "description": "Adds useful missing information to handbook and for block tooltips",
+    "authors": ["Craluminum2413"],
+    "contributors": ["Novocain"],
+    "version": "1.0.0"
+}

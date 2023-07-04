@@ -1,0 +1,14 @@
+{
+    "One": "Одно",
+    "Fuel": "Топливо",
+    "Food": "Еда",
+    "bomb-BlastRadius": "Радиус взрыва: {0}",
+    "bomb-InjureRadius": "Радиус ранения: {0}",
+    "bomb-BlastType": "Тип взрыва: {0}",
+    "bomb-FuseTime": "Время горения запала: {0}",
+    // "mechanics-Speed": "Speed: {0:G4}",
+    // "mechanics-TotalAvailableTorque": "Available Torque: {0:G4}",
+    // "mechanics-NetworkTorque": "Total Torque: {0:G4}",
+    // "mechanics-NetworkResistance": "Resistance: {0:G4}",
+    "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>"
+}

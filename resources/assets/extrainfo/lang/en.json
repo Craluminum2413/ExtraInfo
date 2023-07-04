@@ -1,0 +1,14 @@
+{
+    "One": "One",
+    "Fuel": "Fuel",
+    "Food": "Food",
+    "bomb-BlastRadius": "Blast Radius: {0}",
+    "bomb-InjureRadius": "Injure Radius: {0}",
+    "bomb-BlastType": "Blast Type: {0}",
+    "bomb-FuseTime": "Fuse Time: {0}",
+    // "mechanics-Speed": "Speed: {0:G4}",
+    // "mechanics-TotalAvailableTorque": "Available Torque: {0:G4}",
+    // "mechanics-NetworkTorque": "Total Torque: {0:G4}",
+    // "mechanics-NetworkResistance": "Resistance: {0:G4}",
+    "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>"
+}
