@@ -7,7 +7,9 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Util;
 using Vintagestory.GameContent;
+using Vintagestory.ServerMods.NoObf;
 using static ExtraInfo.TextExtensions;
 
 namespace ExtraInfo;
@@ -26,9 +28,7 @@ public static class HandbookExtensions
 
         foreach (var fuel in fuelStacks)
         {
-            ItemstackTextComponent itemStackComponent = new(capi, fuel.ResolvedItemstack, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)));
-            richText.Add(itemStackComponent);
-
+            richText.AddStack(capi, openDetailPageFor, fuel.ResolvedItemstack);
             richText.Add(new RichTextComponent(capi, ColorText(Lang.Get("{0} hours", fuel.BurnTimeHours.ToString())) + "\n", CairoFont.WhiteSmallText())
             {
                 VerticalAlign = EnumVerticalAlign.Middle
@@ -101,15 +101,8 @@ public static class HandbookExtensions
                 || (block is BlockBerryBush && blockDiet.Contains("Berry"))
                 || (block is BlockBeehive && blockDiet.Contains("Honey")))
             {
-                var location = entityType.Code.Clone().WithPathPrefix("creature-");
-                var item = capi.World.GetItem(location);
-                if (item == null)
-                {
-                    capi.Logger.Error("ItemCreature: No such entity - {0}", location);
-                    continue;
-                }
-
-                var stack = new ItemStack(item);
+                var stack = GetCreatureStack(capi, entityType);
+                if (stack == null) continue;
                 stacks.Add(stack);
             }
         }
@@ -122,9 +115,7 @@ public static class HandbookExtensions
 
         foreach (var stack in stacks)
         {
-            ItemstackTextComponent itemStackComponent = new(capi, stack, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)));
-            richText.Add(itemStackComponent);
-
+            richText.AddStack(capi, openDetailPageFor, stack);
             richText.Add(new RichTextComponent(capi, "\t", CairoFont.WhiteSmallText())
             {
                 VerticalAlign = EnumVerticalAlign.Middle
@@ -161,8 +152,7 @@ public static class HandbookExtensions
 
         foreach (var stack in stacks)
         {
-            ItemstackTextComponent itemStackComponent = new(capi, stack, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)));
-            richText.Add(itemStackComponent);
+            richText.AddStack(capi, openDetailPageFor, stack);
 
             richText.Add(new RichTextComponent(capi, "\t", CairoFont.WhiteSmallText())
             {
@@ -216,14 +206,10 @@ public static class HandbookExtensions
             buyingList = GetTradeProps(entityType)?.Buying.List;
             if (buyingList == null) break;
 
-            var location = entityType.Code.Clone().WithPathPrefix("creature-");
-            var item = capi.World.GetItem(location);
-            if (item == null) continue;
-            var stack = new ItemStack(item);
+            var stack = GetCreatureStack(capi, entityType);
+            if (stack == null) continue;
 
-            ItemstackTextComponent itemStackComponent = new(capi, stack, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)));
-            richTextSell.Add(itemStackComponent);
-
+            richTextSell.AddStack(capi, openDetailPageFor, stack);
             richTextSell.Add(new RichTextComponent(capi, "\t", CairoFont.WhiteSmallText())
             {
                 VerticalAlign = EnumVerticalAlign.Middle
@@ -242,14 +228,10 @@ public static class HandbookExtensions
             sellingList = GetTradeProps(entityType)?.Selling.List;
             if (sellingList == null) break;
 
-            var location = entityType.Code.Clone().WithPathPrefix("creature-");
-            var item = capi.World.GetItem(location);
-            if (item == null) continue;
-            var stack = new ItemStack(item);
+            var stack = GetCreatureStack(capi, entityType);
+            if (stack == null) continue;
 
-            ItemstackTextComponent itemStackComponent = new(capi, stack, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)));
-            richTextBuy.Add(itemStackComponent);
-
+            richTextBuy.AddStack(capi, openDetailPageFor, stack);
             richTextBuy.Add(new RichTextComponent(capi, "\t", CairoFont.WhiteSmallText())
             {
                 VerticalAlign = EnumVerticalAlign.Middle
@@ -260,6 +242,13 @@ public static class HandbookExtensions
             list.AddMarginAndTitle(capi, marginTop: 7, titletext: Lang.Get("Sold by"));
             list.AddRange(richTextBuy);
         }
+    }
+
+    private static ItemStack GetCreatureStack(ICoreClientAPI capi, EntityProperties entityType)
+    {
+        var location = entityType.Code.Clone().WithPathPrefix("creature-");
+        var item = capi.World.GetItem(location);
+        return item == null ? null : new ItemStack(item);
     }
 
     private static TradeProperties GetTradeProps(EntityProperties props) => props.Attributes["tradeProps"].AsObject<TradeProperties>(null);
@@ -274,17 +263,13 @@ public static class HandbookExtensions
 
     private static void AddTraderInfo(this List<RichTextComponentBase> richText, ICoreClientAPI capi, TradeItem val, ActionConsumable<string> openDetailPageFor, ItemStack gear)
     {
-        ItemstackTextComponent itemStackComponent = new(capi, val.ResolvedItemstack, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)))
-        {
-            ShowStacksize = true
-        };
-        richText.Add(itemStackComponent);
+        richText.AddStack(capi, openDetailPageFor, val.ResolvedItemstack, showStacksize: true);
         richText.Add(new RichTextComponent(capi, "\t" + GetMinMax(val.Stock), CairoFont.WhiteSmallText())
         {
             VerticalAlign = EnumVerticalAlign.Middle
         });
         richText.AddEqualSign(capi);
-        richText.AddGearStack(capi, openDetailPageFor, gear);
+        richText.AddStack(capi, openDetailPageFor, gear);
         richText.Add(new RichTextComponent(capi, GetMinMax(val.Price) + "\n", CairoFont.WhiteSmallText())
         {
             VerticalAlign = EnumVerticalAlign.Middle
@@ -305,9 +290,20 @@ public static class HandbookExtensions
         });
     }
 
-    private static void AddGearStack(this List<RichTextComponentBase> richText, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor, ItemStack gear)
+    private static void AddStack(this List<RichTextComponentBase> richText, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor, ItemStack stack, bool showStacksize = false)
     {
-        richText.Add(new ItemstackTextComponent(capi, gear, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs))));
+        richText.Add(new ItemstackTextComponent(capi, stack, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)))
+        {
+            ShowStacksize = showStacksize
+        });
+    }
+
+    private static void AddStacks(this List<RichTextComponentBase> richText, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor, ItemStack[] stacks, bool showStacksize = false)
+    {
+        richText.Add(new SlideshowItemstackTextComponent(capi, stacks, 40, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)))
+        {
+            ShowStackSize = showStacksize
+        });
     }
 
     private static List<JsonItemStackBuildStage> GetFuelStacks(this BlockPitkiln blockPitKiln, ICoreClientAPI capi)
