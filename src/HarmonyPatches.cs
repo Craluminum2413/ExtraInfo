@@ -33,6 +33,7 @@ public class HarmonyPatches : ModSystem
         {
             List<RichTextComponentBase> list = __result.ToList();
 
+            list.AddTroughInfo(inSlot, capi, openDetailPageFor);
             list.AddPitKilnInfo(inSlot, capi, openDetailPageFor);
             list.AddTraderPropsInfo(inSlot, capi, openDetailPageFor);
             list.AddTradersInfo(inSlot, capi, openDetailPageFor);
