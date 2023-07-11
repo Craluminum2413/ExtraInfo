@@ -2,6 +2,7 @@
     "One": "Одне",
     "Fuel": "Паливо",
     "Food": "Їжа",
+    "AvailableFood": "Доступна їжа",
     "Bomb-BlastRadius": "Радіус вибуху: {0}",
     "bomb-InjureRadius": "Радіус поранення: {0}",
     "bomb-BlastType": "Тип вибуху: {0}",

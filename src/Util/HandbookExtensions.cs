@@ -37,6 +37,55 @@ public static class HandbookExtensions
 
         list.AddRange(richText);
     }
+    // TODO: AddTroughInfoForEntity, AddTroughInfoForFood
+    public static void AddTroughInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        if (inSlot.Itemstack.Collectible is not BlockTroughBase blockTrough) return;
+
+        var contentConfigs = blockTrough.contentConfigs;
+
+        list.AddMarginAndTitle(capi, marginTop: 7, titletext: Lang.Get("extrainfo:AvailableFood"));
+
+        List<RichTextComponentBase> richText = new();
+
+        foreach (var config in blockTrough.contentConfigs)
+        {
+            if (config.Foodfor?.Length == 0) continue;
+
+            if (config.Content.Code.ToShortString().Contains("-*"))
+            {
+                var stacks = new List<ItemStack>();
+                foreach (var obj in capi.World.Collectibles.Where(x => x.WildCardMatch(config.Content.Code)))
+                {
+                    var stack = new ItemStack(obj);
+                    if (!stack.ResolveBlockOrItem(capi.World)) continue;
+                    stacks.Add(stack);
+                }
+
+                richText.AddStacks(capi, openDetailPageFor, stacks.ToArray());
+            }
+            else
+            {
+                richText.AddStack(capi, openDetailPageFor, config.Content.ResolvedItemstack);
+            }
+
+            richText.AddEqualSign(capi);
+
+            foreach (var entityType in capi.World.EntityTypes)
+            {
+                if (RegistryObjectType.WildCardMatches(entityType.Code.ToString(), config.Foodfor.ToList().ConvertAll(x => x.ToString()), out var aaa))
+                {
+                    var stack = GetCreatureStack(capi, entityType);
+                    if (stack == null) continue;
+                    richText.AddStack(capi, openDetailPageFor, stack);
+                }
+            }
+
+            richText.Add(new ClearFloatTextComponent(capi, unScaleMarginTop: 7));
+        }
+
+        list.AddRange(richText);
+    }
 
     public static void AddEntityDietInfoForBlock(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
     {

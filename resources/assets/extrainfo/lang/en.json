@@ -2,6 +2,7 @@
     "One": "One",
     "Fuel": "Fuel",
     "Food": "Food",
+    "AvailableFood": "Available Food",
     "bomb-BlastRadius": "Blast Radius: {0}",
     "bomb-InjureRadius": "Injure Radius: {0}",
     "bomb-BlastType": "Blast Type: {0}",
