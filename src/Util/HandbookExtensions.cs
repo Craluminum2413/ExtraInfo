@@ -358,17 +358,20 @@ public static class HandbookExtensions
 
     private static List<JsonItemStackBuildStage> GetFuelStacks(this BlockPitkiln blockPitKiln, ICoreClientAPI capi)
     {
-        var fuelStacks = blockPitKiln?.Attributes?["buildMats"]?["fuel"]?.AsObject<JsonItemStackBuildStage[]>();
-
-        List<JsonItemStackBuildStage> stacks = new();
-        stacks.AddRange(fuelStacks.Where(stack => stack?.BurnTimeHours != null));
-
-        foreach (var stack in stacks)
+        return ObjectCacheUtil.GetOrCreate(capi, blockPitKiln.Code.ToString(), delegate
         {
-            stack.Resolve(capi.World, "");
-        }
+            var fuelStacks = blockPitKiln?.Attributes?["buildMats"]?["fuel"]?.AsObject<JsonItemStackBuildStage[]>();
 
-        return stacks;
+            List<JsonItemStackBuildStage> stacks = new();
+            stacks.AddRange(fuelStacks.Where(stack => stack?.BurnTimeHours != null));
+
+            foreach (var stack in stacks)
+            {
+                stack.Resolve(capi.World, "");
+            }
+
+            return stacks;
+        });
     }
 
     private static Dictionary<ItemStack[], PanningDrop[]> GetPanningDrops(ICoreClientAPI capi, BlockPan blockPan)
