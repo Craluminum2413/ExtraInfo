@@ -37,12 +37,55 @@ public static class HandbookExtensions
 
         list.AddRange(richText);
     }
+
+    public static void AddPanningDropsInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        if (inSlot.Itemstack.Collectible is not BlockPan blockPan) return;
+
+        var panningDrops = GetPanningDrops(capi, blockPan);
+
+        list.AddMarginAndTitle(capi, marginTop: 7, titletext: Lang.Get("extrainfo:PanningDrops"));
+
+        List<RichTextComponentBase> richText = new();
+
+        foreach (var keyVal in panningDrops)
+        {
+            var stackLists = keyVal.Key.GroupBy(stack => stack.Collectible.FirstCodePart()).Select(group => group.ToArray()).ToList();
+            foreach (var stacks in stackLists)
+            {
+                richText.AddStacks(capi, openDetailPageFor, stacks);
+            }
+
+            richText.AddEqualSign(capi);
+            richText.Add(new ClearFloatTextComponent(capi, unScaleMarginTop: 7));
+
+            int count = 3;
+            foreach (var drop in panningDrops[keyVal.Key])
+            {
+                if (!drop.Resolve(capi.World, "")) continue;
+                richText.AddStack(capi, openDetailPageFor, drop.ResolvedItemstack);
+
+                var extraMul = drop.DropModbyStat is null ? 1f : capi.World.Player.Entity.Stats.GetBlended(drop.DropModbyStat);
+
+                count--;
+                richText.Add(new RichTextComponent(capi, GetMinMaxPercent(drop, extraMul) + (count == 0 ? "\n" : "\t\t\t\t\t"), CairoFont.WhiteSmallText())
+                {
+                    VerticalAlign = EnumVerticalAlign.Middle
+                });
+
+                if (count == 0) count = 3;
+            }
+
+            richText.Add(new ClearFloatTextComponent(capi, unScaleMarginTop: 7));
+        }
+
+        list.AddRange(richText);
+    }
+
     // TODO: AddTroughInfoForEntity, AddTroughInfoForFood
     public static void AddTroughInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
     {
         if (inSlot.Itemstack.Collectible is not BlockTroughBase blockTrough) return;
-
-        var contentConfigs = blockTrough.contentConfigs;
 
         list.AddMarginAndTitle(capi, marginTop: 7, titletext: Lang.Get("extrainfo:AvailableFood"));
 
@@ -261,6 +304,13 @@ public static class HandbookExtensions
         return min == max ? $"{min}" : string.Format("{0} - {1}", min, max);
     }
 
+    private static string GetMinMaxPercent(PanningDrop drop, float extraMul)
+    {
+        var min = (drop.Chance.avg - drop.Chance.var) * extraMul * 100;
+        var max = (drop.Chance.avg + drop.Chance.var) * extraMul * 100;
+        return min == max ? $"{min} %" : string.Format("{0} - {1} %", min, max);
+    }
+
     private static void AddTraderInfo(this List<RichTextComponentBase> richText, ICoreClientAPI capi, TradeItem val, ActionConsumable<string> openDetailPageFor, ItemStack gear)
     {
         richText.AddStack(capi, openDetailPageFor, val.ResolvedItemstack, showStacksize: true);
@@ -319,5 +369,40 @@ public static class HandbookExtensions
         }
 
         return stacks;
+    }
+
+    private static Dictionary<ItemStack[], PanningDrop[]> GetPanningDrops(ICoreClientAPI capi, BlockPan blockPan)
+    {
+        return ObjectCacheUtil.GetOrCreate(capi, blockPan.Code.ToString(), delegate
+        {
+            var dropsBySourceMat = blockPan.GetField<Dictionary<string, PanningDrop[]>>("dropsBySourceMat");
+
+            Dictionary<ItemStack[], PanningDrop[]> panningDrops = new();
+
+            foreach (var key in dropsBySourceMat.Keys)
+            {
+                List<ItemStack> blockStacks = new();
+                foreach (var block in capi.World.Blocks.Where(x => x.WildCardMatch(key)))
+                {
+                    string rocktype = block?.Variant["rock"];
+
+                    foreach (var drop in dropsBySourceMat[key])
+                    {
+                        if (drop.Code.Path.Contains("{rocktype}"))
+                        {
+                            drop.Code.Path = drop.Code.Path.Replace("{rocktype}", rocktype);
+                        }
+                    }
+
+                    var stack = new ItemStack(block);
+                    if (!stack.ResolveBlockOrItem(capi.World)) continue;
+                    if (stack.Collectible.Variant["layer"] != null) continue; // Ignore layer variants
+                    blockStacks.Add(stack);
+                }
+                panningDrops.Add(blockStacks.ToArray(), dropsBySourceMat[key]);
+                blockStacks = new();
+            }
+            return panningDrops;
+        });
     }
 }
