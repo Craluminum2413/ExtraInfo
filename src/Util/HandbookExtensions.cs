@@ -97,14 +97,7 @@ public static class HandbookExtensions
 
             if (config.Content.Code.ToShortString().Contains("-*"))
             {
-                var stacks = new List<ItemStack>();
-                foreach (var obj in capi.World.Collectibles.Where(x => x.WildCardMatch(config.Content.Code)))
-                {
-                    var stack = new ItemStack(obj);
-                    if (!stack.ResolveBlockOrItem(capi.World)) continue;
-                    stacks.Add(stack);
-                }
-
+                var stacks = GetWildcardTroughStacks(capi, config);
                 richText.AddStacks(capi, openDetailPageFor, stacks.ToArray());
             }
             else
@@ -116,7 +109,7 @@ public static class HandbookExtensions
 
             foreach (var entityType in capi.World.EntityTypes)
             {
-                if (RegistryObjectType.WildCardMatches(entityType.Code.ToString(), config.Foodfor.ToList().ConvertAll(x => x.ToString()), out var aaa))
+                if (RegistryObjectType.WildCardMatches(entityType.Code.ToString(), config.Foodfor.ToList().ConvertAll(x => x.ToString()), out _))
                 {
                     var stack = GetCreatureStack(capi, entityType);
                     if (stack == null) continue;
@@ -406,6 +399,21 @@ public static class HandbookExtensions
                 blockStacks = new();
             }
             return panningDrops;
+        });
+    }
+
+    private static List<ItemStack> GetWildcardTroughStacks(ICoreClientAPI capi, ContentConfig config)
+    {
+        return ObjectCacheUtil.GetOrCreate(capi, config.Code, delegate
+        {
+            var stacks = new List<ItemStack>();
+            foreach (var obj in capi.World.Collectibles.Where(x => x.WildCardMatch(config.Content.Code)))
+            {
+                var stack = new ItemStack(obj);
+                if (!stack.ResolveBlockOrItem(capi.World)) continue;
+                stacks.Add(stack);
+            }
+            return stacks;
         });
     }
 }
