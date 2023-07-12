@@ -29,7 +29,7 @@ public static class HandbookExtensions
         foreach (var fuel in fuelStacks)
         {
             richText.AddStack(capi, openDetailPageFor, fuel.ResolvedItemstack);
-            richText.Add(new RichTextComponent(capi, ColorText(Lang.Get("{0} hours", fuel.BurnTimeHours.ToString())) + "\n", CairoFont.WhiteSmallText())
+            richText.Add(new RichTextComponent(capi, Lang.Get("{0} hours", fuel.BurnTimeHours.ToString()) + "\n", CairoFont.WhiteSmallText())
             {
                 VerticalAlign = EnumVerticalAlign.Middle
             });
