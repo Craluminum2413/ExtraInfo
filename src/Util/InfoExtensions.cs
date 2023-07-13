@@ -170,6 +170,13 @@ public static class InfoExtensions
         dsc.AppendLine(ColorText(Lang.Get("{0} hours", hoursLeft)));
     }
 
+    public static void GetSkepInfo(this StringBuilder dsc, BlockEntityBeehive be)
+    {
+        if (be == null) return;
+        var hoursLeft = be.GetField<double>("harvestableAtTotalHours") - be.Api.World.Calendar.TotalHours;
+        dsc.AppendLine(ColorText(Lang.Get("{0} hours", hoursLeft)));
+    }
+
     // /// <summary>
     // /// Mechanical block info (speed, total torque, available torque, resistance)
     // /// </summary>
