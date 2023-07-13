@@ -28,7 +28,7 @@ public static class InfoExtensions
         if (quern.CanGrind() && quern.GrindSpeed > 0)
         {
             double percent = quern.inputGrindTime / quern.maxGrindingTime();
-            int mss = quern.InputSlot?.Itemstack?.Item?.MaxStackSize ?? 1;
+            int mss = quern.InputSlot?.Itemstack?.StackSize + (quern.OutputSlot?.Itemstack?.StackSize ?? 0) ?? 1;
             double stackSize = (double)(quern.InputSlot?.Itemstack?.StackSize ?? 0) / mss;
             stackSize = 1.0 - stackSize;
             stackSize += percent / mss;
@@ -37,11 +37,11 @@ public static class InfoExtensions
 
             dsc.Append(ColorText(Lang.Get("tabname-general")));
             dsc.Append(' ');
-            dsc.AppendFormat("{0}%", Math.Round(stackSize, 2)).AppendLine();
+            dsc.AppendFormat("{0:#}%", Math.Round(stackSize, 2)).AppendLine();
 
             dsc.Append(ColorText(Lang.Get("extrainfo:One")));
             dsc.Append(' ');
-            dsc.AppendFormat("{0}%", Math.Round(percent, 2)).AppendLine();
+            dsc.AppendFormat("{0:#}%", Math.Round(percent, 2)).AppendLine();
         }
     }
 
