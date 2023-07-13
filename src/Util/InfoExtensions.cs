@@ -177,6 +177,20 @@ public static class InfoExtensions
         dsc.AppendLine(ColorText(Lang.Get("{0} hours", hoursLeft)));
     }
 
+    public static void GetTranslocatorInfo(this StringBuilder dsc, BlockEntityStaticTranslocator be)
+    {
+        if (be == null) return;
+        if (be.tpLocation == null) return;
+
+        BlockPos pos = be.Api.World.DefaultSpawnPosition.AsBlockPos;
+        BlockPos targetpos = be.tpLocation.Copy().Sub(pos.X, 0, pos.Z);
+        if (be.tpLocationIsOffset)
+        {
+            targetpos.Add(be.Pos.X, pos.Y, pos.Z);
+        }
+        dsc.AppendLine(ColorText(Lang.Get("Teleports to {0}", targetpos)));
+    }
+
     // /// <summary>
     // /// Mechanical block info (speed, total torque, available torque, resistance)
     // /// </summary>
