@@ -161,6 +161,15 @@ public static class InfoExtensions
         }
     }
 
+    public static void GetTransientInfo(this StringBuilder dsc, BlockEntityTransient be)
+    {
+        if (be == null) return;
+        be.CheckTransition(0);
+
+        var hoursLeft = be.GetField<double>("transitionHoursLeft");
+        dsc.AppendLine(ColorText(Lang.Get("{0} hours", hoursLeft)));
+    }
+
     // /// <summary>
     // /// Mechanical block info (speed, total torque, available torque, resistance)
     // /// </summary>
