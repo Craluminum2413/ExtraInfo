@@ -164,6 +164,10 @@ public static class InfoExtensions
     public static void GetTransientInfo(this StringBuilder dsc, BlockEntityTransient be)
     {
         if (be == null) return;
+
+        var props = be.GetField<TransientProperties>("props");
+        if (props is null) return;
+
         be.CheckTransition(0);
 
         var hoursLeft = be.GetField<double>("transitionHoursLeft");
