@@ -76,8 +76,12 @@ public static class InfoExtensions
             sb.AppendLine()
                 .Append(ColorText(Lang.Get("item-coke")))
                 .Append(": ")
-                .Append(Math.Round(hoursLeft.Value, 2))
-                .Append(" hours");
+                .Append(ColorText(Lang.Get("{0} hours", Math.Round(hoursLeft.Value, 2))));
+        }
+
+        return sb.ToString().TrimEnd();
+    }
+
         }
 
         return sb.ToString().TrimEnd();
