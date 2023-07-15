@@ -80,6 +80,7 @@ public class HarmonyPatches : ModSystem
         public static void Postfix(ref string __result, IWorldAccessor world, BlockPos pos)
         {
             __result = __result.GetCokeInfo(world, pos);
+            __result = __result.GetSteelInfo(world, pos);
             __result = __result.GetCharcoalPitInfo(world, pos);
         }
     }

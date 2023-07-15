@@ -82,6 +82,35 @@ public static class InfoExtensions
         return sb.ToString().TrimEnd();
     }
 
+    public static string GetSteelInfo(this string __result, IWorldAccessor world, BlockPos pos)
+    {
+        if (world.BlockAccessor.GetBlock(pos) is not BlockDoor blockDoor) return __result;
+        if (blockDoor.FirstCodePart() != "irondoor") return __result;
+
+        StringBuilder sb = new(__result);
+
+        var _pos = blockDoor.IsUpperHalf() switch
+        {
+            true => pos.DownCopy(),
+            false => pos,
+        };
+
+        var neighborPositions = new[]
+        {
+            _pos.NorthCopy(3),
+            _pos.EastCopy(3),
+            _pos.SouthCopy(3),
+            _pos.WestCopy(3)
+        };
+
+        foreach (var blockPos in neighborPositions)
+        {
+            if (world.BlockAccessor.GetBlockEntity(blockPos) is not BlockEntityStoneCoffin be) continue;
+
+            var progress = be.GetField<double>("progress");
+            if (progress <= 0.0) continue;
+
+            sb.AppendLine(ColorText(Lang.Get("Carburization: {0}% complete", (int)(progress * 100.0))));
         }
 
         return sb.ToString().TrimEnd();
