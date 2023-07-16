@@ -10,7 +10,6 @@ using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 using Vintagestory.ServerMods.NoObf;
-using static ExtraInfo.TextExtensions;
 
 namespace ExtraInfo;
 
@@ -351,7 +350,7 @@ public static class HandbookExtensions
 
     private static List<JsonItemStackBuildStage> GetFuelStacks(this BlockPitkiln blockPitKiln, ICoreClientAPI capi)
     {
-        return ObjectCacheUtil.GetOrCreate(capi, blockPitKiln.Code.ToString(), delegate
+        return ObjectCacheUtil.GetOrCreate(capi, "pitKilnFuelStacks-" + blockPitKiln.Code.ToString(), delegate
         {
             var fuelStacks = blockPitKiln?.Attributes?["buildMats"]?["fuel"]?.AsObject<JsonItemStackBuildStage[]>();
 
@@ -369,7 +368,7 @@ public static class HandbookExtensions
 
     private static Dictionary<ItemStack[], PanningDrop[]> GetPanningDrops(ICoreClientAPI capi, BlockPan blockPan)
     {
-        return ObjectCacheUtil.GetOrCreate(capi, blockPan.Code.ToString(), delegate
+        return ObjectCacheUtil.GetOrCreate(capi, "blockPanDrops-" + blockPan.Code.ToString(), delegate
         {
             var dropsBySourceMat = blockPan.GetField<Dictionary<string, PanningDrop[]>>("dropsBySourceMat");
 
@@ -404,7 +403,7 @@ public static class HandbookExtensions
 
     private static List<ItemStack> GetWildcardTroughStacks(ICoreClientAPI capi, ContentConfig config)
     {
-        return ObjectCacheUtil.GetOrCreate(capi, config.Code, delegate
+        return ObjectCacheUtil.GetOrCreate(capi, "troughWildcardStacks-" + config.Code, delegate
         {
             var stacks = new List<ItemStack>();
             foreach (var obj in capi.World.Collectibles.Where(x => x.WildCardMatch(config.Content.Code)))
