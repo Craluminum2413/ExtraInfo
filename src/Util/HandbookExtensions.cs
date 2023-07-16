@@ -290,11 +290,13 @@ public static class HandbookExtensions
 
     private static string GetMinMax(NatFloat natFloat)
     {
-        int min = (int)Math.Max(1, Math.Round(natFloat.avg - natFloat.var));
-        int max = (int)Math.Max(1, Math.Round(natFloat.avg + natFloat.var));
-
+        int min = GetMin(natFloat);
+        int max = GetMax(natFloat);
         return min == max ? $"{min}" : string.Format("{0} - {1}", min, max);
     }
+
+    private static int GetMin(NatFloat natFloat) => (int)Math.Max(1, Math.Round(natFloat.avg - natFloat.var));
+    private static int GetMax(NatFloat natFloat) => (int)Math.Max(1, Math.Round(natFloat.avg + natFloat.var));
 
     private static string GetMinMaxPercent(PanningDrop drop, float extraMul)
     {
