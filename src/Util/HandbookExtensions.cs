@@ -151,10 +151,6 @@ public static class HandbookExtensions
         foreach (var stack in stacks)
         {
             richText.AddStack(capi, openDetailPageFor, stack);
-            richText.Add(new RichTextComponent(capi, "\t", CairoFont.WhiteSmallText())
-            {
-                VerticalAlign = EnumVerticalAlign.Middle
-            });
         }
 
         list.AddRange(richText);
@@ -245,10 +241,6 @@ public static class HandbookExtensions
             if (stack == null) continue;
 
             richTextSell.AddStack(capi, openDetailPageFor, stack);
-            richTextSell.Add(new RichTextComponent(capi, "\t", CairoFont.WhiteSmallText())
-            {
-                VerticalAlign = EnumVerticalAlign.Middle
-            });
         }
         if (buyingList?.Length != 0)
         {
@@ -267,10 +259,6 @@ public static class HandbookExtensions
             if (stack == null) continue;
 
             richTextBuy.AddStack(capi, openDetailPageFor, stack);
-            richTextBuy.Add(new RichTextComponent(capi, "\t", CairoFont.WhiteSmallText())
-            {
-                VerticalAlign = EnumVerticalAlign.Middle
-            });
         }
         if (sellingList?.Length != 0)
         {
