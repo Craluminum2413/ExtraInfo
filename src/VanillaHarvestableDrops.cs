@@ -5,7 +5,7 @@ namespace ExtraInfo;
 
 public class VanillaHarvestableDrops : ModSystem
 {
-    public static Dictionary<AssetLocation, BlockDropItemStack[]> HarvestableBehaviors { get; set; } = new();
+    public static Dictionary<AssetLocation, BlockDropItemStack[]> HarvestableDrops { get; set; } = new();
 
     public BlockDropItemStack[] Drops { get; set; }
 
@@ -19,7 +19,7 @@ public class VanillaHarvestableDrops : ModSystem
             {
                 if (behavior.ToString().Contains("harvestable"))
                 {
-                    HarvestableBehaviors.Add(type.Code, behavior.AsObject<VanillaHarvestableDrops>().Drops);
+                    HarvestableDrops.Add(type.Code, behavior.AsObject<VanillaHarvestableDrops>().Drops);
                 }
             }
         }

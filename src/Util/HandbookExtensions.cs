@@ -489,7 +489,7 @@ public static class HandbookExtensions
     {
         return ObjectCacheUtil.GetOrCreate(capi, "harvestableDrops-" + entityType.Code, delegate
         {
-            var harvestableBehaviors = VanillaHarvestableDrops.HarvestableBehaviors;
+            var harvestableBehaviors = VanillaHarvestableDrops.HarvestableDrops;
             if (harvestableBehaviors?.Count == 0 || !harvestableBehaviors.ContainsKey(entityType.Code))
             {
                 return new();
