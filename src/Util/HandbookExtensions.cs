@@ -184,14 +184,93 @@ public static class HandbookExtensions
         foreach (var stack in stacks)
         {
             richText.AddStack(capi, openDetailPageFor, stack);
-
-            richText.Add(new RichTextComponent(capi, "\t", CairoFont.WhiteSmallText())
-            {
-                VerticalAlign = EnumVerticalAlign.Middle
-            });
         }
 
         list.AddRange(richText);
+    }
+
+    public static void AddEntityDropsInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        if (inSlot.Itemstack.Collectible is not ItemCreature itemCreature) return;
+
+        var entityType = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
+
+        var harvestStacks = GetHarvestableDrops(capi, entityType);
+        if (harvestStacks?.Count != 0)
+        {
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: string.Format("{0} ({1})", Lang.Get("Obtained by killing"), Lang.Get("Harvestable")));
+
+            List<RichTextComponentBase> richTextHarvest = new();
+
+            foreach (var stack in harvestStacks)
+            {
+                richTextHarvest.AddStack(capi, openDetailPageFor, stack.ResolvedItemstack);
+                richTextHarvest.Add(new RichTextComponent(capi, GetMinMax(stack.Quantity) + "\n", CairoFont.WhiteSmallText())
+                {
+                    VerticalAlign = EnumVerticalAlign.Middle
+                });
+            }
+
+            list.AddRange(richTextHarvest);
+        }
+
+        if (entityType.Drops?.Length != 0)
+        {
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: string.Format("{0} ({1})", Lang.Get("Obtained by killing"), Lang.Get("blockmaterial-Other")));
+
+            List<RichTextComponentBase> richTextOther = new();
+
+            foreach (var stack in entityType.Drops)
+            {
+                richTextOther.AddStack(capi, openDetailPageFor, stack.ResolvedItemstack);
+                richTextOther.Add(new RichTextComponent(capi, GetMinMax(stack.Quantity) + "\n", CairoFont.WhiteSmallText())
+                {
+                    VerticalAlign = EnumVerticalAlign.Middle
+                });
+            }
+
+            list.AddRange(richTextOther);
+        }
+    }
+
+    public static void AddEntityDropsInfoForDrop(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        var collObj = inSlot.Itemstack.Collectible;
+
+        List<RichTextComponentBase> richTextHarvest = new();
+        List<RichTextComponentBase> richTextDrop = new();
+
+        foreach (var entityType in capi.World.EntityTypes)
+        {
+            var harvestStacks = GetHarvestableDrops(capi, entityType);
+            if (harvestStacks?.Count != 0 && harvestStacks.Find(stack => stack?.Code == collObj?.Code) != null)
+            {
+                var stack = GetCreatureStack(capi, entityType);
+                if (stack == null) continue;
+
+                richTextHarvest.AddStack(capi, openDetailPageFor, stack);
+            }
+
+            if (entityType.Drops?.Length != 0 && entityType.Drops.ToList().Find(stack => stack.Code == collObj.Code) != null)
+            {
+                var stack = GetCreatureStack(capi, entityType);
+                if (stack == null) continue;
+
+                richTextDrop.AddStack(capi, openDetailPageFor, stack);
+            }
+        }
+
+        if (richTextHarvest?.Count != 0)
+        {
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: string.Format("{0} ({1})", Lang.Get("Obtained by killing"), Lang.Get("Harvestable")));
+            list.AddRange(richTextHarvest);
+        }
+
+        if (richTextDrop?.Count != 0)
+        {
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: string.Format("{0} ({1})", Lang.Get("Obtained by killing"), Lang.Get("blockmaterial-Other")));
+            list.AddRange(richTextDrop);
+        }
     }
 
     public static void AddTraderPropsInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
@@ -402,6 +481,33 @@ public static class HandbookExtensions
                 if (!stack.ResolveBlockOrItem(capi.World)) continue;
                 stacks.Add(stack);
             }
+            return stacks;
+        });
+    }
+
+    private static List<BlockDropItemStack> GetHarvestableDrops(ICoreClientAPI capi, EntityProperties entityType)
+    {
+        return ObjectCacheUtil.GetOrCreate(capi, "harvestableDrops-" + entityType.Code, delegate
+        {
+            var harvestableBehaviors = VanillaHarvestableDrops.HarvestableBehaviors;
+            if (harvestableBehaviors?.Count == 0 || !harvestableBehaviors.ContainsKey(entityType.Code))
+            {
+                return new();
+            }
+
+            var drops = harvestableBehaviors[entityType.Code];
+            if (drops == null) return new();
+
+            var stacks = new List<BlockDropItemStack>();
+
+            foreach (var drop in drops)
+            {
+                if (drop.Resolve(capi.World, "BehaviorHarvestable ", entityType.Code))
+                {
+                    stacks.Add(drop);
+                }
+            }
+
             return stacks;
         });
     }
