@@ -20,7 +20,7 @@ public class HighlightReinforced : ModSystem
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
-        api.Input.RegisterHotKey(StringName, Lang.Get("extrainfo:Toggle", StringName), GlKeys.T, HotkeyType.CharacterControls, ctrlPressed: true);
+        api.Input.RegisterHotKey(StringName, Lang.Get("extrainfo:Toggle", StringName), GlKeys.T, HotkeyType.HelpAndOverlays, ctrlPressed: true);
         api.Input.SetHotKeyHandler(StringName, x => ToggleRun(x, api));
 
         Api = api;
