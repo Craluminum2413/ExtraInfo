@@ -7,6 +7,7 @@ using Vintagestory.GameContent;
 using System.Linq;
 using System.Text;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Common.Entities;
 
 namespace ExtraInfo;
 
@@ -47,6 +48,34 @@ public class HarmonyPatches : ModSystem
             list.AddEntityDietInfo(inSlot, capi, openDetailPageFor);
 
             __result = list.ToArray();
+        }
+    }
+
+    [HarmonyPatch(typeof(ModSystemHandbook), methodName: "OnHelpHotkey")]
+    public static class OpenHandbookForEntityPatch
+    {
+        public static void Postfix(ref bool __result, ModSystemHandbook __instance)
+        {
+            var dialog = __instance.GetField<GuiDialogHandbook>("dialog");
+            var capi = __instance.GetField<ICoreClientAPI>("capi");
+
+            if (capi.World.Player.Entity.Controls.ShiftKey && capi.World.Player.CurrentEntitySelection != null)
+            {
+                Entity entity = capi.World.Player.CurrentEntitySelection.Entity;
+
+                var stack = capi.World.GetEntityType(entity.Code).GetCreatureStack(capi);
+                if (stack == null)
+                {
+                    __result = true;
+                    return;
+                }
+
+                if (!dialog.OpenDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(stack)))
+                {
+                    dialog.OpenDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(new ItemStack(stack.Collectible)));
+                }
+            }
+            __result = true;
         }
     }
 
