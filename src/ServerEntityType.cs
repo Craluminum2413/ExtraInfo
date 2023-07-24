@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 
 namespace ExtraInfo;
 
-public class VanillaEntity : ModSystem
+public class ServerEntityType : ModSystem
 {
     public override bool AllowRuntimeReload => true;
 
@@ -28,16 +28,16 @@ public class VanillaEntity : ModSystem
             {
                 if (behavior.ToString().Contains("harvestable"))
                 {
-                    HarvestableDrops.Add(type.Code, behavior.AsObject<VanillaEntity>().Drops);
+                    HarvestableDrops.Add(type.Code, behavior.AsObject<ServerEntityType>().Drops);
                 }
                 if (behavior.ToString().Contains("taskai"))
                 {
-                    DamageList.Add(type.Code, (float)(Array.Find(behavior?.Token?["aitasks"]?.ToObject<VanillaEntity[]>(), x => x?.Damage != 0)?.Damage ?? 0));
-                    DamageTierList.Add(type.Code, (int)(Array.Find(behavior?.Token?["aitasks"]?.ToObject<VanillaEntity[]>(), x => x?.DamageTier != 0)?.DamageTier ?? 0));
+                    DamageList.Add(type.Code, (float)(Array.Find(behavior?.Token?["aitasks"]?.ToObject<ServerEntityType[]>(), x => x?.Damage != 0)?.Damage ?? 0));
+                    DamageTierList.Add(type.Code, (int)(Array.Find(behavior?.Token?["aitasks"]?.ToObject<ServerEntityType[]>(), x => x?.DamageTier != 0)?.DamageTier ?? 0));
                 }
                 if (behavior.ToString().Contains("health"))
                 {
-                    HealthList.Add(type.Code, behavior.AsObject<VanillaEntity>().MaxHealth);
+                    HealthList.Add(type.Code, behavior.AsObject<ServerEntityType>().MaxHealth);
                 }
             }
         }
