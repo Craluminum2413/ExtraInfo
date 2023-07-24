@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Cairo;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -187,6 +188,32 @@ public static class HandbookExtensions
         }
 
         list.AddRange(richText);
+    }
+
+    public static void AddEntityHealthAndDamageInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        if (inSlot.Itemstack.Collectible is not ItemCreature itemCreature) return;
+
+        var entityType = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
+
+        var health = VanillaEntityHealthDamage.HealthList.FirstOrDefault(x => x.Key == entityType.Code).Value;
+        var damage = VanillaEntityHealthDamage.DamageList.FirstOrDefault(x => x.Key == entityType.Code).Value;
+        var damageTier = VanillaEntityHealthDamage.DamageTierList.FirstOrDefault(x => x.Key == entityType.Code).Value;
+
+        var sb = new StringBuilder();
+
+        if (health != 0) sb.AppendLine(Lang.Get("Health: {0}{1} hp", health, ""));
+        if (damage != 0) sb.AppendLine(Lang.Get("extrainfo:Damage", damage));
+        if (damage != 0) sb.AppendLine(Lang.Get("Damage tier: {0}", damageTier));
+
+        if (sb.Length == 0) return;
+
+        var text = sb.ToString();
+
+        list.Add(new RichTextComponent(capi, text, CairoFont.WhiteSmallText())
+        {
+            VerticalAlign = EnumVerticalAlign.Middle
+        });
     }
 
     public static void AddEntityDropsInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)

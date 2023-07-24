@@ -35,6 +35,7 @@ public class HarmonyPatches : ModSystem
         {
             List<RichTextComponentBase> list = __result.ToList();
 
+            list.AddEntityHealthAndDamageInfo(inSlot, capi, openDetailPageFor);
             list.AddEntityDropsInfo(inSlot, capi, openDetailPageFor);
             list.AddEntityDropsInfoForDrop(inSlot, capi, openDetailPageFor);
             list.AddPanningDropsInfo(inSlot, capi, openDetailPageFor);
