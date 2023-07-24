@@ -11,5 +11,9 @@
     // "mechanics-TotalAvailableTorque": "Available Torque: {0:G4}",
     // "mechanics-NetworkTorque": "Total Torque: {0:G4}",
     // "mechanics-NetworkResistance": "Resistance: {0:G4}",
-    "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>"
+    "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>",
+    "HighlightReinforcedBlocks": "Подсвечивание укрепленных блоков",
+    "Toggle": "Переключить {0}",
+    "Toggle.True": "{0} <font weight=\"bold\" color=\"#84ff84\">{1}</font>",
+    "Toggle.False": "{0} <font weight=\"bold\" color=\"#ff8484\">{1}</font>"
 }

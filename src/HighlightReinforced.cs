@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.GameContent;
 
@@ -11,39 +12,50 @@ namespace ExtraInfo;
 public class HighlightReinforced : ModSystem
 {
     public static Thread OpThread { get; protected set; }
-    // public static bool IsOn { get; protected set; }
+    public static bool Enabled { get; protected set; }
     public static ICoreClientAPI Api { get; protected set; }
     public static ModSystemBlockReinforcement ModSysBlockReinforcement { get; protected set; }
+    public static string StringName => Lang.Get("extrainfo:HighlightReinforcedBlocks");
 
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
+        api.Input.RegisterHotKey(StringName, Lang.Get("extrainfo:Toggle", StringName), GlKeys.T, HotkeyType.CharacterControls, ctrlPressed: true);
+        api.Input.SetHotKeyHandler(StringName, x => ToggleRun(x, api));
+
         Api = api;
-
         ModSysBlockReinforcement = api.ModLoader.GetModSystem<ModSystemBlockReinforcement>();
+    }
 
-        // IsOn = true;
-        OpThread = new Thread(Run)
+    private bool ToggleRun(KeyCombination x, ICoreClientAPI capi)
+    {
+        if (!Enabled)
         {
-            IsBackground = true,
-            Name = "ExtraInfo:ReinforcementsOperator"
-        };
-        OpThread.Start();
+            Enabled = true;
+            OpThread = new Thread(Run)
+            {
+                IsBackground = true,
+                Name = "ExtraInfo:ReinforcementsOperator"
+            };
+            OpThread.Start();
+        }
+        else
+        {
+            Enabled = false;
+        }
+
+        var StringEnabled = Lang.Get("worldconfig-snowAccum-Enabled");
+        var StringDisabled = Lang.Get("worldconfig-snowAccum-Disabled");
+        capi.TriggerChatMessage(Lang.Get("extrainfo:Toggle." + Enabled, StringName, Enabled ? StringEnabled : StringDisabled));
+
+        return true;
     }
 
     private void Run()
     {
-        // while (IsOn)
-        while (true)
+        while (Enabled)
         {
             Thread.Sleep(100);
-
-            if (!IsPlumbAndSquare())
-            {
-                ClearHighlights();
-                continue;
-            }
-
             try
             {
                 int rad = GetRadius();
@@ -79,12 +91,7 @@ public class HighlightReinforced : ModSystem
             }
             catch { }
         }
-        // ClearHighlights();
-    }
-
-    private static bool IsPlumbAndSquare()
-    {
-        return Api.World.Player?.InventoryManager?.ActiveHotbarSlot?.Itemstack?.Collectible is ItemPlumbAndSquare;
+        ClearHighlights();
     }
 
     private bool IsAir(int x, int y, int z) => Api.World.BlockAccessor.GetBlock(x, y, z).Id == 0;
