@@ -1,16 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Cairo;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
-using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 using Vintagestory.ServerMods.NoObf;
+using static ExtraInfo.TextExtensions;
 
 namespace ExtraInfo;
 
@@ -111,7 +109,7 @@ public static class HandbookExtensions
             {
                 if (RegistryObjectType.WildCardMatches(entityType.Code.ToString(), config.Foodfor.ToList().ConvertAll(x => x.ToString()), out _))
                 {
-                    var stack = GetCreatureStack(capi, entityType);
+                    var stack = entityType.GetCreatureStack(capi);
                     if (stack == null) continue;
                     richText.AddStack(capi, openDetailPageFor, stack);
                 }
@@ -137,7 +135,7 @@ public static class HandbookExtensions
                 || (block is BlockBerryBush && blockDiet.Contains("Berry"))
                 || (block is BlockBeehive && blockDiet.Contains("Honey")))
             {
-                var stack = GetCreatureStack(capi, entityType);
+                var stack = entityType.GetCreatureStack(capi);
                 if (stack == null) continue;
                 stacks.Add(stack);
             }
@@ -272,7 +270,7 @@ public static class HandbookExtensions
             var harvestStacks = GetHarvestableDrops(capi, entityType);
             if (harvestStacks?.Count != 0 && harvestStacks.Find(stack => stack?.Code == collObj?.Code) != null)
             {
-                var stack = GetCreatureStack(capi, entityType);
+                var stack = entityType.GetCreatureStack(capi);
                 if (stack == null) continue;
 
                 richTextHarvest.AddStack(capi, openDetailPageFor, stack);
@@ -280,7 +278,7 @@ public static class HandbookExtensions
 
             if (entityType.Drops?.Length != 0 && entityType.Drops.ToList().Find(stack => stack.Code == collObj.Code) != null)
             {
-                var stack = GetCreatureStack(capi, entityType);
+                var stack = entityType.GetCreatureStack(capi);
                 if (stack == null) continue;
 
                 richTextDrop.AddStack(capi, openDetailPageFor, stack);
@@ -343,7 +341,7 @@ public static class HandbookExtensions
             buyingList = GetTradeProps(entityType)?.Buying.List;
             if (buyingList == null) break;
 
-            var stack = GetCreatureStack(capi, entityType);
+            var stack = entityType.GetCreatureStack(capi);
             if (stack == null) continue;
 
             richTextSell.AddStack(capi, openDetailPageFor, stack);
@@ -361,7 +359,7 @@ public static class HandbookExtensions
             sellingList = GetTradeProps(entityType)?.Selling.List;
             if (sellingList == null) break;
 
-            var stack = GetCreatureStack(capi, entityType);
+            var stack = entityType.GetCreatureStack(capi);
             if (stack == null) continue;
 
             richTextBuy.AddStack(capi, openDetailPageFor, stack);
@@ -373,76 +371,7 @@ public static class HandbookExtensions
         }
     }
 
-    private static ItemStack GetCreatureStack(ICoreClientAPI capi, EntityProperties entityType)
-    {
-        var location = entityType.Code.Clone().WithPathPrefix("creature-");
-        var item = capi.World.GetItem(location);
-        return item == null ? null : new ItemStack(item);
-    }
-
     private static TradeProperties GetTradeProps(EntityProperties props) => props.Attributes["tradeProps"].AsObject<TradeProperties>(null);
-
-    private static string GetMinMax(NatFloat natFloat)
-    {
-        int min = GetMin(natFloat);
-        int max = GetMax(natFloat);
-        return min == max ? $"{min}" : string.Format("{0} - {1}", min, max);
-    }
-
-    private static int GetMin(NatFloat natFloat) => (int)Math.Max(1, Math.Round(natFloat.avg - natFloat.var));
-    private static int GetMax(NatFloat natFloat) => (int)Math.Max(1, Math.Round(natFloat.avg + natFloat.var));
-
-    private static string GetMinMaxPercent(PanningDrop drop, float extraMul)
-    {
-        var min = (drop.Chance.avg - drop.Chance.var) * extraMul * 100;
-        var max = (drop.Chance.avg + drop.Chance.var) * extraMul * 100;
-        return min == max ? $"{min} %" : string.Format("{0} - {1} %", min, max);
-    }
-
-    private static void AddTraderInfo(this List<RichTextComponentBase> richText, ICoreClientAPI capi, TradeItem val, ActionConsumable<string> openDetailPageFor, ItemStack gear)
-    {
-        richText.AddStack(capi, openDetailPageFor, val.ResolvedItemstack, showStacksize: true);
-        richText.Add(new RichTextComponent(capi, "\t" + GetMinMax(val.Stock), CairoFont.WhiteSmallText())
-        {
-            VerticalAlign = EnumVerticalAlign.Middle
-        });
-        richText.AddEqualSign(capi);
-        richText.AddStack(capi, openDetailPageFor, gear);
-        richText.Add(new RichTextComponent(capi, GetMinMax(val.Price) + "\n", CairoFont.WhiteSmallText())
-        {
-            VerticalAlign = EnumVerticalAlign.Middle
-        });
-    }
-
-    private static void AddMarginAndTitle(this List<RichTextComponentBase> list, ICoreClientAPI capi, float marginTop, string titletext)
-    {
-        list.Add(new ClearFloatTextComponent(capi, marginTop));
-        list.Add(new RichTextComponent(capi, titletext + "\n", CairoFont.WhiteSmallText().WithWeight(FontWeight.Bold)));
-    }
-
-    private static void AddEqualSign(this List<RichTextComponentBase> richText, ICoreClientAPI capi)
-    {
-        richText.Add(new RichTextComponent(capi, " = ", CairoFont.WhiteMediumText())
-        {
-            VerticalAlign = EnumVerticalAlign.Middle
-        });
-    }
-
-    private static void AddStack(this List<RichTextComponentBase> richText, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor, ItemStack stack, bool showStacksize = false)
-    {
-        richText.Add(new ItemstackTextComponent(capi, stack, 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)))
-        {
-            ShowStacksize = showStacksize
-        });
-    }
-
-    private static void AddStacks(this List<RichTextComponentBase> richText, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor, ItemStack[] stacks, bool showStacksize = false)
-    {
-        richText.Add(new SlideshowItemstackTextComponent(capi, stacks, 40, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs)))
-        {
-            ShowStackSize = showStacksize
-        });
-    }
 
     private static List<JsonItemStackBuildStage> GetFuelStacks(this BlockPitkiln blockPitKiln, ICoreClientAPI capi)
     {
