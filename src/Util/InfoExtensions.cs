@@ -210,6 +210,7 @@ public static class InfoExtensions
     public static void GetSkepInfo(this StringBuilder dsc, BlockEntityBeehive be)
     {
         if (be == null) return;
+        if (be.Block is not BlockSkep) return;
         var hoursLeft = be.GetField<double>("harvestableAtTotalHours") - be.Api.World.Calendar.TotalHours;
         dsc.AppendLine(ColorText(Lang.Get("{0} hours", hoursLeft)));
     }
