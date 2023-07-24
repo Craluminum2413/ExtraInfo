@@ -5,6 +5,8 @@ namespace ExtraInfo;
 
 public class VanillaHarvestableDrops : ModSystem
 {
+    public override bool AllowRuntimeReload => true;
+
     public static Dictionary<AssetLocation, BlockDropItemStack[]> HarvestableDrops { get; set; } = new();
 
     public BlockDropItemStack[] Drops { get; set; }

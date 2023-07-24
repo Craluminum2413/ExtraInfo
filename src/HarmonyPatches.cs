@@ -14,6 +14,8 @@ public class HarmonyPatches : ModSystem
 {
     public const string HarmonyID = "craluminum2413.extrainfo";
 
+    public override bool AllowRuntimeReload => true;
+
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
