@@ -196,9 +196,9 @@ public static class HandbookExtensions
 
         var entityType = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
 
-        var health = VanillaEntityHealthDamage.HealthList.FirstOrDefault(x => x.Key == entityType.Code).Value;
-        var damage = VanillaEntityHealthDamage.DamageList.FirstOrDefault(x => x.Key == entityType.Code).Value;
-        var damageTier = VanillaEntityHealthDamage.DamageTierList.FirstOrDefault(x => x.Key == entityType.Code).Value;
+        var health = VanillaEntity.HealthList.FirstOrDefault(x => x.Key == entityType.Code).Value;
+        var damage = VanillaEntity.DamageList.FirstOrDefault(x => x.Key == entityType.Code).Value;
+        var damageTier = VanillaEntity.DamageTierList.FirstOrDefault(x => x.Key == entityType.Code).Value;
 
         var sb = new StringBuilder();
 
@@ -516,7 +516,7 @@ public static class HandbookExtensions
     {
         return ObjectCacheUtil.GetOrCreate(capi, "harvestableDrops-" + entityType.Code, delegate
         {
-            var harvestableBehaviors = VanillaHarvestableDrops.HarvestableDrops;
+            var harvestableBehaviors = VanillaEntity.HarvestableDrops;
             if (harvestableBehaviors?.Count == 0 || !harvestableBehaviors.ContainsKey(entityType.Code))
             {
                 return new();
