@@ -3,8 +3,8 @@
     "side": "client",
     "modid": "extrainfo",
     "name": "Extra Info",
-    "description": "Adds useful missing information to handbook and for block tooltips",
+    "description": "Useful information for handbook, blocks, items and entities",
     "authors": ["Craluminum2413"],
     "contributors": ["Novocain"],
-    "version": "1.2.0"
+    "version": "1.3.0"
 }
