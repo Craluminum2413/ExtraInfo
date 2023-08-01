@@ -79,6 +79,15 @@ public class HarmonyPatches : ModSystem
         }
     }
 
+    [HarmonyPatch(typeof(BlockEntityGroundStorage), nameof(BlockEntityGroundStorage.GetBlockInfo))]
+    public static class GroundStorageInfoPatch
+    {
+        public static void Postfix(BlockEntityGroundStorage __instance, StringBuilder dsc)
+        {
+            dsc.GetGroundStorageInfo(__instance);
+        }
+    }
+
     [HarmonyPatch(typeof(CollectibleObject), nameof(CollectibleObject.GetHeldItemInfo))]
     public static class HeldItemInfoPatch
     {

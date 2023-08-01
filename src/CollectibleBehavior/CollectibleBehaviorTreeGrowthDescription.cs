@@ -16,10 +16,10 @@ public class CollectibleBehaviorTreeGrowthDescription : CollectibleBehavior
     public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
     {
         base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-        AddTreeGrowthInfoForItem(inSlot, dsc, world);
+        AppendInfo(inSlot, dsc, world);
     }
 
-    private static void AddTreeGrowthInfoForItem(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world)
+    private static void AppendInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world)
     {
         NatFloat sproutDays = null;
         NatFloat matureDays = null;
@@ -40,7 +40,7 @@ public class CollectibleBehaviorTreeGrowthDescription : CollectibleBehavior
 
         if (sproutDays == null && matureDays == null) return;
 
-        dsc.AppendLine(Lang.Get("Will sprout in about {0} days", GetMinMax(sproutDays)));
-        dsc.AppendLine(Lang.Get("Will mature in about {0} days", GetMinMax(matureDays)));
+        dsc.AppendLine(ColorText(Lang.Get("Will sprout in about {0} days", GetMinMax(sproutDays))));
+        dsc.AppendLine(ColorText(Lang.Get("Will mature in about {0} days", GetMinMax(matureDays))));
     }
 }

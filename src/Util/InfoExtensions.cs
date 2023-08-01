@@ -36,6 +36,66 @@ public static class InfoExtensions
         return sb.ToString().TrimEnd();
     }
 
+    public static void GetGroundStorageInfo(this StringBuilder dsc, BlockEntityGroundStorage __instance)
+    {
+        if (__instance?.StorageProps?.Layout != EnumGroundStorageLayout.Stacking) return;
+        if (__instance?.Inventory?.Count == 0) return;
+
+        var api = __instance.Api;
+        var centerPos = __instance.Pos;
+
+        var totalAmount = __instance.GetTotalAmount();
+        var totalAmountSame = totalAmount;
+
+        var invalid = false;
+        for (int y = centerPos.Y - 1; !invalid; y--)
+        {
+            var pos = new BlockPos(centerPos.X, y, centerPos.Z);
+            if (api.World.IsGroundStorage(pos, out var beGroundStorage))
+            {
+                totalAmount += beGroundStorage.GetTotalAmount();
+
+                if (__instance.HasSameContent(beGroundStorage))
+                {
+                    totalAmountSame += beGroundStorage.GetTotalAmount();
+                }
+            }
+            else
+            {
+                invalid = true;
+                break;
+            }
+        }
+
+        invalid = false;
+        for (int y = centerPos.Y + 1; !invalid; y++)
+        {
+            var pos = new BlockPos(centerPos.X, y, centerPos.Z);
+            if (api.World.IsGroundStorage(pos, out var beGroundStorage))
+            {
+                totalAmount += beGroundStorage.GetTotalAmount();
+
+                if (__instance.HasSameContent(beGroundStorage))
+                {
+                    totalAmountSame += beGroundStorage.GetTotalAmount();
+                }
+            }
+            else
+            {
+                invalid = true;
+                break;
+            }
+        }
+
+        dsc.Append(ColorText(Lang.Get("tabname-general")));
+        dsc.Append(": ");
+        dsc.Append(totalAmount).AppendLine();
+
+        dsc.Append(ColorText(Lang.Get("extrainfo:Current")));
+        dsc.Append(": ");
+        dsc.Append(totalAmountSame).AppendLine();
+    }
+
     public static void GetBloomeryInfo(this StringBuilder dsc, BlockEntityBloomery __instance)
     {
         var api = __instance.Api;
@@ -86,7 +146,7 @@ public static class InfoExtensions
 
             if (neighborBE?.IsBurning == false)
             {
-                return sb.ToString();
+                return __result;
             }
 
             double? neighborHoursLeft = neighborBE?.GetHoursLeft(neighborBE.GetField<double>("burnStartTotalHours"));
