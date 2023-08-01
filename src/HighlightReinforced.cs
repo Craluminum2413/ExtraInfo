@@ -7,7 +7,7 @@ using Vintagestory.GameContent;
 
 namespace ExtraInfo;
 
-public class ModSystemHighlightReinforced : ModSystemHighlight
+public class HighlightReinforced : ModSystemHighlight
 {
     public override string Name => Lang.Get("extrainfo:HighlightReinforcedBlocks");
     public override string ThreadName => "ExtraInfo:Reinforcements";

@@ -1,9 +1,8 @@
 using System.Threading;
-using Vintagestory.API.Client;
 
 namespace ExtraInfo;
 
-public interface IHighlightThread
+public interface IThreadHighlight
 {
     bool Enabled { get; set; }
     Thread OpThread { get; set; }

@@ -8,7 +8,7 @@ using Vintagestory.API.MathTools;
 
 namespace ExtraInfo;
 
-public class ModSystemHighlight : ModSystem, IHighlightThread
+public class ModSystemHighlight : ModSystem, IThreadHighlight
 {
     public bool Enabled { get; set; }
     public Thread OpThread { get; set; }
