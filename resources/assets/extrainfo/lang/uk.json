@@ -13,6 +13,7 @@
     // "Mechanics-NetworkTorque": "Total Torque: {0: G4}",
     // "Mechanics-NetworkResistance": "Resistance: {0:G4}",
     "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>",
+    "HighlightMycelium": "'Підсвічування міцелію'",
     "HighlightReinforcedBlocks": "'Підсвічування посилених блоків'",
     "Toggle": "Переключити {0}",
     "Toggle.True": "{0} <font weight=\"bold\" color=\"#84ff84\">{1}</font>",
