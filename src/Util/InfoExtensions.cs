@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
+using Vintagestory.Client.NoObf;
 using Vintagestory.GameContent;
 using static ExtraInfo.TextExtensions;
 
@@ -10,6 +13,29 @@ namespace ExtraInfo;
 
 public static class InfoExtensions
 {
+    public static string GetBlockBreakingTimeInfo(this string __result, IWorldAccessor world, BlockPos pos)
+    {
+        StringBuilder sb = new(__result);
+
+        var damagedBlocks = (world as ClientMain).GetField<Dictionary<BlockPos, BlockDamage>>("damagedBlocks");
+        if (damagedBlocks?.Count == 0) return __result;
+
+        var currentBlockDamage = damagedBlocks.FirstOrDefault(x => x.Key == pos).Value;
+        if (currentBlockDamage == null) return __result;
+
+        var block = world.BlockAccessor.GetBlock(pos);
+        var initialResistance = block.Resistance;
+        var remainingResistance = currentBlockDamage.RemainingResistance;
+
+        var percent = ((initialResistance - remainingResistance) / initialResistance * 100).ToString("F0");
+        // var seconds = Lang.Get("{0} seconds", remainingResistance.ToString("F02"));
+
+        sb.AppendLine().Append(ColorText(Lang.Get("extrainfo:RemainingResistance", percent + "%")));
+        // sb.AppendLine().Append(ColorText(Lang.Get("extrainfo:RemainingResistance", string.Format("{0}% | {1}", percent, seconds))));
+
+        return sb.ToString().TrimEnd();
+    }
+
     public static void GetBloomeryInfo(this StringBuilder dsc, BlockEntityBloomery __instance)
     {
         var api = __instance.Api;
