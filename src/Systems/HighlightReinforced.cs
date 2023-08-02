@@ -9,12 +9,12 @@ namespace ExtraInfo;
 
 public class HighlightReinforced : ModSystemHighlight
 {
-    public override string HotkeyCode => "extrainfo:highlightreinforced";
+    public override string ThreadName => "ExtraInfo:Reinforcements";
 
     public override string Name => Lang.Get("extrainfo:HighlightReinforcedBlocks");
-    public override int Radius => 10;
+    public override string HotkeyCode => "extrainfo:highlightreinforced";
 
-    public override string ThreadName => "ExtraInfo:Reinforcements";
+    public int Radius => 10;
 
     public int HighlightColor => Constants.ColorsRGBA.Cyan;
 

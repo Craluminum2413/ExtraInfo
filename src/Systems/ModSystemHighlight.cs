@@ -10,12 +10,10 @@ namespace ExtraInfo;
 public class ModSystemHighlight : ModSystem, IThreadHighlight
 {
     public bool Enabled { get; set; }
-    public virtual string Name { get; }
-    public virtual int Radius { get; }
-
     public Thread OpThread { get; set; }
     public virtual string ThreadName { get; }
 
+    public virtual string Name { get; }
     public virtual string HotkeyCode { get; }
 
     public bool ToggleRun(ICoreClientAPI capi)

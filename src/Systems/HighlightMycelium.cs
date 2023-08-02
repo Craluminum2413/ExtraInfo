@@ -10,12 +10,12 @@ namespace ExtraInfo;
 
 public class HighlightMycelium : ModSystemHighlight
 {
-    public override string HotkeyCode => "extrainfo:highlightmycelium";
+    public override string ThreadName => "ExtraInfo:Mycelium";
 
     public override string Name => Lang.Get("extrainfo:HighlightMycelium");
-    public override int Radius => 64;
+    public override string HotkeyCode => "extrainfo:highlightmycelium";
 
-    public override string ThreadName => "ExtraInfo:Mycelium";
+    public int Radius => 64;
 
     public int FirstHighlightColor => Constants.ColorsRGBA.Yellow;
     public int SecondHighlightColor => Constants.ColorsRGBA.Yellow;
