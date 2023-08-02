@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace ExtraInfo;
@@ -11,18 +10,13 @@ namespace ExtraInfo;
 public class ModSystemHighlight : ModSystem, IThreadHighlight
 {
     public bool Enabled { get; set; }
-    public Thread OpThread { get; set; }
-
     public virtual string Name { get; }
-    public virtual string ThreadName { get; }
-    public virtual string OperatorName => ThreadName + "Operator";
     public virtual int Radius { get; }
 
-    public virtual string HotkeyCode { get; }
+    public Thread OpThread { get; set; }
+    public virtual string ThreadName { get; }
 
-    public string StringEnabled => Lang.Get("worldconfig-snowAccum-Enabled");
-    public string StringDisabled => Lang.Get("worldconfig-snowAccum-Disabled");
-    public string StringToggle => Lang.Get("extrainfo:Toggle." + Enabled, Name, Enabled ? StringEnabled : StringDisabled);
+    public virtual string HotkeyCode { get; }
 
     public bool ToggleRun(ICoreClientAPI capi)
     {
@@ -32,7 +26,7 @@ public class ModSystemHighlight : ModSystem, IThreadHighlight
             OpThread = new Thread(() => Run(capi))
             {
                 IsBackground = true,
-                Name = OperatorName
+                Name = ThreadName
             };
             OpThread.Start();
         }
@@ -41,7 +35,7 @@ public class ModSystemHighlight : ModSystem, IThreadHighlight
             Enabled = false;
         }
 
-        capi.TriggerChatMessage(StringToggle);
+        capi.TriggerChatMessage(Constants.StringToggle(Enabled, Name));
 
         return true;
     }

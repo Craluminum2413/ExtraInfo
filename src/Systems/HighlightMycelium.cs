@@ -13,17 +13,17 @@ public class HighlightMycelium : ModSystemHighlight
     public override string HotkeyCode => "extrainfo:highlightmycelium";
 
     public override string Name => Lang.Get("extrainfo:HighlightMycelium");
-    public override string ThreadName => "ExtraInfo:Mycelium";
     public override int Radius => 64;
 
-    // public int FirstHighlightColor => ColorUtil.ColorFromRgba(new Vec4f(1f, 0.4f, 0.4f, 0.5f)); // #ff6666
-    public int FirstHighlightColor => SecondHighlightColor;
-    public int SecondHighlightColor => ColorUtil.ColorFromRgba(new Vec4f(1f, 1f, 0.4f, 0.5f)); // #ffff66
+    public override string ThreadName => "ExtraInfo:Mycelium";
+
+    public int FirstHighlightColor => Constants.ColorsRGBA.Yellow;
+    public int SecondHighlightColor => Constants.ColorsRGBA.Yellow;
 
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
-        api.Input.RegisterHotKey(HotkeyCode, Lang.Get("extrainfo:Toggle", Name), GlKeys.M, HotkeyType.HelpAndOverlays, shiftPressed: true);
+        api.Input.RegisterHotKey(HotkeyCode, Constants.ToggleName(Name), GlKeys.M, HotkeyType.HelpAndOverlays, shiftPressed: true);
         api.Input.SetHotKeyHandler(HotkeyCode, _ => ToggleRun(api));
     }
 

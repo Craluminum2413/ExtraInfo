@@ -12,17 +12,18 @@ public class HighlightReinforced : ModSystemHighlight
     public override string HotkeyCode => "extrainfo:highlightreinforced";
 
     public override string Name => Lang.Get("extrainfo:HighlightReinforcedBlocks");
-    public override string ThreadName => "ExtraInfo:Reinforcements";
     public override int Radius => 10;
 
-    private int HighlightColor => ColorUtil.ToRgba(102, 255, 255, 50); // #77f7f7
+    public override string ThreadName => "ExtraInfo:Reinforcements";
+
+    public int HighlightColor => Constants.ColorsRGBA.Cyan;
 
     public ModSystemBlockReinforcement ModSysBlockReinforcement { get; protected set; }
 
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
-        api.Input.RegisterHotKey(HotkeyCode, Lang.Get("extrainfo:Toggle", Name), GlKeys.T, HotkeyType.HelpAndOverlays, ctrlPressed: true);
+        api.Input.RegisterHotKey(HotkeyCode, Constants.ToggleName(Name), GlKeys.T, HotkeyType.HelpAndOverlays, ctrlPressed: true);
         api.Input.SetHotKeyHandler(HotkeyCode, _ => ToggleRun(api));
 
         ModSysBlockReinforcement = api.ModLoader.GetModSystem<ModSystemBlockReinforcement>();
