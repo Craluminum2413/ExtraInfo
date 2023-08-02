@@ -188,7 +188,7 @@ public static class HandbookExtensions
         list.AddRange(richText);
     }
 
-    public static void AddEntityHealthAndDamageInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    public static void AddEntityHealthAndDamageInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi)
     {
         if (inSlot.Itemstack.Collectible is not ItemCreature itemCreature) return;
 

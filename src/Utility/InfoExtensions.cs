@@ -13,6 +13,58 @@ namespace ExtraInfo;
 
 public static class InfoExtensions
 {
+    public static void GetWorkableTempInfoForAnvil(this StringBuilder dsc, BlockEntityAnvil __instance)
+    {
+        if (__instance.WorkItemStack == null || __instance.SelectedRecipe == null)
+        {
+            return;
+        }
+
+        ItemStack stack = __instance.WorkItemStack;
+
+        float meltingpoint = stack.Collectible.GetMeltingPoint(__instance.Api.World, null, new DummySlot(stack));
+
+        float workableTemp = (stack.Collectible.Attributes?["workableTemperature"].Exists) switch
+        {
+            true => stack.Collectible.Attributes["workableTemperature"].AsFloat(meltingpoint / 2),
+            _ => meltingpoint / 2,
+        };
+
+        _ = workableTemp switch
+        {
+            0 => dsc.AppendLine(ColorText(Lang.Get("extrainfo:AlwaysWorkable"))),
+            _ => dsc.AppendLine(ColorText(Lang.Get("extrainfo:WorkableTemperature", (int)workableTemp)))
+        };
+    }
+
+    public static void GetWorkableTempInfoForItem(this StringBuilder dsc, ItemSlot inSlot, IWorldAccessor world)
+    {
+        ItemStack stack = inSlot.Itemstack;
+        if (stack.Collectible is not IAnvilWorkable) return;
+
+        float temperature = stack.Collectible.GetTemperature(world, stack);
+        float meltingpoint = stack.Collectible.GetMeltingPoint(world, null, inSlot);
+
+        float workableTemp = (stack.Collectible.Attributes?["workableTemperature"].Exists) switch
+        {
+            true => stack.Collectible.Attributes["workableTemperature"].AsFloat(meltingpoint / 2),
+            _ => meltingpoint / 2,
+        };
+
+        _ = workableTemp switch
+        {
+            0 => dsc.AppendLine(ColorText(Lang.Get("extrainfo:AlwaysWorkable"))),
+            _ => dsc.AppendLine(ColorText(Lang.Get("extrainfo:WorkableTemperature", (int)workableTemp)))
+        };
+
+        if (inSlot is DummySlot || inSlot is ItemSlotCreative) return; // do not show in handbook and creative inventory
+
+        if (temperature < workableTemp)
+        {
+            dsc.AppendLine(ColorText(Lang.Get("Too cold to work")));
+        }
+    }
+
     public static string GetBlockBreakingTimeInfo(this string __result, IWorldAccessor world, BlockPos pos)
     {
         StringBuilder sb = new(__result);

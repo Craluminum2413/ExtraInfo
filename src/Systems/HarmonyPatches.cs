@@ -36,7 +36,7 @@ public class HarmonyPatches : ModSystem
         {
             List<RichTextComponentBase> list = __result.ToList();
 
-            list.AddEntityHealthAndDamageInfo(inSlot, capi, openDetailPageFor);
+            list.AddEntityHealthAndDamageInfo(inSlot, capi);
             list.AddEntityDropsInfo(inSlot, capi, openDetailPageFor);
             list.AddEntityDropsInfoForDrop(inSlot, capi, openDetailPageFor);
             list.AddPanningDropsInfo(inSlot, capi, openDetailPageFor);
@@ -91,9 +91,11 @@ public class HarmonyPatches : ModSystem
     [HarmonyPatch(typeof(CollectibleObject), nameof(CollectibleObject.GetHeldItemInfo))]
     public static class HeldItemInfoPatch
     {
-        public static void Postfix(ItemSlot inSlot, StringBuilder dsc)
+        public static void Postfix(ItemSlot inSlot, IWorldAccessor world, StringBuilder dsc)
         {
-            if (inSlot.Itemstack.Collectible is BlockBomb blockBomb) dsc.GetBombInfo(blockBomb, null);
+            var obj = inSlot.Itemstack.Collectible;
+            dsc.GetBombInfo(obj as BlockBomb, null);
+            dsc.GetWorkableTempInfoForItem(inSlot, world);
         }
     }
 
@@ -105,6 +107,15 @@ public class HarmonyPatches : ModSystem
             dsc.GetBombInfo(null, __instance as BlockEntityBomb);
             dsc.GetTransientInfo(__instance as BlockEntityTransient);
             // dsc.GetMechanicalBlockInfo(__instance);
+        }
+    }
+
+    [HarmonyPatch(typeof(BlockEntityAnvil), nameof(BlockEntityAnvil.GetBlockInfo))]
+    public static class AnvilInfoPatch
+    {
+        public static void Postfix(BlockEntityAnvil __instance, StringBuilder dsc)
+        {
+            dsc.GetWorkableTempInfoForAnvil(__instance);
         }
     }
 

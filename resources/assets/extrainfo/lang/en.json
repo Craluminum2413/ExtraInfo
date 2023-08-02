@@ -1,4 +1,6 @@
 {
+	"WorkableTemperature": "Workable Temperature: {0}°C",
+	"AlwaysWorkable": "Workable Temperature: Always workable",
     "RemainingResistance": "Remaining Resistance: {0}",
     "Current": "Current",
     "Damage": "Damage: {0}",

@@ -1,4 +1,6 @@
 {
+    "WorkableTemperature": "Рабочая температура: {0}°C",
+    "AlwaysWorkable": "Рабочая температура: Всегда",
     "RemainingBlockResistance": "Сопротивления осталось: {0}",
     "Current": "Текущий",
     "Damage": "Урон: {0}",
