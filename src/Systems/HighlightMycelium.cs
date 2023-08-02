@@ -10,6 +10,8 @@ namespace ExtraInfo;
 
 public class HighlightMycelium : ModSystemHighlight
 {
+    public override string HotkeyCode => "extrainfo:highlightmycelium";
+
     public override string Name => Lang.Get("extrainfo:HighlightMycelium");
     public override string ThreadName => "ExtraInfo:Mycelium";
     public override int Radius => 64;
@@ -21,8 +23,8 @@ public class HighlightMycelium : ModSystemHighlight
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
-        api.Input.RegisterHotKey(Name, Lang.Get("extrainfo:Toggle", Name), GlKeys.M, HotkeyType.HelpAndOverlays, shiftPressed: true);
-        api.Input.SetHotKeyHandler(Name, _ => ToggleRun(api));
+        api.Input.RegisterHotKey(HotkeyCode, Lang.Get("extrainfo:Toggle", Name), GlKeys.M, HotkeyType.HelpAndOverlays, shiftPressed: true);
+        api.Input.SetHotKeyHandler(HotkeyCode, _ => ToggleRun(api));
     }
 
     public override void OnRunning(ICoreClientAPI capi)

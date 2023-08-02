@@ -18,6 +18,8 @@ public class ModSystemHighlight : ModSystem, IThreadHighlight
     public virtual string OperatorName => ThreadName + "Operator";
     public virtual int Radius { get; }
 
+    public virtual string HotkeyCode { get; }
+
     public string StringEnabled => Lang.Get("worldconfig-snowAccum-Enabled");
     public string StringDisabled => Lang.Get("worldconfig-snowAccum-Disabled");
     public string StringToggle => Lang.Get("extrainfo:Toggle." + Enabled, Name, Enabled ? StringEnabled : StringDisabled);
