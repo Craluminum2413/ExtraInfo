@@ -102,7 +102,7 @@ public static class InfoExtensions
 
         if (__instance.GetField<bool>("burning"))
         {
-            double timeLeft = (__instance.GetField<double>("burningUntilTotalDays") - api.World.Calendar.TotalDays) * 24.0;
+            double timeLeft = (__instance.GetField<double>("burningUntilTotalDays") - api.World.Calendar.TotalDays) * api.World.Calendar.HoursPerDay;
             dsc.AppendLine(ColorText(Lang.Get("{0} hours", Math.Round(timeLeft, 2))));
         }
     }
