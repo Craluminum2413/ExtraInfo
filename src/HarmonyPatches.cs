@@ -108,6 +108,15 @@ public class HarmonyPatches : ModSystem
         }
     }
 
+    [HarmonyPatch(typeof(BlockEntityFarmland), nameof(BlockEntityFarmland.GetBlockInfo))]
+    public static class GetFarmlandInfoPatch
+    {
+        public static void Postfix(BlockEntityFarmland __instance, StringBuilder dsc)
+        {
+            dsc.GetFarmlandInfo(__instance);
+        }
+    }
+
     [HarmonyPatch(typeof(BlockEntityPitKiln), nameof(BlockEntityPitKiln.GetBlockInfo))]
     public static class PitKilnInfoPatch
     {

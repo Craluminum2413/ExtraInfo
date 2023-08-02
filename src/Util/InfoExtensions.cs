@@ -96,6 +96,34 @@ public static class InfoExtensions
         dsc.Append(totalAmountSame).AppendLine();
     }
 
+    public static void GetFarmlandInfo(this StringBuilder dsc, BlockEntityFarmland __instance)
+    {
+        var timeLeft = __instance.TotalHoursForNextStage - __instance.Api.World.Calendar.TotalHours;
+
+        var block = GetCrop();
+
+        if (block != null && (GetCropStage(block) < block.CropProps.GrowthStages))
+        {
+            dsc.AppendLine(ColorText(Lang.Get("{0} hours", timeLeft)));
+        }
+
+        Block GetCrop()
+        {
+            var block = __instance.Api.World.BlockAccessor.GetBlock(__instance.UpPos);
+            if (block == null || block.CropProps == null)
+            {
+                return null;
+            }
+            return block;
+        }
+
+        static int GetCropStage(Block block)
+        {
+            int.TryParse(block.LastCodePart(), out var stage);
+            return stage;
+        }
+    }
+
     public static void GetBloomeryInfo(this StringBuilder dsc, BlockEntityBloomery __instance)
     {
         var api = __instance.Api;
