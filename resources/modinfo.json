@@ -1,6 +1,8 @@
 {
     "type": "code",
-    "side": "client",
+    "side": "universal",
+    "requiredOnClient": false,
+    "requiredOnServer": false,
     "modid": "extrainfo",
     "name": "Extra Info",
     "description": "Useful information for handbook, blocks, items and entities",

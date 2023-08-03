@@ -2,7 +2,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
-[assembly: ModInfo("Extra Info")]
+[assembly: ModInfo(name: "Extra Info", Side = "Universal", RequiredOnClient = false, RequiredOnServer = false)]
 
 namespace ExtraInfo;
 
