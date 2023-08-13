@@ -88,6 +88,24 @@ public class HarmonyPatches : ModSystem
         }
     }
 
+    [HarmonyPatch(typeof(BlockEntityShelf), nameof(BlockEntityShelf.CrockInfoCompact))]
+    public static class CrockInfoCompactShelfPatch
+    {
+        public static void Postfix(ref string __result, ItemSlot inSlot)
+        {
+            __result = __result.GetCrockSealedInName(inSlot);
+        }
+    }
+
+    [HarmonyPatch(typeof(BlockCookedContainerBase), nameof(BlockCookedContainerBase.GetContainedInfo))]
+    public static class GetContainedNameCookedContainerPatch
+    {
+        public static void Postfix(ref string __result, ItemSlot inSlot)
+        {
+            __result = __result.GetCrockSealedInName(inSlot);
+        }
+    }
+
     [HarmonyPatch(typeof(CollectibleObject), nameof(CollectibleObject.GetHeldItemInfo))]
     public static class HeldItemInfoPatch
     {

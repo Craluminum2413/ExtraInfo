@@ -149,6 +149,26 @@ public static class InfoExtensions
         dsc.Append(totalAmountSame).AppendLine();
     }
 
+    public static string GetCrockSealedInName(this string __result, ItemSlot inSlot)
+    {
+        StringBuilder oldSb = new(__result);
+
+        if (inSlot?.Itemstack?.Attributes?.GetBool("sealed") == true)
+        {
+            StringBuilder newSb = new();
+
+            newSb.Append('[');
+            newSb.Append("<font color=\"#90EE90\">");
+            newSb.Append(Lang.Get("Sealed."));
+            newSb.Append("</font>");
+            newSb.Append("] ");
+
+            oldSb.Insert(0, newSb);
+        }
+
+        return oldSb.ToString();
+    }
+
     public static void GetFarmlandDropSoilChanceInfo(this StringBuilder dsc, BlockEntityFarmland __instance)
     {
         bool isModEnabled = __instance.Api.ModLoader.IsModEnabled("farmlanddropssoil");
