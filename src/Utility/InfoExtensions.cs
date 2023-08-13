@@ -149,6 +149,21 @@ public static class InfoExtensions
         dsc.Append(totalAmountSame).AppendLine();
     }
 
+    public static void GetFarmlandDropSoilChanceInfo(this StringBuilder dsc, BlockEntityFarmland __instance)
+    {
+        bool isModEnabled = __instance.Api.ModLoader.IsModEnabled("farmlanddropssoil");
+        if (!isModEnabled)
+        {
+            return;
+        }
+
+        Mod mod = __instance.Api.ModLoader.GetMod("farmlanddropssoil");
+
+        float nutrients = __instance.Nutrients.Zip(__instance.OriginalFertility, (current, original) => current / original).Min();
+
+        dsc.AppendLine(ColorText(string.Format("{0}: {1}%", mod.Info.Name, (int)(nutrients * 100))));
+    }
+
     public static void GetFarmlandInfo(this StringBuilder dsc, BlockEntityFarmland __instance)
     {
         var timeLeft = __instance.TotalHoursForNextStage - __instance.Api.World.Calendar.TotalHours;
