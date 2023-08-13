@@ -12,18 +12,28 @@ public class Core : ModSystem
     {
         base.Start(api);
         api.RegisterCollectibleBehaviorClass("ExtraInfo:TreeGrowthDescription", typeof(CollectibleBehaviorTreeGrowthDescription));
-        api.World.Logger.Event("started 'Extra Info' mod");
+        api.RegisterCollectibleBehaviorClass("ExtraInfo:CrockSealedInName", typeof(CollectibleBehaviorCrockSealedInName));
     }
 
     public override void AssetsFinalize(ICoreAPI api)
     {
-        if (api.Side != EnumAppSide.Client) return;
-
-        foreach (var obj in api.World.Collectibles)
+        if (api.Side != EnumAppSide.Client)
         {
-            if (obj is not (ItemTreeSeed or BlockPlant)) continue;
+            return;
+        }
 
-            obj.CollectibleBehaviors = obj.CollectibleBehaviors.Append(new CollectibleBehaviorTreeGrowthDescription(obj));
+        foreach (CollectibleObject obj in api.World.Collectibles)
+        {
+            if (obj is ItemTreeSeed or BlockPlant)
+            {
+                obj.CollectibleBehaviors = obj.CollectibleBehaviors.Append(new CollectibleBehaviorTreeGrowthDescription(obj));
+            }
+
+            if (obj is BlockCrock)
+            {
+                obj.CollectibleBehaviors = obj.CollectibleBehaviors.Append(new CollectibleBehaviorCrockSealedInName(obj));
+            }
+
         }
     }
 }
