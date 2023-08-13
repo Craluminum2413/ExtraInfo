@@ -13,6 +13,7 @@ public class Core : ModSystem
         base.Start(api);
         api.RegisterCollectibleBehaviorClass("ExtraInfo:TreeGrowthDescription", typeof(CollectibleBehaviorTreeGrowthDescription));
         api.RegisterCollectibleBehaviorClass("ExtraInfo:CrockSealedInName", typeof(CollectibleBehaviorCrockSealedInName));
+        api.RegisterCollectibleBehaviorClass("ExtraInfo:TemperatureInName", typeof(CollectibleBehaviorTemperatureInName));
     }
 
     public override void AssetsFinalize(ICoreAPI api)
@@ -34,6 +35,7 @@ public class Core : ModSystem
                 obj.CollectibleBehaviors = obj.CollectibleBehaviors.Append(new CollectibleBehaviorCrockSealedInName(obj));
             }
 
+            obj.CollectibleBehaviors = obj.CollectibleBehaviors.Append(new CollectibleBehaviorTemperatureInName(obj));
         }
     }
 }
