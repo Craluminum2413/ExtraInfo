@@ -139,6 +139,7 @@ public static class InfoExtensions
             }
         }
 
+        dsc.AppendLine();
         dsc.Append(ColorText(Lang.Get("tabname-general")));
         dsc.Append(": ");
         dsc.Append(totalAmount).AppendLine();
