@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Datastructures;
 
 namespace ExtraInfo;
 
@@ -23,11 +25,11 @@ public class ServerEntityType : ModSystem
 
     public override void AssetsFinalize(ICoreAPI api)
     {
-        foreach (var type in api.World.EntityTypes)
+        foreach (EntityProperties type in api.World.EntityTypes)
         {
             if (type?.Server == null) continue;
             if (type?.Server?.BehaviorsAsJsonObj == null) continue;
-            foreach (var behavior in type.Server.BehaviorsAsJsonObj)
+            foreach (JsonObject behavior in type.Server.BehaviorsAsJsonObj)
             {
                 if (behavior.ToString().Contains("harvestable"))
                 {

@@ -21,8 +21,8 @@ public static class TextExtensions
 
     public static string GetMinMaxPercent(PanningDrop drop, float extraMul)
     {
-        var min = (drop.Chance.avg - drop.Chance.var) * extraMul * 100;
-        var max = (drop.Chance.avg + drop.Chance.var) * extraMul * 100;
+        float min = (drop.Chance.avg - drop.Chance.var) * extraMul * 100;
+        float max = (drop.Chance.avg + drop.Chance.var) * extraMul * 100;
         return min == max ? $"{min} %" : string.Format("{0} - {1} %", min, max);
     }
 }

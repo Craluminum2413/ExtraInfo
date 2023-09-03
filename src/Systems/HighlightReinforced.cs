@@ -14,9 +14,9 @@ public class HighlightReinforced : ModSystemHighlight
     public override string Name => Lang.Get("extrainfo:HighlightReinforcedBlocks");
     public override string HotkeyCode => "extrainfo:highlightreinforced";
 
-    public int Radius => 10;
+    public static int Radius => 10;
 
-    public int HighlightColor => Constants.ColorsRGBA.Cyan;
+    public static int HighlightColor => Constants.ColorsRGBA.Cyan;
 
     public ModSystemBlockReinforcement ModSysBlockReinforcement { get; protected set; }
 
@@ -33,11 +33,11 @@ public class HighlightReinforced : ModSystemHighlight
     {
         List<BlockPos> positions = new();
         List<int> colors = new();
-        var playerPos = capi.World.Player.Entity.Pos.AsBlockPos;
+        BlockPos playerPos = capi.World.Player.Entity.Pos.AsBlockPos;
 
         capi.World.BlockAccessor.WalkBlocks(playerPos.AddCopy(-Radius, -Radius, -Radius), playerPos.AddCopy(Radius, Radius, Radius), (_, x, y, z) =>
         {
-            var bPos = new BlockPos(x, y, z);
+            BlockPos bPos = new(x, y, z);
             if (IsReinforced(bPos))
             {
                 positions.Add(bPos);

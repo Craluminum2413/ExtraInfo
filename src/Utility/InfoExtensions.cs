@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.Client.NoObf;
 using Vintagestory.GameContent;
@@ -13,55 +12,57 @@ namespace ExtraInfo;
 
 public static class InfoExtensions
 {
-    public static void GetWorkableTempInfoForAnvil(this StringBuilder dsc, BlockEntityAnvil __instance)
+    public static void GetWorkableTempInfoForAnvil(this StringBuilder dsc, BlockEntityAnvil blockEntity)
     {
-        if (__instance.WorkItemStack == null || __instance.SelectedRecipe == null)
+        if (blockEntity == null) return;
+
+        if (blockEntity.WorkItemStack == null || blockEntity.SelectedRecipe == null)
         {
             return;
         }
 
-        ItemStack stack = __instance.WorkItemStack;
+        ItemStack stack = blockEntity.WorkItemStack;
 
-        float meltingpoint = stack.Collectible.GetMeltingPoint(__instance.Api.World, null, new DummySlot(stack));
+        float meltingpoint = stack.Collectible.GetMeltingPoint(blockEntity.Api.World, null, new DummySlot(stack));
 
-        float workableTemp = (stack.Collectible.Attributes?["workableTemperature"].Exists) switch
+        float workableTemp = (stack.Collectible.Attributes?[Constants.Text.WorkableTemperatureAttr].Exists) switch
         {
-            true => stack.Collectible.Attributes["workableTemperature"].AsFloat(meltingpoint / 2),
+            true => stack.Collectible.Attributes[Constants.Text.WorkableTemperatureAttr].AsFloat(meltingpoint / 2),
             _ => meltingpoint / 2,
         };
 
         _ = workableTemp switch
         {
-            0 => dsc.AppendLine(ColorText(Lang.Get("extrainfo:AlwaysWorkable"))),
-            _ => dsc.AppendLine(ColorText(Lang.Get("extrainfo:WorkableTemperature", (int)workableTemp)))
+            0 => dsc.AppendLine(ColorText(Constants.Text.AlwaysWorkable)),
+            _ => dsc.AppendLine(ColorText(Constants.Text.WorkableTemperature(workableTemp)))
         };
     }
 
     public static void GetWorkableTempInfoForItem(this StringBuilder dsc, ItemSlot inSlot, IWorldAccessor world)
     {
-        ItemStack stack = inSlot.Itemstack;
-        if (stack.Collectible is not IAnvilWorkable) return;
+        CollectibleObject obj = inSlot.Itemstack.Collectible;
+        if (obj is not IAnvilWorkable) return;
 
-        float temperature = stack.Collectible.GetTemperature(world, stack);
-        float meltingpoint = stack.Collectible.GetMeltingPoint(world, null, inSlot);
+        float temperature = obj.GetTemperature(world, inSlot.Itemstack);
+        float meltingpoint = obj.GetMeltingPoint(world, null, inSlot);
 
-        float workableTemp = (stack.Collectible.Attributes?["workableTemperature"].Exists) switch
+        float workableTemp = (obj.Attributes?[Constants.Text.WorkableTemperatureAttr].Exists) switch
         {
-            true => stack.Collectible.Attributes["workableTemperature"].AsFloat(meltingpoint / 2),
+            true => obj.Attributes[Constants.Text.WorkableTemperatureAttr].AsFloat(meltingpoint / 2),
             _ => meltingpoint / 2,
         };
 
         _ = workableTemp switch
         {
-            0 => dsc.AppendLine(ColorText(Lang.Get("extrainfo:AlwaysWorkable"))),
-            _ => dsc.AppendLine(ColorText(Lang.Get("extrainfo:WorkableTemperature", (int)workableTemp)))
+            0 => dsc.AppendLine(ColorText(Constants.Text.AlwaysWorkable)),
+            _ => dsc.AppendLine(ColorText(Constants.Text.WorkableTemperature(workableTemp)))
         };
 
         if (inSlot is DummySlot || inSlot is ItemSlotCreative) return; // do not show in handbook and creative inventory
 
         if (temperature < workableTemp)
         {
-            dsc.AppendLine(ColorText(Lang.Get("Too cold to work")));
+            dsc.AppendLine(ColorText(Constants.Text.TooColdToWork));
         }
     }
 
@@ -69,47 +70,45 @@ public static class InfoExtensions
     {
         StringBuilder sb = new(__result);
 
-        var damagedBlocks = (world as ClientMain).GetField<Dictionary<BlockPos, BlockDamage>>("damagedBlocks");
+        Dictionary<BlockPos, BlockDamage> damagedBlocks = (world as ClientMain).GetField<Dictionary<BlockPos, BlockDamage>>("damagedBlocks");
         if (damagedBlocks?.Count == 0) return __result;
 
-        var currentBlockDamage = damagedBlocks.FirstOrDefault(x => x.Key == pos).Value;
+        BlockDamage currentBlockDamage = damagedBlocks.FirstOrDefault(x => x.Key == pos).Value;
         if (currentBlockDamage == null) return __result;
 
-        var block = world.BlockAccessor.GetBlock(pos);
-        var initialResistance = block.Resistance;
-        var remainingResistance = currentBlockDamage.RemainingResistance;
+        Block block = world.BlockAccessor.GetBlock(pos);
+        float initialResistance = block.Resistance;
+        float remainingResistance = currentBlockDamage.RemainingResistance;
 
-        var percent = ((initialResistance - remainingResistance) / initialResistance * 100).ToString("F0");
-        // var seconds = Lang.Get("{0} seconds", remainingResistance.ToString("F02"));
-
-        sb.AppendLine().Append(ColorText(Lang.Get("extrainfo:RemainingResistance", percent + "%")));
-        // sb.AppendLine().Append(ColorText(Lang.Get("extrainfo:RemainingResistance", string.Format("{0}% | {1}", percent, seconds))));
+        string percent = ((initialResistance - remainingResistance) / initialResistance * 100).ToString("F0");
+        sb.AppendLine().Append(ColorText(Constants.Text.RemainingResistance(percent)));
 
         return sb.ToString().TrimEnd();
     }
 
-    public static void GetGroundStorageInfo(this StringBuilder dsc, BlockEntityGroundStorage __instance)
+    public static void GetGroundStorageInfo(this StringBuilder dsc, BlockEntityGroundStorage blockEntity)
     {
-        if (__instance?.StorageProps?.Layout != EnumGroundStorageLayout.Stacking) return;
-        if (__instance?.Inventory?.Count == 0) return;
+        if (blockEntity == null) return;
+        if (blockEntity?.StorageProps?.Layout != EnumGroundStorageLayout.Stacking) return;
+        if (blockEntity?.Inventory?.Count == 0) return;
 
-        var api = __instance.Api;
-        var centerPos = __instance.Pos;
+        ICoreAPI api = blockEntity.Api;
+        BlockPos centerPos = blockEntity.Pos;
 
-        var totalAmount = __instance.GetTotalAmount();
-        var totalAmountSame = totalAmount;
+        int totalAmount = blockEntity.GetTotalAmount();
+        int totalAmountSame = totalAmount;
 
-        var invalid = false;
+        bool invalid = false;
         for (int y = centerPos.Y - 1; !invalid; y--)
         {
-            var pos = new BlockPos(centerPos.X, y, centerPos.Z);
-            if (api.World.IsGroundStorage(pos, out var beGroundStorage))
+            BlockPos pos = new(centerPos.X, y, centerPos.Z);
+            if (api.World.IsGroundStorage(pos, out BlockEntityGroundStorage blockEntityGroundStorage))
             {
-                totalAmount += beGroundStorage.GetTotalAmount();
+                totalAmount += blockEntityGroundStorage.GetTotalAmount();
 
-                if (__instance.HasSameContent(beGroundStorage))
+                if (blockEntity.HasSameContent(blockEntityGroundStorage))
                 {
-                    totalAmountSame += beGroundStorage.GetTotalAmount();
+                    totalAmountSame += blockEntityGroundStorage.GetTotalAmount();
                 }
             }
             else
@@ -122,14 +121,14 @@ public static class InfoExtensions
         invalid = false;
         for (int y = centerPos.Y + 1; !invalid; y++)
         {
-            var pos = new BlockPos(centerPos.X, y, centerPos.Z);
-            if (api.World.IsGroundStorage(pos, out var beGroundStorage))
+            BlockPos pos = new(centerPos.X, y, centerPos.Z);
+            if (api.World.IsGroundStorage(pos, out BlockEntityGroundStorage blockEntityGroundStorage))
             {
-                totalAmount += beGroundStorage.GetTotalAmount();
+                totalAmount += blockEntityGroundStorage.GetTotalAmount();
 
-                if (__instance.HasSameContent(beGroundStorage))
+                if (blockEntity.HasSameContent(blockEntityGroundStorage))
                 {
-                    totalAmountSame += beGroundStorage.GetTotalAmount();
+                    totalAmountSame += blockEntityGroundStorage.GetTotalAmount();
                 }
             }
             else
@@ -140,11 +139,11 @@ public static class InfoExtensions
         }
 
         dsc.AppendLine();
-        dsc.Append(ColorText(Lang.Get("tabname-general")));
+        dsc.Append(ColorText(Constants.Text.Everything));
         dsc.Append(": ");
         dsc.Append(totalAmount).AppendLine();
 
-        dsc.Append(ColorText(Lang.Get("extrainfo:Current")));
+        dsc.Append(ColorText(Constants.Text.Current));
         dsc.Append(": ");
         dsc.Append(totalAmountSame).AppendLine();
     }
@@ -153,15 +152,12 @@ public static class InfoExtensions
     {
         StringBuilder oldSb = new(__result);
 
-        if (inSlot?.Itemstack?.Attributes?.GetBool("sealed") == true)
+        if (inSlot?.Itemstack?.Attributes?.GetBool(Constants.Text.SealedAttr) == true)
         {
             StringBuilder newSb = new();
 
-            newSb.Append('[');
-            newSb.Append("<font color=\"#90EE90\">");
-            newSb.Append(Lang.Get("Sealed."));
-            newSb.Append("</font>");
-            newSb.Append("] ");
+            newSb.Append(Constants.Text.SealedText);
+            newSb.Append(' ');
 
             oldSb.Insert(0, newSb);
         }
@@ -169,35 +165,39 @@ public static class InfoExtensions
         return oldSb.ToString();
     }
 
-    public static void GetFarmlandDropSoilChanceInfo(this StringBuilder dsc, BlockEntityFarmland __instance)
+    public static void GetFarmlandDropSoilChanceInfo(this StringBuilder dsc, BlockEntityFarmland blockEntity)
     {
-        bool isModEnabled = __instance.Api.ModLoader.IsModEnabled("farmlanddropssoil");
+        if (blockEntity == null) return;
+
+        bool isModEnabled = blockEntity.Api.ModLoader.IsModEnabled(Constants.Modid.FarmlandDropsSoil);
         if (!isModEnabled)
         {
             return;
         }
 
-        Mod mod = __instance.Api.ModLoader.GetMod("farmlanddropssoil");
+        Mod mod = blockEntity.Api.ModLoader.GetMod(Constants.Modid.FarmlandDropsSoil);
 
-        float nutrients = __instance.Nutrients.Zip(__instance.OriginalFertility, (current, original) => current / original).Min();
+        float nutrients = blockEntity.Nutrients.Zip(blockEntity.OriginalFertility, (current, original) => current / original).Min();
 
-        dsc.AppendLine(ColorText(string.Format("{0}: {1}%", mod.Info.Name, (int)(nutrients * 100))));
+        dsc.AppendLine(ColorText(string.Format(Constants.Text.FormatPercent, mod.Info.Name, (int)(nutrients * 100))));
     }
 
-    public static void GetFarmlandInfo(this StringBuilder dsc, BlockEntityFarmland __instance)
+    public static void GetFarmlandInfo(this StringBuilder dsc, BlockEntityFarmland blockEntity)
     {
-        var timeLeft = __instance.TotalHoursForNextStage - __instance.Api.World.Calendar.TotalHours;
+        if (blockEntity == null) return;
 
-        var block = GetCrop();
+        double timeLeft = blockEntity.TotalHoursForNextStage - blockEntity.Api.World.Calendar.TotalHours;
+
+        Block block = GetCrop();
 
         if (block != null && (GetCropStage(block) < block.CropProps.GrowthStages))
         {
-            dsc.AppendLine(ColorText(Lang.Get("{0} hours", timeLeft)));
+            dsc.AppendLine(ColorText(Constants.Text.Hours(timeLeft)));
         }
 
         Block GetCrop()
         {
-            var block = __instance.Api.World.BlockAccessor.GetBlock(__instance.UpPos);
+            Block block = blockEntity.Api.World.BlockAccessor.GetBlock(blockEntity.UpPos);
             if (block == null || block.CropProps == null)
             {
                 return null;
@@ -207,24 +207,27 @@ public static class InfoExtensions
 
         static int GetCropStage(Block block)
         {
-            int.TryParse(block.LastCodePart(), out var stage);
+            int.TryParse(block.LastCodePart(), out int stage);
             return stage;
         }
     }
 
-    public static void GetBloomeryInfo(this StringBuilder dsc, BlockEntityBloomery __instance)
+    public static void GetBloomeryInfo(this StringBuilder dsc, BlockEntityBloomery blockEntity)
     {
-        var api = __instance.Api;
+        if (blockEntity == null) return;
+        ICoreAPI api = blockEntity.Api;
 
-        if (__instance.GetField<bool>("burning"))
+        if (blockEntity.GetField<bool>("burning"))
         {
-            double timeLeft = (__instance.GetField<double>("burningUntilTotalDays") - api.World.Calendar.TotalDays) * api.World.Calendar.HoursPerDay;
-            dsc.AppendLine(ColorText(Lang.Get("{0} hours", Math.Round(timeLeft, 2))));
+            double timeLeft = (blockEntity.GetField<double>("burningUntilTotalDays") - api.World.Calendar.TotalDays) * api.World.Calendar.HoursPerDay;
+            double _timeLeft = Math.Round(timeLeft, 2);
+            dsc.AppendLine(ColorText(Constants.Text.Hours(_timeLeft)));
         }
     }
 
     public static void GetQuernInfo(this StringBuilder dsc, BlockEntityOpenableContainer blockEntity)
     {
+        if (blockEntity == null) return;
         if (blockEntity is not BlockEntityQuern quern) return;
 
         if (quern.CanGrind() && quern.GrindSpeed > 0)
@@ -237,11 +240,11 @@ public static class InfoExtensions
             stackSize *= 100;
             percent *= 100;
 
-            dsc.Append(ColorText(Lang.Get("tabname-general")));
+            dsc.Append(ColorText(Constants.Text.Everything));
             dsc.Append(' ');
             dsc.AppendFormat("{0:#}%", Math.Round(stackSize, 2)).AppendLine();
 
-            dsc.Append(ColorText(Lang.Get("extrainfo:One")));
+            dsc.Append(ColorText(Constants.Text.One));
             dsc.Append(' ');
             dsc.AppendFormat("{0:#}%", Math.Round(percent, 2)).AppendLine();
         }
@@ -256,9 +259,9 @@ public static class InfoExtensions
         BlockPos[] neighborPositions = new[] { pos.NorthCopy(), pos.EastCopy(), pos.SouthCopy(), pos.WestCopy() };
         double? hoursLeft = null;
 
-        foreach (var neighborPos in neighborPositions)
+        foreach (BlockPos neighborPos in neighborPositions)
         {
-            var neighborBE = world.BlockAccessor.GetBlockEntity(neighborPos) as BlockEntityCoalPile;
+            BlockEntityCoalPile neighborBE = world.BlockAccessor.GetBlockEntity(neighborPos) as BlockEntityCoalPile;
 
             if (neighborBE?.IsBurning == false)
             {
@@ -275,10 +278,11 @@ public static class InfoExtensions
 
         if (hoursLeft.HasValue)
         {
+            double _hoursLeft = Math.Round(hoursLeft.Value, 2);
             sb.AppendLine()
-                .Append(ColorText(Lang.Get("item-coke")))
+                .Append(ColorText(Constants.Text.Coke))
                 .Append(": ")
-                .Append(ColorText(Lang.Get("{0} hours", Math.Round(hoursLeft.Value, 2))));
+                .Append(ColorText(Constants.Text.Hours(_hoursLeft)));
         }
 
         return sb.ToString().TrimEnd();
@@ -291,13 +295,13 @@ public static class InfoExtensions
 
         StringBuilder sb = new(__result);
 
-        var _pos = blockDoor.IsUpperHalf() switch
+        BlockPos _pos = blockDoor.IsUpperHalf() switch
         {
             true => pos.DownCopy(),
             false => pos,
         };
 
-        var neighborPositions = new[]
+        BlockPos[] neighborPositions = new BlockPos[]
         {
             _pos.NorthCopy(3),
             _pos.EastCopy(3),
@@ -305,14 +309,15 @@ public static class InfoExtensions
             _pos.WestCopy(3)
         };
 
-        foreach (var blockPos in neighborPositions)
+        foreach (BlockPos blockPos in neighborPositions)
         {
             if (world.BlockAccessor.GetBlockEntity(blockPos) is not BlockEntityStoneCoffin be) continue;
 
-            var progress = be.GetField<double>("progress");
+            double progress = be.GetField<double>("progress");
             if (progress <= 0.0) continue;
 
-            sb.AppendLine(ColorText(Lang.Get("Carburization: {0}% complete", (int)(progress * 100.0))));
+            int percent = (int)(progress * 100.0);
+            sb.AppendLine(Constants.Text.CarburizationComplete(percent));
         }
 
         return sb.ToString().TrimEnd();
@@ -320,115 +325,99 @@ public static class InfoExtensions
 
     public static string GetCharcoalPitInfo(this string __result, IWorldAccessor world, BlockPos pos)
     {
-        var blockEntity = world.BlockAccessor.GetBlockEntity(pos.DownCopy());
-        if (blockEntity is not BlockEntityCharcoalPit be) return __result;
+        if (world.BlockAccessor.GetBlockEntity(pos.DownCopy()) is not BlockEntityCharcoalPit blockEntity) return __result;
 
         StringBuilder sb = new(__result);
 
-        switch (be.GetField<int>("state"))
+        switch (blockEntity.GetField<int>("state"))
         {
             case > 0:
                 {
-                    double timeLeft = be.GetField<double>("finishedAfterTotalHours") - world.Calendar.TotalHours;
-                    sb.Append(ColorText(Lang.Get("block-charcoalpit")));
+                    double timeLeft = blockEntity.GetField<double>("finishedAfterTotalHours") - world.Calendar.TotalHours;
+                    double hours = Math.Round(timeLeft, 2);
+                    sb.Append(ColorText(Constants.Text.CharcoalPit));
                     sb.Append(": ");
-                    sb.AppendLine(ColorText(Lang.Get("{0} hours", Math.Round(timeLeft, 2))));
+                    sb.AppendLine(ColorText(Constants.Text.Hours(hours)));
                     return sb.ToString().TrimEnd();
                 }
 
             default:
                 {
-                    double timeLeft = be.GetField<double>("startingAfterTotalHours") - world.Calendar.TotalHours;
-                    sb.Append(ColorText(Lang.Get("block-charcoalpit")));
+                    double timeLeft = blockEntity.GetField<double>("startingAfterTotalHours") - world.Calendar.TotalHours;
+                    double seconds = Math.Round(timeLeft, 2) * 100;
+                    sb.Append(ColorText(Constants.Text.CharcoalPit));
                     sb.Append(": ");
-                    sb.Append(ColorText(Lang.Get("Warming up...")));
+                    sb.Append(ColorText(Constants.Text.WarmingUp));
                     sb.Append(' ');
-                    sb.AppendLine(ColorText(Lang.Get("{0} seconds", Math.Round(timeLeft, 2) * 100)));
+                    sb.AppendLine(ColorText(Constants.Text.Seconds(seconds)));
                     return sb.ToString().TrimEnd();
                 }
         }
     }
 
-    public static void GetPitKilnInfo(this StringBuilder dsc, BlockEntityPitKiln __instance)
+    public static void GetPitKilnInfo(this StringBuilder dsc, BlockEntityPitKiln blockEntity)
     {
-        var api = __instance.Api;
+        if (blockEntity == null) return;
+        ICoreAPI api = blockEntity.Api;
 
-        if (__instance.Lit)
+        if (blockEntity.Lit)
         {
-            double timeLeft = __instance.BurningUntilTotalHours - api.World.Calendar.TotalHours;
-            dsc.AppendLine(ColorText(Lang.Get("{0} hours", Math.Round(timeLeft, 2))));
+            double timeLeft = blockEntity.BurningUntilTotalHours - api.World.Calendar.TotalHours;
+            double hours = Math.Round(timeLeft, 2);
+            dsc.AppendLine(ColorText(Constants.Text.Hours(hours)));
         }
     }
 
-    public static void GetBombInfo(this StringBuilder sb, Block block, BlockEntityBomb be)
+    public static void GetBombInfo(this StringBuilder sb, Block block, BlockEntityBomb blockEntity)
     {
-        if (be != null)
+        if (blockEntity != null)
         {
-            sb.AppendLine(ColorText(Lang.Get("extrainfo:bomb-BlastRadius", be.BlastRadius)));
-            sb.AppendLine(ColorText(Lang.Get("extrainfo:bomb-InjureRadius", be.InjureRadius)));
-            sb.AppendLine(ColorText(Lang.Get("extrainfo:bomb-BlastType", be.BlastType switch
-            {
-                EnumBlastType.OreBlast => Lang.Get("blockmaterial-Ore"),
-                EnumBlastType.RockBlast => Lang.Get("blockmaterial-Stone"),
-                EnumBlastType.EntityBlast => Lang.Get("tabname-creatures"),
-                _ => Lang.Get("foodcategory-unknown")
-            })));
-
-            sb.AppendLine(ColorText(Lang.Get("extrainfo:bomb-FuseTime", Lang.Get("{0} seconds", be.FuseTimeSeconds))));
+            sb.AppendLine(ColorText(Constants.Text.BlastRadius(blockEntity.BlastRadius)));
+            sb.AppendLine(ColorText(Constants.Text.InjureRadius(blockEntity.InjureRadius)));
+            sb.AppendLine(ColorText(Constants.Text.BlastType(blockEntity.BlastType)));
+            sb.AppendLine(ColorText(Constants.Text.FuseTimeSeconds(blockEntity.FuseTimeSeconds)));
         }
         else if (block != null)
         {
             if (block.Attributes == null) return;
-
-            var blastRadius = (float)block.Attributes["blastRadius"].AsInt();
-            var injureRadius = (float)block.Attributes["injureRadius"].AsInt();
-            var blastType = (EnumBlastType)block.Attributes["blastType"].AsInt();
-
-            sb.AppendLine(ColorText(Lang.Get("extrainfo:bomb-BlastRadius", blastRadius)));
-            sb.AppendLine(ColorText(Lang.Get("extrainfo:bomb-InjureRadius", injureRadius)));
-            sb.AppendLine(ColorText(Lang.Get("extrainfo:bomb-BlastType", blastType switch
-            {
-                EnumBlastType.OreBlast => Lang.Get("blockmaterial-Ore"),
-                EnumBlastType.RockBlast => Lang.Get("blockmaterial-Stone"),
-                EnumBlastType.EntityBlast => Lang.Get("tabname-creatures"),
-                _ => Lang.Get("foodcategory-unknown")
-            })));
+            sb.AppendLine(ColorText(Constants.Text.BlastRadius(block.Attributes[Constants.Text.BlastRadiusAttr].AsInt())));
+            sb.AppendLine(ColorText(Constants.Text.InjureRadius(block.Attributes[Constants.Text.InjureRadiusAttr].AsInt())));
+            sb.AppendLine(ColorText(Constants.Text.BlastType(block.Attributes[Constants.Text.BlastTypeAttr].AsObject<EnumBlastType>())));
         }
     }
 
-    public static void GetTransientInfo(this StringBuilder dsc, BlockEntityTransient be)
+    public static void GetTransientInfo(this StringBuilder dsc, BlockEntityTransient blockEntity)
     {
-        if (be == null) return;
+        if (blockEntity == null) return;
+        TransientProperties props = blockEntity.GetField<TransientProperties>("props");
+        if (props == null) return;
 
-        var props = be.GetField<TransientProperties>("props");
-        if (props is null) return;
+        blockEntity.CheckTransition(0);
 
-        be.CheckTransition(0);
-
-        var hoursLeft = be.GetField<double>("transitionHoursLeft");
-        dsc.AppendLine(ColorText(Lang.Get("{0} hours", hoursLeft)));
+        double hoursLeft = blockEntity.GetField<double>("transitionHoursLeft");
+        dsc.AppendLine(ColorText(Constants.Text.Hours(hoursLeft)));
     }
 
-    public static void GetSkepInfo(this StringBuilder dsc, BlockEntityBeehive be)
+    public static void GetSkepInfo(this StringBuilder dsc, BlockEntityBeehive blockEntity)
     {
-        if (be == null) return;
-        if (be.Block is not BlockSkep) return;
-        var hoursLeft = be.GetField<double>("harvestableAtTotalHours") - be.Api.World.Calendar.TotalHours;
-        dsc.AppendLine(ColorText(Lang.Get("{0} hours", hoursLeft)));
+        if (blockEntity == null) return;
+        if (blockEntity.Block is not BlockSkep) return;
+        double hoursLeft = blockEntity.GetField<double>("harvestableAtTotalHours") - blockEntity.Api.World.Calendar.TotalHours;
+        dsc.AppendLine(ColorText(Constants.Text.Hours(hoursLeft)));
     }
 
-    public static void GetTranslocatorInfo(this StringBuilder dsc, BlockEntityStaticTranslocator be)
+    public static void GetTranslocatorInfo(this StringBuilder dsc, BlockEntityStaticTranslocator blockEntity)
     {
-        if (be == null) return;
-        if (be.tpLocation == null) return;
+        if (blockEntity == null) return;
+        if (blockEntity.tpLocation == null) return;
 
-        BlockPos pos = be.Api.World.DefaultSpawnPosition.AsBlockPos;
-        BlockPos targetpos = be.tpLocation.Copy().Sub(pos.X, 0, pos.Z);
-        if (be.tpLocationIsOffset)
+        BlockPos pos = blockEntity.Api.World.DefaultSpawnPosition.AsBlockPos;
+        BlockPos targetpos = blockEntity.tpLocation.Copy().Sub(pos.X, 0, pos.Z);
+        if (blockEntity.tpLocationIsOffset)
         {
-            targetpos.Add(be.Pos.X, pos.Y, pos.Z);
+            targetpos.Add(blockEntity.Pos.X, pos.Y, pos.Z);
         }
-        dsc.AppendLine(ColorText(Lang.Get("Teleports to {0}", targetpos)));
+        dsc.AppendLine(ColorText(Constants.Text.TeleportsTo(targetpos)));
     }
 
     // /// <summary>

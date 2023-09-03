@@ -1,6 +1,5 @@
 using System.Text;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 
 namespace ExtraInfo;
@@ -22,16 +21,13 @@ public class CollectibleBehaviorTemperatureInName : CollectibleBehavior
             return;
         }
 
-        ITreeAttribute attr = itemStack.Attributes.GetTreeAttribute("temperature");
+        ITreeAttribute attr = itemStack.Attributes.GetTreeAttribute(Constants.Text.TemperatureAttr);
 
-        float temperature = attr.GetFloat("temperature", 20f);
+        float temperature = attr.GetFloat(Constants.Text.TemperatureAttr, 20f);
         if (temperature > 20f)
         {
-            dsc.Append('[');
-            dsc.Append("<font color=\"#EEEE90\">");
-            dsc.AppendFormat(Lang.Get("{0}°C"), (int)temperature);
-            dsc.Append("</font>");
-            dsc.Append("] ");
+            dsc.Append(Constants.Text.TemperatureText(temperature));
+            dsc.Append(' ');
         }
 
         sb.Insert(0, dsc);

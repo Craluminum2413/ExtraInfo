@@ -23,12 +23,12 @@ public static class GroundStorageExtensions
 
     public static bool HasSameContent<T>(this T beGroundStorage, T beGroundStorageOther) where T : BlockEntityGroundStorage
     {
-        var thisStack = GetContainedStack(beGroundStorage);
-        var otherStack = GetContainedStack(beGroundStorageOther);
+        ItemStack thisStack = GetContainedStack(beGroundStorage);
+        ItemStack otherStack = GetContainedStack(beGroundStorageOther);
 
         if (thisStack == null || otherStack == null) return false;
 
-        var obj = thisStack.Collectible;
+        CollectibleObject obj = thisStack.Collectible;
         return obj.Equals(thisStack, otherStack, "temperature");
     }
 }

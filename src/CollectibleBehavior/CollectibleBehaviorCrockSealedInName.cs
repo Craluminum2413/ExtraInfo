@@ -1,6 +1,5 @@
 using System.Text;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 
 namespace ExtraInfo;
 
@@ -16,13 +15,10 @@ public class CollectibleBehaviorCrockSealedInName : CollectibleBehavior
 
         StringBuilder dsc = new();
 
-        if (itemStack.Attributes.GetBool("sealed"))
+        if (itemStack.Attributes.GetBool(Constants.Text.SealedAttr))
         {
-            dsc.Append('[');
-            dsc.Append("<font color=\"#90EE90\">");
-            dsc.Append(Lang.Get("Sealed."));
-            dsc.Append("</font>");
-            dsc.Append("] ");
+            dsc.Append(Constants.Text.SealedText);
+            dsc.Append(' ');
         }
 
         sb.Insert(0, dsc);
