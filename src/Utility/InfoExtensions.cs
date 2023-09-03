@@ -77,11 +77,13 @@ public static class InfoExtensions
         if (currentBlockDamage == null) return __result;
 
         Block block = world.BlockAccessor.GetBlock(pos);
-        float initialResistance = block.Resistance;
-        float remainingResistance = currentBlockDamage.RemainingResistance;
+        float totalValue = block.Resistance;
+        float remainingValue = currentBlockDamage.RemainingResistance;
 
-        string percent = ((initialResistance - remainingResistance) / initialResistance * 100).ToString("F0");
-        sb.AppendLine().Append(ColorText(Constants.Text.RemainingResistance(percent)));
+        float totalPercentage = (remainingValue / totalValue) * 100;
+        float remainingPercentage = 100 - (100 - totalPercentage);
+
+        sb.AppendLine().Append(ColorText(Constants.Text.RemainingResistance(remainingPercentage.ToString("F0"))));
 
         return sb.ToString().TrimEnd();
     }
