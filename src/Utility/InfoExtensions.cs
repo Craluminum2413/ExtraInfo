@@ -80,8 +80,7 @@ public static class InfoExtensions
         float totalValue = block.Resistance;
         float remainingValue = currentBlockDamage.RemainingResistance;
 
-        float totalPercentage = (remainingValue / totalValue) * 100;
-        float remainingPercentage = 100 - (100 - totalPercentage);
+        float remainingPercentage = remainingValue / totalValue * 100;
 
         sb.AppendLine().Append(ColorText(Constants.Text.RemainingResistance(remainingPercentage.ToString("F0"))));
 
