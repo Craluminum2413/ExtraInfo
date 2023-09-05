@@ -7,19 +7,13 @@
     "One": "Одне",
     "Fuel": "Паливо",
     "Food": "Їжа",
+    "PanningDrops": "Здобич від панорамування",
     "AvailableFood": "Доступна їжа",
     "Bomb-BlastRadius": "Радіус вибуху: {0}",
-    "bomb-InjureRadius": "Радіус поранення: {0}",
+    "bomb-InjureRadius": "Радіус ураження: {0}",
     "bomb-BlastType": "Тип вибуху: {0}",
     "bomb-FuseTime": "Час горіння запалу: {0}",
-    // "Mechanics-Speed": "Speed: {0: G4}",
-    // "mechanics-TotalAvailableTorque": "Available Torque: {0:G4}",
-    // "Mechanics-NetworkTorque": "Total Torque: {0: G4}",
-    // "Mechanics-NetworkResistance": "Resistance: {0:G4}",
-    "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>",
     "HighlightMycelium": "'Підсвічування міцелію'",
     "HighlightReinforcedBlocks": "'Підсвічування посилених блоків'",
-    "Toggle": "Переключити {0}",
-    "Toggle.True": "{0} <font weight=\"bold\" color=\"#84ff84\">{1}</font>",
-    "Toggle.False": "{0} <font weight=\"bold\" color=\"#ff8484\">{1}</font>"
+    "Toggle": "Переключити {0}"
 }

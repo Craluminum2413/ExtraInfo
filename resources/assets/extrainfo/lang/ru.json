@@ -7,19 +7,13 @@
     "One": "Одно",
     "Fuel": "Топливо",
     "Food": "Еда",
+    "PanningDrops": "Добыча с панорамирования",
     "AvailableFood": "Доступная еда",
     "bomb-BlastRadius": "Радиус взрыва: {0}",
-    "bomb-InjureRadius": "Радиус ранения: {0}",
+    "bomb-InjureRadius": "Радиус поражения: {0}",
     "bomb-BlastType": "Тип взрыва: {0}",
     "bomb-FuseTime": "Время горения запала: {0}",
-    // "mechanics-Speed": "Speed: {0:G4}",
-    // "mechanics-TotalAvailableTorque": "Available Torque: {0:G4}",
-    // "mechanics-NetworkTorque": "Total Torque: {0:G4}",
-    // "mechanics-NetworkResistance": "Resistance: {0:G4}",
-    "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>",
     "HighlightMycelium": "'Подсвечивание мицелия'",
     "HighlightReinforcedBlocks": "'Подсвечивание укрепленных блоков'",
-    "Toggle": "Переключить {0}",
-    "Toggle.True": "{0} <font weight=\"bold\" color=\"#84ff84\">{1}</font>",
-    "Toggle.False": "{0} <font weight=\"bold\" color=\"#ff8484\">{1}</font>"
+    "Toggle": "Переключить {0}"
 }
