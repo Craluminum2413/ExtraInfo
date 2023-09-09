@@ -1,7 +1,3 @@
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
-
 namespace ExtraInfo;
 
 public static class ItemstackExtensions

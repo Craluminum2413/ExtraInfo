@@ -1,9 +1,3 @@
-using System.Text;
-using Vintagestory.API.Common;
-using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
-using static ExtraInfo.TextExtensions;
-
 namespace ExtraInfo;
 
 public class CollectibleBehaviorTreeGrowthDescription : CollectibleBehavior

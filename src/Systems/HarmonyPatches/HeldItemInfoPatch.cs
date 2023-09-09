@@ -1,8 +1,3 @@
-using HarmonyLib;
-using Vintagestory.API.Common;
-using Vintagestory.GameContent;
-using System.Text;
-
 namespace ExtraInfo;
 
 public partial class HarmonyPatches

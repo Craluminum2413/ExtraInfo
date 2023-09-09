@@ -1,7 +1,3 @@
-using System.Text;
-using Vintagestory.API.Common;
-using Vintagestory.API.Datastructures;
-
 namespace ExtraInfo;
 
 public class CollectibleBehaviorTemperatureInName : CollectibleBehavior

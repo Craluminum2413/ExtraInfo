@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Vintagestory.API.Client;
-using Vintagestory.API.Config;
-using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
-
 namespace ExtraInfo;
 
 public class HighlightReinforced : ModSystemHighlight

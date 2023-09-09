@@ -1,7 +1,3 @@
-using HarmonyLib;
-using Vintagestory.API.Common;
-using Vintagestory.API.MathTools;
-
 namespace ExtraInfo;
 
 public partial class HarmonyPatches

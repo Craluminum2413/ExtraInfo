@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
-using Vintagestory.API.Datastructures;
-
 namespace ExtraInfo;
 
 public class ServerEntityType : ModSystem

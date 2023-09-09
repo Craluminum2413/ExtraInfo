@@ -1,8 +1,3 @@
-using HarmonyLib;
-using Vintagestory.API.Common;
-using Vintagestory.API.Client;
-using Vintagestory.GameContent;
-
 namespace ExtraInfo;
 
 public partial class HarmonyPatches : ModSystem

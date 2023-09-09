@@ -1,6 +1,3 @@
-using System.Text;
-using Vintagestory.API.Common;
-
 namespace ExtraInfo;
 
 public class CollectibleBehaviorCrockSealedInName : CollectibleBehavior
