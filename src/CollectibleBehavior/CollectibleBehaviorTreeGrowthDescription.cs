@@ -37,9 +37,13 @@ public class CollectibleBehaviorTreeGrowthDescription : CollectibleBehavior
             matureDays = block.Attributes[Constants.Text.MatureDaysAttr].AsObject<NatFloat>();
         }
 
-        if (sproutDays == null && matureDays == null) return;
-
-        dsc.AppendLine(ColorText(Constants.Text.WillSproutIn(GetMinMax(sproutDays))));
-        dsc.AppendLine(ColorText(Constants.Text.WillMatureIn(GetMinMax(matureDays))));
+        if (sproutDays != null)
+        {
+            dsc.AppendLine(ColorText(Constants.Text.WillSproutIn(GetMinMax(sproutDays))));
+        }
+        if (matureDays != null)
+        {
+            dsc.AppendLine(ColorText(Constants.Text.WillMatureIn(GetMinMax(matureDays))));
+        }
     }
 }
