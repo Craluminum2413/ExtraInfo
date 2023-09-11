@@ -95,15 +95,23 @@ public static class Constants
             _ => Lang.Get("foodcategory-unknown")
         });
 
-        public static string Hours(double hours) => Lang.Get("{0} hours", hours);
-        public static string Hours(float hours) => Lang.Get("{0} hours", hours);
-        public static string Hours(int hours) => Lang.Get("{0} hours", hours);
-        public static string Hours(string hours) => Lang.Get("{0} hours", hours);
+        public static string Hours(double hours) => Lang.Get("{0} hours", Math.Floor(hours));
+        public static string Hours(float hours) => Lang.Get("{0} hours", Math.Floor(hours));
+
+        public static string HoursAndMinutes(double hours)
+        {
+            double minutes = Math.Floor((hours - Math.Truncate(hours)) * 60.0);
+            return Lang.Get("{0} hours, {1} minutes", Math.Floor(hours), minutes);
+        }
+
+        public static string HoursAndMinutes(float hours)
+        {
+            double minutes = Math.Floor((hours - Math.Truncate(hours)) * 60.0);
+            return Lang.Get("{0} hours, {1} minutes", Math.Floor(hours), minutes);
+        }
 
         public static string Seconds(double seconds) => Lang.Get("{0} seconds", seconds);
         public static string Seconds(float seconds) => Lang.Get("{0} seconds", seconds);
-        public static string Seconds(int seconds) => Lang.Get("{0} seconds", seconds);
-        public static string Seconds(string seconds) => Lang.Get("{0} seconds", seconds);
 
         public static string TeleportsTo(BlockPos pos) => Lang.Get("Teleports to {0}", pos);
 
