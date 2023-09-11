@@ -177,13 +177,13 @@ public static class InfoExtensions
     {
         if (blockEntity == null) return;
 
-        double timeLeft = blockEntity.TotalHoursForNextStage - blockEntity.Api.World.Calendar.TotalHours;
+        double hours = blockEntity.TotalHoursForNextStage - blockEntity.Api.World.Calendar.TotalHours;
 
         Block block = GetCrop();
 
         if (block != null && (GetCropStage(block) < block.CropProps.GrowthStages))
         {
-            dsc.AppendLine(ColorText(Constants.Text.Hours(timeLeft)));
+            dsc.AppendLine(ColorText(Constants.Text.HoursAndMinutes(hours)));
         }
 
         Block GetCrop()
