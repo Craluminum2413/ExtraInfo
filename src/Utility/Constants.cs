@@ -110,6 +110,20 @@ public static class Constants
             return Lang.Get("{0} hours, {1} minutes", Math.Floor(hours), minutes);
         }
 
+        public static string MinutesAndSeconds(double hours)
+        {
+            double minutes = Math.Floor((hours - Math.Truncate(hours)) * 60.0);
+            double seconds = Math.Floor((minutes - Math.Truncate(minutes)) * 60.0);
+            return Lang.Get("{0} minutes, {1} seconds", minutes, seconds);
+        }
+
+        public static string MinutesAndSeconds(float hours)
+        {
+            double minutes = Math.Floor((hours - Math.Truncate(hours)) * 60.0);
+            double seconds = Math.Floor((minutes - Math.Truncate(minutes)) * 60.0);
+            return Lang.Get("{0} minutes, {1} seconds", minutes, seconds);
+        }
+
         public static string Seconds(double seconds) => Lang.Get("{0} seconds", seconds);
         public static string Seconds(float seconds) => Lang.Get("{0} seconds", seconds);
 
