@@ -246,10 +246,8 @@ public static class InfoExtensions
 
         StringBuilder sb = new(__result);
 
-        BlockPos[] neighborPositions = new[] { pos.NorthCopy(), pos.EastCopy(), pos.SouthCopy(), pos.WestCopy() };
-        double? hoursLeft = null;
-
-        foreach (BlockPos neighborPos in neighborPositions)
+        BlockPos[] positions = new[] { pos.NorthCopy(), pos.EastCopy(), pos.SouthCopy(), pos.WestCopy() };
+        foreach (BlockPos neighborPos in positions)
         {
             BlockEntityCoalPile neighborBE = world.BlockAccessor.GetBlockEntity(neighborPos) as BlockEntityCoalPile;
 
@@ -258,24 +256,22 @@ public static class InfoExtensions
                 return __result;
             }
 
-            double? neighborHoursLeft = neighborBE?.GetHoursLeft(neighborBE.GetField<double>("burnStartTotalHours"));
+            double? hours = neighborBE?.GetHoursLeft(neighborBE.GetField<double>("burnStartTotalHours"));
 
-            if (neighborHoursLeft.HasValue && (!hoursLeft.HasValue || neighborHoursLeft.Value < hoursLeft.Value))
+            if (!hours.HasValue)
             {
-                hoursLeft = neighborHoursLeft.Value;
+                continue;
             }
-        }
 
-        if (hoursLeft.HasValue)
-        {
-            double _hoursLeft = Math.Round(hoursLeft.Value, 2);
             sb.AppendLine()
                 .Append(ColorText(Constants.Text.Coke))
                 .Append(": ")
-                .Append(ColorText(Constants.Text.Hours(_hoursLeft)));
+                .Append(ColorText(Constants.Text.Hours(hours.Value)));
+
+            return sb.ToString().TrimEnd();
         }
 
-        return sb.ToString().TrimEnd();
+        return __result;
     }
 
     public static string GetSteelInfo(this string __result, IWorldAccessor world, BlockPos pos)
