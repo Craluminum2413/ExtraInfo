@@ -385,8 +385,8 @@ public static class InfoExtensions
     {
         if (blockEntity == null) return;
         if (blockEntity.Block is not BlockSkep) return;
-        double hoursLeft = blockEntity.GetField<double>("harvestableAtTotalHours") - blockEntity.Api.World.Calendar.TotalHours;
-        dsc.AppendLine(ColorText(Constants.Text.Hours(hoursLeft)));
+        double hours = blockEntity.GetField<double>("harvestableAtTotalHours") - blockEntity.Api.World.Calendar.TotalHours;
+        dsc.AppendLine(ColorText(Constants.Text.HoursAndMinutes(hours)));
     }
 
     public static void GetTranslocatorInfo(this StringBuilder dsc, BlockEntityStaticTranslocator blockEntity)
