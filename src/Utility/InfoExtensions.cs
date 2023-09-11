@@ -319,23 +319,21 @@ public static class InfoExtensions
         {
             case > 0:
                 {
-                    double timeLeft = blockEntity.GetField<double>("finishedAfterTotalHours") - world.Calendar.TotalHours;
-                    double hours = Math.Round(timeLeft, 2);
+                    double hours = blockEntity.GetField<double>("finishedAfterTotalHours") - world.Calendar.TotalHours;
                     sb.Append(ColorText(Constants.Text.CharcoalPit));
                     sb.Append(": ");
-                    sb.AppendLine(ColorText(Constants.Text.Hours(hours)));
+                    sb.AppendLine(ColorText(Constants.Text.HoursAndMinutes(hours)));
                     return sb.ToString().TrimEnd();
                 }
 
             default:
                 {
-                    double timeLeft = blockEntity.GetField<double>("startingAfterTotalHours") - world.Calendar.TotalHours;
-                    double seconds = Math.Round(timeLeft, 2) * 100;
+                    double hours = blockEntity.GetField<double>("startingAfterTotalHours") - world.Calendar.TotalHours;
                     sb.Append(ColorText(Constants.Text.CharcoalPit));
                     sb.Append(": ");
                     sb.Append(ColorText(Constants.Text.WarmingUp));
                     sb.Append(' ');
-                    sb.AppendLine(ColorText(Constants.Text.Seconds(seconds)));
+                    sb.AppendLine(ColorText(Constants.Text.MinutesAndSeconds(hours)));
                     return sb.ToString().TrimEnd();
                 }
         }
