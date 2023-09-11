@@ -15,7 +15,7 @@ public static class HandbookExtensions
         foreach (JsonItemStackBuildStage fuel in fuelStacks)
         {
             richText.AddStack(capi, openDetailPageFor, fuel.ResolvedItemstack);
-            richText.Add(new RichTextComponent(capi, Constants.Text.Hours(fuel.BurnTimeHours.ToString()) + "\n", CairoFont.WhiteSmallText())
+            richText.Add(new RichTextComponent(capi, Constants.Text.Hours((float)fuel.BurnTimeHours) + "\n", CairoFont.WhiteSmallText())
             {
                 VerticalAlign = EnumVerticalAlign.Middle
             });
