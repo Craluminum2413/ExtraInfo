@@ -353,9 +353,8 @@ public static class InfoExtensions
 
         if (blockEntity.Lit)
         {
-            double timeLeft = blockEntity.BurningUntilTotalHours - api.World.Calendar.TotalHours;
-            double hours = Math.Round(timeLeft, 2);
-            dsc.AppendLine(ColorText(Constants.Text.Hours(hours)));
+            double hours = blockEntity.BurningUntilTotalHours - api.World.Calendar.TotalHours;
+            dsc.AppendLine(ColorText(Constants.Text.HoursAndMinutes(hours)));
         }
     }
 
