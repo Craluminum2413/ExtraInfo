@@ -210,9 +210,8 @@ public static class InfoExtensions
 
         if (blockEntity.GetField<bool>("burning"))
         {
-            double timeLeft = (blockEntity.GetField<double>("burningUntilTotalDays") - api.World.Calendar.TotalDays) * api.World.Calendar.HoursPerDay;
-            double _timeLeft = Math.Round(timeLeft, 2);
-            dsc.AppendLine(ColorText(Constants.Text.Hours(_timeLeft)));
+            double hours = (blockEntity.GetField<double>("burningUntilTotalDays") - api.World.Calendar.TotalDays) * api.World.Calendar.HoursPerDay;
+            dsc.AppendLine(ColorText(Constants.Text.HoursAndMinutes(hours)));
         }
     }
 
