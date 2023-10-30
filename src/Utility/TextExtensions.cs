@@ -11,8 +11,8 @@ public static class TextExtensions
         return min == max ? $"{min}" : string.Format("{0} - {1}", min, max);
     }
 
-    public static int GetMin(NatFloat natFloat) => (int)Math.Max(1, Math.Round(natFloat.avg - natFloat.var));
-    public static int GetMax(NatFloat natFloat) => (int)Math.Max(1, Math.Round(natFloat.avg + natFloat.var));
+    public static int GetMin(NatFloat natFloat) => (int)Math.Max(0, Math.Floor(natFloat.avg - natFloat.var));
+    public static int GetMax(NatFloat natFloat) => (int)Math.Max(1, Math.Ceiling(natFloat.avg + natFloat.var));
 
     public static string GetMinMaxPercent(PanningDrop drop, float extraMul)
     {
