@@ -5,8 +5,6 @@ public partial class HarmonyPatches : ModSystem
     public const string HarmonyID = "craluminum2413.extrainfo";
     public static Harmony HarmonyInstance { get; set; } = new Harmony(HarmonyID);
 
-    public override bool AllowRuntimeReload => true;
-
     public override void StartClientSide(ICoreClientAPI api)
     {
         base.StartClientSide(api);
@@ -15,7 +13,7 @@ public partial class HarmonyPatches : ModSystem
         HarmonyInstance.Patch(original: typeof(BlockEntityShelf).GetMethod(nameof(BlockEntityShelf.CrockInfoCompact)), postfix: typeof(CrockInfoCompactShelfPatch).GetMethod(nameof(CrockInfoCompactShelfPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(CollectibleBehaviorHandbookTextAndExtraInfo).GetMethod(nameof(CollectibleBehaviorHandbookTextAndExtraInfo.GetHandbookInfo)), postfix: typeof(GetHandbookInfoPatch).GetMethod(nameof(GetHandbookInfoPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetHeldItemInfo)), postfix: typeof(HeldItemInfoPatch).GetMethod(nameof(HeldItemInfoPatch.Postfix)));
-        HarmonyInstance.Patch(original: typeof(ModSystemHandbook).GetMethod("OnHelpHotkey", AccessTools.all), postfix: typeof(OpenHandbookForEntityPatch).GetMethod(nameof(OpenHandbookForEntityPatch.Postfix)));
+        HarmonyInstance.Patch(original: typeof(ModSystemSurvivalHandbook).GetMethod("OnSurvivalHandbookHotkey", AccessTools.all), postfix: typeof(OpenHandbookForEntityPatch).GetMethod(nameof(OpenHandbookForEntityPatch.Postfix)));
 
         HarmonyInstance.Patch(original: typeof(BlockEntity).GetMethod(nameof(BlockEntity.GetBlockInfo)), postfix: typeof(BlockEntityInfoPatch).GetMethod(nameof(BlockEntityInfoPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(BlockEntityAnvil).GetMethod(nameof(BlockEntityAnvil.GetBlockInfo)), postfix: typeof(AnvilInfoPatch).GetMethod(nameof(AnvilInfoPatch.Postfix)));
@@ -35,7 +33,7 @@ public partial class HarmonyPatches : ModSystem
         HarmonyInstance.Unpatch(original: typeof(BlockEntityShelf).GetMethod(nameof(BlockEntityShelf.CrockInfoCompact)), type: HarmonyPatchType.All, HarmonyID);
         HarmonyInstance.Unpatch(original: typeof(CollectibleBehaviorHandbookTextAndExtraInfo).GetMethod(nameof(CollectibleBehaviorHandbookTextAndExtraInfo.GetHandbookInfo)), type: HarmonyPatchType.All, HarmonyID);
         HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetHeldItemInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(ModSystemHandbook).GetMethod("OnHelpHotkey", AccessTools.all), type: HarmonyPatchType.All, HarmonyID);
+        HarmonyInstance.Unpatch(original: typeof(ModSystemSurvivalHandbook).GetMethod("OnSurvivalHandbookHotkey", AccessTools.all), type: HarmonyPatchType.All, HarmonyID);
 
         HarmonyInstance.Unpatch(original: typeof(BlockEntity).GetMethod(nameof(BlockEntity.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
         HarmonyInstance.Unpatch(original: typeof(BlockEntityAnvil).GetMethod(nameof(BlockEntityAnvil.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);

@@ -2,8 +2,6 @@ namespace ExtraInfo;
 
 public class ServerEntityType : ModSystem
 {
-    public override bool AllowRuntimeReload => true;
-
     public static Dictionary<AssetLocation, BlockDropItemStack[]> HarvestableDrops { get; set; } = new();
     public static Dictionary<AssetLocation, float> HealthList { get; set; } = new();
     public static Dictionary<AssetLocation, float> DamageList { get; set; } = new();

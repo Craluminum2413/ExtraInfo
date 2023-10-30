@@ -2,10 +2,10 @@ namespace ExtraInfo;
 
 public partial class HarmonyPatches
 {
-    [HarmonyPatch(typeof(ModSystemHandbook), methodName: "OnHelpHotkey")]
+    [HarmonyPatch(typeof(ModSystemSurvivalHandbook), methodName: "OnSurvivalHandbookHotkey")]
     public static class OpenHandbookForEntityPatch
     {
-        public static void Postfix(ref bool __result, ModSystemHandbook __instance)
+        public static void Postfix(ref bool __result, ModSystemSurvivalHandbook __instance)
         {
             GuiDialogHandbook dialog = __instance.GetField<GuiDialogHandbook>("dialog");
             ICoreClientAPI capi = __instance.GetField<ICoreClientAPI>("capi");
