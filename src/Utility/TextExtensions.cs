@@ -18,6 +18,8 @@ public static class TextExtensions
     {
         float min = (drop.Chance.avg - drop.Chance.var) * extraMul * 100;
         float max = (drop.Chance.avg + drop.Chance.var) * extraMul * 100;
+        min = (float)Math.Round(min, 5);
+        max = (float)Math.Round(max, 5);
         return min == max ? $"{min} %" : string.Format("{0} - {1} %", min, max);
     }
 }
