@@ -10,6 +10,8 @@ public partial class HarmonyPatches
             CollectibleObject obj = inSlot.Itemstack.Collectible;
             dsc.GetBombInfo(obj as BlockBomb, null);
             dsc.GetWorkableTempInfoForItem(inSlot, world);
+            dsc.GetStackSizeUnitsForOre(inSlot, world);
+            dsc.GetStackSizeUnitsForNugget(inSlot, world);
         }
     }
 }

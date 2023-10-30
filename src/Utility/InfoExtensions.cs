@@ -56,6 +56,62 @@ public static class InfoExtensions
         }
     }
 
+    public static void GetStackSizeUnitsForOre(this StringBuilder dsc, ItemSlot inSlot, IWorldAccessor world)
+    {
+        CollectibleObject obj = inSlot.Itemstack.Collectible;
+        if (obj is not ItemOre)
+        {
+            return;
+        }
+
+        JsonObject attributes = obj.Attributes;
+        CombustibleProperties combProps = obj.CombustibleProps;
+
+        if (inSlot.StackSize <= 1)
+        {
+            return;
+        }
+
+        if (combProps?.SmeltedStack?.ResolvedItemstack == null && attributes?["metalUnits"].Exists == true)
+        {
+            float units2 = attributes["metalUnits"].AsInt() * inSlot.StackSize;
+            string orename = obj.LastCodePart(1);
+            if (orename.Contains('_'))
+            {
+                orename = orename.Split('_')[1];
+            }
+            AssetLocation loc = new("nugget-" + orename);
+            Item item = world.GetItem(loc);
+            if (item.CombustibleProps?.SmeltedStack?.ResolvedItemstack != null)
+            {
+                string metalname2 = item.CombustibleProps.SmeltedStack.ResolvedItemstack.GetName().Replace(" ingot", "");
+                dsc.AppendLine(ColorText(Lang.Get("{0} units of {1}", units2.ToString("0.#"), metalname2)));
+            }
+        }
+    }
+
+    public static void GetStackSizeUnitsForNugget(this StringBuilder dsc, ItemSlot inSlot, IWorldAccessor world)
+    {
+        CollectibleObject obj = inSlot.Itemstack.Collectible;
+        if (obj is not ItemNugget)
+        {
+            return;
+        }
+
+        CombustibleProperties combProps = obj.CombustibleProps;
+
+        if (inSlot.StackSize <= 1 || combProps?.SmeltedStack == null)
+        {
+            return;
+        }
+
+        string smelttype = combProps.SmeltingType.ToString().ToLowerInvariant();
+        int instacksize = combProps.SmeltedRatio;
+        float units = combProps.SmeltedStack.ResolvedItemstack.StackSize * 100f / instacksize * inSlot.StackSize;
+        string metalname = combProps.SmeltedStack.ResolvedItemstack.GetName().Replace(" ingot", "");
+        dsc.AppendLine(ColorText(Lang.Get("game:smeltdesc-" + smelttype + "ore-plural", units.ToString("0.#"), metalname)));
+    }
+
     public static string GetBlockBreakingTimeInfo(this string __result, IWorldAccessor world, BlockPos pos)
     {
         StringBuilder sb = new(__result);
