@@ -186,7 +186,7 @@ public static class HandbookExtensions
         float damage = ServerEntityType.DamageList.FirstOrDefault(x => x.Key == entityType.Code).Value;
         int damageTier = ServerEntityType.DamageTierList.FirstOrDefault(x => x.Key == entityType.Code).Value;
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         if (health != 0) sb.AppendLine(Constants.Text.Health(health));
         if (damage != 0) sb.AppendLine(Constants.Text.Damage(damage));
@@ -296,7 +296,7 @@ public static class HandbookExtensions
         TradeProperties tradeProps = GetTradeProps(entityProperties);
         if (tradeProps == null) return;
 
-        ItemStack gear = new ItemStack(capi.World.GetItem(new AssetLocation("gear-rusty")));
+        ItemStack gear = new(capi.World.GetItem(new AssetLocation("gear-rusty")));
         List<TradeItem> buyingStacks = tradeProps.Buying.List.Where(tradeItem => tradeItem.Resolve(capi.World, "")).ToList();
         List<TradeItem> sellingStacks = tradeProps.Selling.List.Where(tradeItem2 => tradeItem2.Resolve(capi.World, "")).ToList();
 

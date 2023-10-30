@@ -90,7 +90,7 @@ public static class InfoExtensions
         }
     }
 
-    public static void GetStackSizeUnitsForNugget(this StringBuilder dsc, ItemSlot inSlot, IWorldAccessor world)
+    public static void GetStackSizeUnitsForNugget(this StringBuilder dsc, ItemSlot inSlot)
     {
         CollectibleObject obj = inSlot.Itemstack.Collectible;
         if (obj is not ItemNugget)
@@ -145,8 +145,7 @@ public static class InfoExtensions
         int totalAmount = blockEntity.GetTotalAmount();
         int totalAmountSame = totalAmount;
 
-        bool invalid = false;
-        for (int y = centerPos.Y - 1; !invalid; y--)
+        for (int y = centerPos.Y - 1; ; y--)
         {
             BlockPos pos = new(centerPos.X, y, centerPos.Z);
             if (api.World.IsGroundStorage(pos, out BlockEntityGroundStorage blockEntityGroundStorage))
@@ -160,13 +159,11 @@ public static class InfoExtensions
             }
             else
             {
-                invalid = true;
                 break;
             }
         }
 
-        invalid = false;
-        for (int y = centerPos.Y + 1; !invalid; y++)
+        for (int y = centerPos.Y + 1; ; y++)
         {
             BlockPos pos = new(centerPos.X, y, centerPos.Z);
             if (api.World.IsGroundStorage(pos, out BlockEntityGroundStorage blockEntityGroundStorage))
@@ -180,7 +177,6 @@ public static class InfoExtensions
             }
             else
             {
-                invalid = true;
                 break;
             }
         }
@@ -254,7 +250,7 @@ public static class InfoExtensions
 
         static int GetCropStage(Block block)
         {
-            int.TryParse(block.LastCodePart(), out int stage);
+            _ = int.TryParse(block.LastCodePart(), out int stage);
             return stage;
         }
     }

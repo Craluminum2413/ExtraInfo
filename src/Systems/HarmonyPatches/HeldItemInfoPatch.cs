@@ -11,7 +11,7 @@ public partial class HarmonyPatches
             dsc.GetBombInfo(obj as BlockBomb, null);
             dsc.GetWorkableTempInfoForItem(inSlot, world);
             dsc.GetStackSizeUnitsForOre(inSlot, world);
-            dsc.GetStackSizeUnitsForNugget(inSlot, world);
+            dsc.GetStackSizeUnitsForNugget(inSlot);
         }
     }
 }
