@@ -13,7 +13,7 @@ public partial class HarmonyPatches
             list.AddEntityDropsInfo(inSlot, capi, openDetailPageFor);
             list.AddEntityDropsInfoForDrop(inSlot, capi, openDetailPageFor);
             list.AddPanningDropsInfo(inSlot, capi, openDetailPageFor);
-            list.AddTroughInfo(inSlot, capi, openDetailPageFor);
+            // list.AddTroughInfo(inSlot, capi, openDetailPageFor);
             list.AddPitKilnInfo(inSlot, capi, openDetailPageFor);
             list.AddTraderPropsInfo(inSlot, capi, openDetailPageFor);
             list.AddTradersInfo(inSlot, capi, openDetailPageFor);
