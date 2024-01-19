@@ -147,7 +147,7 @@ public static class InfoExtensions
 
         for (int y = centerPos.Y - 1; ; y--)
         {
-            BlockPos pos = new(centerPos.X, y, centerPos.Z);
+            BlockPos pos = new(centerPos.X, y, centerPos.Z, centerPos.dimension);
             if (api.World.IsGroundStorage(pos, out BlockEntityGroundStorage blockEntityGroundStorage))
             {
                 totalAmount += blockEntityGroundStorage.GetTotalAmount();
@@ -165,7 +165,7 @@ public static class InfoExtensions
 
         for (int y = centerPos.Y + 1; ; y++)
         {
-            BlockPos pos = new(centerPos.X, y, centerPos.Z);
+            BlockPos pos = new(centerPos.X, y, centerPos.Z, centerPos.dimension);
             if (api.World.IsGroundStorage(pos, out BlockEntityGroundStorage blockEntityGroundStorage))
             {
                 totalAmount += blockEntityGroundStorage.GetTotalAmount();

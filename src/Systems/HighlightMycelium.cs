@@ -26,7 +26,7 @@ public class HighlightMycelium : ModSystemHighlight
 
         capi.World.BlockAccessor.WalkBlocks(playerPos.AddCopy(-Radius, -Radius, -Radius), playerPos.AddCopy(Radius, Radius, Radius), (_, x, y, z) =>
         {
-            BlockPos bPos = new(x, y, z);
+            BlockPos bPos = new(x, y, z, playerPos.dimension);
 
             BlockEntityMycelium beMycelium = GetMycelium(bPos, capi);
             if (beMycelium == null)
@@ -40,7 +40,7 @@ public class HighlightMycelium : ModSystemHighlight
 
             capi.World.BlockAccessor.WalkBlocks(bPos.AddCopy(-range, -range, -range), bPos.AddCopy(range, range, range), (_, x, y, z) =>
             {
-                BlockPos bPos = new(x, y, z);
+                BlockPos bPos = new(x, y, z, playerPos.dimension);
 
                 if (positions.Contains(bPos)) return;
 

@@ -30,7 +30,7 @@ public class HighlightReinforced : ModSystemHighlight
 
         capi.World.BlockAccessor.WalkBlocks(playerPos.AddCopy(-Radius, -Radius, -Radius), playerPos.AddCopy(Radius, Radius, Radius), (_, x, y, z) =>
         {
-            BlockPos bPos = new(x, y, z);
+            BlockPos bPos = new(x, y, z, playerPos.dimension);
             if (IsReinforced(bPos))
             {
                 positions.Add(bPos);
