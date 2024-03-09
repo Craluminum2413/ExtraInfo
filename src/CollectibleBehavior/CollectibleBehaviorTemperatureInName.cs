@@ -2,14 +2,10 @@ namespace ExtraInfo;
 
 public class CollectibleBehaviorTemperatureInName : CollectibleBehavior
 {
-    public CollectibleBehaviorTemperatureInName(CollectibleObject collObj) : base(collObj)
-    {
-    }
+    public CollectibleBehaviorTemperatureInName(CollectibleObject collObj) : base(collObj) { }
 
     public override void GetHeldItemName(StringBuilder sb, ItemStack itemStack)
     {
-        base.GetHeldItemName(sb, itemStack);
-
         StringBuilder dsc = new();
 
         if (!itemStack.Collectible.HasTemperature(itemStack))

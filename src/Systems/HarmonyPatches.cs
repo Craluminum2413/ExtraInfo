@@ -1,13 +1,12 @@
 namespace ExtraInfo;
 
-public partial class HarmonyPatches : ModSystem
+public class HarmonyPatches : ModSystem
 {
     public const string HarmonyID = "craluminum2413.extrainfo";
     public static Harmony HarmonyInstance { get; set; } = new Harmony(HarmonyID);
 
     public override void StartClientSide(ICoreClientAPI api)
     {
-        base.StartClientSide(api);
         HarmonyInstance.Patch(original: typeof(Block).GetMethod(nameof(Block.GetPlacedBlockInfo)), postfix: typeof(PlacedBlockInfoPatch).GetMethod(nameof(PlacedBlockInfoPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(BlockCookedContainerBase).GetMethod(nameof(BlockCookedContainerBase.GetContainedInfo)), postfix: typeof(ContainedNameCookedContainerPatch).GetMethod(nameof(ContainedNameCookedContainerPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(BlockEntityShelf).GetMethod(nameof(BlockEntityShelf.CrockInfoCompact)), postfix: typeof(CrockInfoCompactShelfPatch).GetMethod(nameof(CrockInfoCompactShelfPatch.Postfix)));
@@ -44,6 +43,5 @@ public partial class HarmonyPatches : ModSystem
         HarmonyInstance.Unpatch(original: typeof(BlockEntityOpenableContainer).GetMethod(nameof(BlockEntityOpenableContainer.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
         HarmonyInstance.Unpatch(original: typeof(BlockEntityPitKiln).GetMethod(nameof(BlockEntityPitKiln.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
         HarmonyInstance.Unpatch(original: typeof(BlockEntityStaticTranslocator).GetMethod(nameof(BlockEntityStaticTranslocator.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        base.Dispose();
     }
 }

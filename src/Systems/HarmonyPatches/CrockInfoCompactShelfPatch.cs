@@ -1,13 +1,10 @@
 namespace ExtraInfo;
 
-public partial class HarmonyPatches
+[HarmonyPatch(typeof(BlockEntityShelf), nameof(BlockEntityShelf.CrockInfoCompact))]
+public static class CrockInfoCompactShelfPatch
 {
-    [HarmonyPatch(typeof(BlockEntityShelf), nameof(BlockEntityShelf.CrockInfoCompact))]
-    public static class CrockInfoCompactShelfPatch
+    public static void Postfix(ref string __result, ItemSlot inSlot)
     {
-        public static void Postfix(ref string __result, ItemSlot inSlot)
-        {
-            __result = __result.GetCrockSealedInName(inSlot);
-        }
+        __result = __result.GetCrockSealedInName(inSlot);
     }
 }

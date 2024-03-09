@@ -2,13 +2,10 @@ namespace ExtraInfo;
 
 public class CollectibleBehaviorTreeGrowthDescription : CollectibleBehavior
 {
-    public CollectibleBehaviorTreeGrowthDescription(CollectibleObject collObj) : base(collObj)
-    {
-    }
+    public CollectibleBehaviorTreeGrowthDescription(CollectibleObject collObj) : base(collObj) { }
 
     public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
     {
-        base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
         AppendInfo(inSlot, dsc, world);
     }
 

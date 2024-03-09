@@ -1,32 +1,29 @@
 namespace ExtraInfo;
 
-public partial class HarmonyPatches
+[HarmonyPatch(typeof(ModSystemSurvivalHandbook), methodName: "OnSurvivalHandbookHotkey")]
+public static class OpenHandbookForEntityPatch
 {
-    [HarmonyPatch(typeof(ModSystemSurvivalHandbook), methodName: "OnSurvivalHandbookHotkey")]
-    public static class OpenHandbookForEntityPatch
+    public static void Postfix(ref bool __result, ModSystemSurvivalHandbook __instance)
     {
-        public static void Postfix(ref bool __result, ModSystemSurvivalHandbook __instance)
+        GuiDialogHandbook dialog = __instance.GetField<GuiDialogHandbook>("dialog");
+        ICoreClientAPI capi = __instance.GetField<ICoreClientAPI>("capi");
+
+        if (capi.World.Player.Entity.Controls.ShiftKey && capi.World.Player.CurrentEntitySelection != null)
         {
-            GuiDialogHandbook dialog = __instance.GetField<GuiDialogHandbook>("dialog");
-            ICoreClientAPI capi = __instance.GetField<ICoreClientAPI>("capi");
+            Entity entity = capi.World.Player.CurrentEntitySelection.Entity;
 
-            if (capi.World.Player.Entity.Controls.ShiftKey && capi.World.Player.CurrentEntitySelection != null)
+            ItemStack stack = capi.World.GetEntityType(entity.Code).GetCreatureStack(capi);
+            if (stack == null)
             {
-                Entity entity = capi.World.Player.CurrentEntitySelection.Entity;
-
-                ItemStack stack = capi.World.GetEntityType(entity.Code).GetCreatureStack(capi);
-                if (stack == null)
-                {
-                    __result = true;
-                    return;
-                }
-
-                if (!dialog.OpenDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(stack)))
-                {
-                    dialog.OpenDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(new ItemStack(stack.Collectible)));
-                }
+                __result = true;
+                return;
             }
-            __result = true;
+
+            if (!dialog.OpenDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(stack)))
+            {
+                dialog.OpenDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(new ItemStack(stack.Collectible)));
+            }
         }
+        __result = true;
     }
 }

@@ -1,13 +1,10 @@
 namespace ExtraInfo;
 
-public partial class HarmonyPatches
+[HarmonyPatch(typeof(BlockEntityGroundStorage), nameof(BlockEntityGroundStorage.GetBlockInfo))]
+public static class GroundStorageInfoPatch
 {
-    [HarmonyPatch(typeof(BlockEntityGroundStorage), nameof(BlockEntityGroundStorage.GetBlockInfo))]
-    public static class GroundStorageInfoPatch
+    public static void Postfix(BlockEntityGroundStorage __instance, StringBuilder dsc)
     {
-        public static void Postfix(BlockEntityGroundStorage __instance, StringBuilder dsc)
-        {
-            dsc.GetGroundStorageInfo(__instance);
-        }
+        dsc.GetGroundStorageInfo(__instance);
     }
 }

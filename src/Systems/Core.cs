@@ -13,7 +13,6 @@ global using Vintagestory.API.MathTools;
 global using Vintagestory.API.Util;
 global using Vintagestory.Client.NoObf;
 global using Vintagestory.GameContent;
-global using Vintagestory.ServerMods.NoObf;
 
 [assembly: ModInfo(name: "Extra Info", modID: "extrainfo", Side = "Universal", RequiredOnClient = false, RequiredOnServer = false)]
 
@@ -23,7 +22,6 @@ public class Core : ModSystem
 {
     public override void Start(ICoreAPI api)
     {
-        base.Start(api);
         api.RegisterCollectibleBehaviorClass("ExtraInfo:TreeGrowthDescription", typeof(CollectibleBehaviorTreeGrowthDescription));
         api.RegisterCollectibleBehaviorClass("ExtraInfo:CrockSealedInName", typeof(CollectibleBehaviorCrockSealedInName));
         api.RegisterCollectibleBehaviorClass("ExtraInfo:TemperatureInName", typeof(CollectibleBehaviorTemperatureInName));
