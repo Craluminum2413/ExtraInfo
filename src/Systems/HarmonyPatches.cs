@@ -2,8 +2,8 @@ namespace ExtraInfo;
 
 public class HarmonyPatches : ModSystem
 {
-    public const string HarmonyID = "craluminum2413.extrainfo";
-    public static Harmony HarmonyInstance { get; set; } = new Harmony(HarmonyID);
+    public string HarmonyID => Mod.Info.ModID;
+    public Harmony HarmonyInstance => new(HarmonyID);
 
     public override void StartClientSide(ICoreClientAPI api)
     {
