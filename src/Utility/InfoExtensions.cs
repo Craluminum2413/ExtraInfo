@@ -351,6 +351,13 @@ public static class InfoExtensions
         {
             if (world.BlockAccessor.GetBlockEntity(blockPos) is not BlockEntityStoneCoffin be) continue;
 
+            bool processComplete = be.GetField<bool>("processComplete");
+            if (processComplete)
+            {
+                sb.AppendLine(Lang.Get("Carburization process complete. Break to retrieve blister steel."));
+                continue;
+            }
+
             double progress = be.GetField<double>("progress");
             if (progress <= 0.0) continue;
 
