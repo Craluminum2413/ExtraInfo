@@ -23,6 +23,11 @@ public class HarmonyPatches : ModSystem
         HarmonyInstance.Patch(original: typeof(BlockEntityOpenableContainer).GetMethod(nameof(BlockEntityOpenableContainer.GetBlockInfo)), postfix: typeof(ContainerInfoPatch).GetMethod(nameof(ContainerInfoPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(BlockEntityPitKiln).GetMethod(nameof(BlockEntityPitKiln.GetBlockInfo)), postfix: typeof(PitKilnInfoPatch).GetMethod(nameof(PitKilnInfoPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(BlockEntityStaticTranslocator).GetMethod(nameof(BlockEntityStaticTranslocator.GetBlockInfo)), postfix: typeof(TranslocatorInfoPatch).GetMethod(nameof(TranslocatorInfoPatch.Postfix)));
+
+        HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetItemDamageColor)), postfix: typeof(DurabilityBar_Color_Patch).GetMethod(nameof(DurabilityBar_Color_Patch.Postfix)));
+        HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.ShouldDisplayItemDamage)), postfix: typeof(DurabilityBar_ShouldDisplay_Patch).GetMethod(nameof(DurabilityBar_ShouldDisplay_Patch.Postfix)));
+        HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetRemainingDurability)), postfix: typeof(DurabilityBar_Current_Patch).GetMethod(nameof(DurabilityBar_Current_Patch.Postfix)));
+        HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetMaxDurability)), postfix: typeof(DurabilityBar_Max_Patch).GetMethod(nameof(DurabilityBar_Max_Patch.Postfix)));
     }
 
     public override void Dispose()
@@ -43,5 +48,10 @@ public class HarmonyPatches : ModSystem
         HarmonyInstance.Unpatch(original: typeof(BlockEntityOpenableContainer).GetMethod(nameof(BlockEntityOpenableContainer.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
         HarmonyInstance.Unpatch(original: typeof(BlockEntityPitKiln).GetMethod(nameof(BlockEntityPitKiln.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
         HarmonyInstance.Unpatch(original: typeof(BlockEntityStaticTranslocator).GetMethod(nameof(BlockEntityStaticTranslocator.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
+
+        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetItemDamageColor)), type: HarmonyPatchType.All, HarmonyID);
+        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.ShouldDisplayItemDamage)), type: HarmonyPatchType.All, HarmonyID);
+        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetRemainingDurability)), type: HarmonyPatchType.All, HarmonyID);
+        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetMaxDurability)), type: HarmonyPatchType.All, HarmonyID);
     }
 }
