@@ -2,8 +2,7 @@ namespace ExtraInfo;
 
 public class HarmonyPatches : ModSystem
 {
-    public string HarmonyID => Mod.Info.ModID;
-    public Harmony HarmonyInstance => new(HarmonyID);
+    public Harmony HarmonyInstance => new(Mod.Info.ModID);
 
     public override void StartClientSide(ICoreClientAPI api)
     {
@@ -32,26 +31,6 @@ public class HarmonyPatches : ModSystem
 
     public override void Dispose()
     {
-        HarmonyInstance.Unpatch(original: typeof(Block).GetMethod(nameof(Block.GetPlacedBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockCookedContainerBase).GetMethod(nameof(BlockCookedContainerBase.GetContainedInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityShelf).GetMethod(nameof(BlockEntityShelf.CrockInfoCompact)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(CollectibleBehaviorHandbookTextAndExtraInfo).GetMethod(nameof(CollectibleBehaviorHandbookTextAndExtraInfo.GetHandbookInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetHeldItemInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(ModSystemSurvivalHandbook).GetMethod("OnSurvivalHandbookHotkey", AccessTools.all), type: HarmonyPatchType.All, HarmonyID);
-
-        HarmonyInstance.Unpatch(original: typeof(BlockEntity).GetMethod(nameof(BlockEntity.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityAnvil).GetMethod(nameof(BlockEntityAnvil.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityBeehive).GetMethod(nameof(BlockEntityBeehive.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityBloomery).GetMethod(nameof(BlockEntityBloomery.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityFarmland).GetMethod(nameof(BlockEntityFarmland.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityGroundStorage).GetMethod(nameof(BlockEntityGroundStorage.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityOpenableContainer).GetMethod(nameof(BlockEntityOpenableContainer.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityPitKiln).GetMethod(nameof(BlockEntityPitKiln.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(BlockEntityStaticTranslocator).GetMethod(nameof(BlockEntityStaticTranslocator.GetBlockInfo)), type: HarmonyPatchType.All, HarmonyID);
-
-        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetItemDamageColor)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.ShouldDisplayItemDamage)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetRemainingDurability)), type: HarmonyPatchType.All, HarmonyID);
-        HarmonyInstance.Unpatch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetMaxDurability)), type: HarmonyPatchType.All, HarmonyID);
+        HarmonyInstance.UnpatchAll(HarmonyInstance.Id);
     }
 }
