@@ -27,6 +27,8 @@ public class HarmonyPatches : ModSystem
         HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.ShouldDisplayItemDamage)), postfix: typeof(DurabilityBar_ShouldDisplay_Patch).GetMethod(nameof(DurabilityBar_ShouldDisplay_Patch.Postfix)));
         HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetRemainingDurability)), postfix: typeof(DurabilityBar_Current_Patch).GetMethod(nameof(DurabilityBar_Current_Patch.Postfix)));
         HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetMaxDurability)), postfix: typeof(DurabilityBar_Max_Patch).GetMethod(nameof(DurabilityBar_Max_Patch.Postfix)));
+
+        HarmonyInstance.PatchCategory("RemoveTradeHandbookInfo");
     }
 
     public override void Dispose()

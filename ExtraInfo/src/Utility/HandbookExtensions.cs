@@ -286,9 +286,15 @@ public static class HandbookExtensions
         }
     }
 
-    public static void AddTraderPropsInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    public static void AddTraderInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
     {
-        if (inSlot.Itemstack.Collectible is not ItemCreature itemCreature) return;
+        CollectibleObject collObj = inSlot.Itemstack.Collectible;
+        if (collObj is ItemCreature itemCreature)
+        {
+            if (!TraderInfoSystem.unresolvedTradeProps.TryGetValue(itemCreature.Code, out TradeProperties tradeProps) || tradeProps == null)
+            {
+                return;
+            }
 
         EntityProperties entityProperties = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
         if (entityProperties.Class != "EntityTrader") return;
@@ -317,49 +323,40 @@ public static class HandbookExtensions
         list.AddRange(richTextBuy);
     }
 
-    public static void AddTradersInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+        bool any = false;
+        List<RichTextComponentBase> richTextSellBy = new();
+        foreach ((AssetLocation trader, TradeProperties props) in TraderInfoSystem.unresolvedTradeProps)
     {
-        CollectibleObject collObj = inSlot.Itemstack.Collectible;
-        // var itemstack = inSlot.Itemstack; // x.Attributes == itemstack.Attributes
-
-        List<RichTextComponentBase> richTextSell = new();
-        TradeItem[] buyingList = System.Array.Empty<TradeItem>();
-        foreach (EntityProperties entityType in capi.World.EntityTypes.Where(x => x.Class == "EntityTrader" && GetTradeProps(x)?.Buying.List.Any(x => x.Code == collObj.Code) == true))
+            if (props.Buying.List.Any(x => x.Code == collObj.Code) == true)
         {
-            buyingList = GetTradeProps(entityType)?.Buying.List;
-            if (buyingList == null) break;
-
-            ItemStack stack = entityType.GetCreatureStack(capi);
-            if (stack == null) continue;
-
-            richTextSell.AddStack(capi, openDetailPageFor, stack);
+                ItemStack traderStack = new ItemStack(capi.World.GetItem(trader));
+                richTextSellBy.AddStack(capi, openDetailPageFor, traderStack);
+                any = true;
+            }
         }
-        if (buyingList?.Length != 0)
+        if (any)
         {
             list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.PurchasedBy);
-            list.AddRange(richTextSell);
+            list.AddRange(richTextSellBy);
         }
 
-        List<RichTextComponentBase> richTextBuy = new();
-        TradeItem[] sellingList = System.Array.Empty<TradeItem>();
-        foreach (EntityProperties entityType in capi.World.EntityTypes.Where(x => x.Class == "EntityTrader" && GetTradeProps(x)?.Selling.List.Any(x => x.Code == collObj.Code) == true))
+        any = false;
+        List<RichTextComponentBase> richTextBuyBy = new();
+        foreach ((AssetLocation trader, TradeProperties props) in TraderInfoSystem.unresolvedTradeProps)
         {
-            sellingList = GetTradeProps(entityType)?.Selling.List;
-            if (sellingList == null) break;
-
-            ItemStack stack = entityType.GetCreatureStack(capi);
-            if (stack == null) continue;
-
-            richTextBuy.AddStack(capi, openDetailPageFor, stack);
+            if (props.Selling.List.Any(x => x.Code == collObj.Code) == true)
+            {
+                ItemStack traderStack = new ItemStack(capi.World.GetItem(trader));
+                richTextBuyBy.AddStack(capi, openDetailPageFor, traderStack);
+                any = true;
+            }
         }
-        if (sellingList?.Length != 0)
+        if (any)
         {
             list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.SoldBy);
-            list.AddRange(richTextBuy);
+            list.AddRange(richTextBuyBy);
         }
     }
-
-    private static TradeProperties GetTradeProps(EntityProperties props) => props.Attributes["tradeProps"].AsObject<TradeProperties>(null);
 
     private static List<JsonItemStackBuildStage> GetFuelStacks(this BlockPitkiln blockPitKiln, ICoreClientAPI capi)
     {

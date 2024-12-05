@@ -13,8 +13,7 @@ public static class GetHandbookInfoPatch
         list.AddPanningDropsInfo(inSlot, capi, openDetailPageFor);
         // list.AddTroughInfo(inSlot, capi, openDetailPageFor);
         list.AddPitKilnInfo(inSlot, capi, openDetailPageFor);
-        list.AddTraderPropsInfo(inSlot, capi, openDetailPageFor);
-        list.AddTradersInfo(inSlot, capi, openDetailPageFor);
+        list.AddTraderInfo(inSlot, capi, openDetailPageFor);
         list.AddEntityDietInfoForBlock(inSlot, capi, openDetailPageFor);
         list.AddEntityDietInfo(inSlot, capi, openDetailPageFor);
 

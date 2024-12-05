@@ -1,5 +1,4 @@
 global using HarmonyLib;
-global using static ExtraInfo.TextExtensions;
 global using System;
 global using System.Collections.Generic;
 global using System.Linq;
@@ -13,8 +12,7 @@ global using Vintagestory.API.MathTools;
 global using Vintagestory.API.Util;
 global using Vintagestory.Client.NoObf;
 global using Vintagestory.GameContent;
-
-[assembly: ModInfo(name: "Extra Info", modID: "extrainfo", Side = "Universal", RequiredOnClient = false, RequiredOnServer = false)]
+global using static ExtraInfo.TextExtensions;
 
 namespace ExtraInfo;
 
