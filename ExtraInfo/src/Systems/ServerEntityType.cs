@@ -2,14 +2,12 @@ namespace ExtraInfo;
 
 public class ServerEntityType : ModSystem
 {
-    public static Dictionary<AssetLocation, BlockDropItemStack[]> HarvestableDrops { get; set; } = new();
     public static Dictionary<AssetLocation, float> HealthList { get; set; } = new();
     public static Dictionary<AssetLocation, float> DamageList { get; set; } = new();
     public static Dictionary<AssetLocation, int> DamageTierList { get; set; } = new();
 
     public class EntityType
     {
-        public BlockDropItemStack[] Drops { get; set; }
         public float MaxHealth { get; set; }
         public float Damage { get; set; }
         public int DamageTier { get; set; }
@@ -23,12 +21,6 @@ public class ServerEntityType : ModSystem
             if (type?.Server?.BehaviorsAsJsonObj == null) continue;
             foreach (JsonObject behavior in type.Server.BehaviorsAsJsonObj)
             {
-                if (behavior.ToString().Contains("harvestable"))
-                {
-                    if (HarvestableDrops.ContainsKey(type.Code)) continue;
-
-                    HarvestableDrops.Add(type.Code, behavior.AsObject<EntityType>().Drops);
-                }
                 if (behavior.ToString().Contains("taskai"))
                 {
                     if (DamageList.ContainsKey(type.Code)) continue;

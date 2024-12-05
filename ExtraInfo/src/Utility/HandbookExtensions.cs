@@ -256,7 +256,7 @@ public static class HandbookExtensions
         foreach (EntityProperties entityType in capi.World.EntityTypes)
         {
             List<BlockDropItemStack> harvestStacks = GetHarvestableDrops(capi, entityType);
-            if (harvestStacks?.Count != 0 && harvestStacks.Find(stack => stack?.Code == collObj?.Code) != null)
+            if (harvestStacks?.Count != 0 && harvestStacks?.Find(stack => stack?.Code == collObj?.Code) != null)
             {
                 ItemStack stack = entityType.GetCreatureStack(capi);
                 if (stack == null) continue;
@@ -433,26 +433,17 @@ public static class HandbookExtensions
     {
         return ObjectCacheUtil.GetOrCreate(capi, "harvestableDrops-" + entityType.Code, delegate
         {
-            Dictionary<AssetLocation, BlockDropItemStack[]> harvestableBehaviors = ServerEntityType.HarvestableDrops;
-            if (harvestableBehaviors?.Count == 0 || !harvestableBehaviors.ContainsKey(entityType.Code))
+            BlockDropItemStack[] harvestableDrops = entityType.Attributes?["harvestableDrops"]?.AsArray<BlockDropItemStack>();
+            if (harvestableDrops == null)
             {
-                return new();
+                return null;
             }
-
-            BlockDropItemStack[] drops = harvestableBehaviors[entityType.Code];
-            if (drops == null) return new();
-
-            List<BlockDropItemStack> stacks = new();
-
-            foreach (BlockDropItemStack drop in drops)
-            {
-                if (drop.Resolve(capi.World, "BehaviorHarvestable ", entityType.Code))
+            BlockDropItemStack[] array = harvestableDrops;
+            foreach (BlockDropItemStack hstack in array)
                 {
-                    stacks.Add(drop);
-                }
+                hstack.Resolve(capi.World, "handbook info", new AssetLocation());
             }
-
-            return stacks;
+            return array.ToList();
         });
     }
 }
