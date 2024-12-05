@@ -18,7 +18,11 @@
     "Toggle": "Toggle {0}",
     "Toggle.True": "{0} <font weight=\"bold\" color=\"#84ff84\">{1}</font>",
     "Toggle.False": "{0} <font weight=\"bold\" color=\"#ff8484\">{1}</font>",
-    "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>"
+    "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>",
+
+	  "sprout-in-days": "Will sprout in about {0} - {p1:# days|# day|# days}",
+	  "mature-in-days": "Will mature in about {0} - {p1:# days|# day|# days}"
+
     // "mechanics-Speed": "Speed: {0:G4}",
     // "mechanics-TotalAvailableTorque": "Available Torque: {0:G4}",
     // "mechanics-NetworkTorque": "Total Torque: {0:G4}",

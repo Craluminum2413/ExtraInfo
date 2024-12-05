@@ -16,7 +16,7 @@ public class CollectibleBehaviorTreeGrowthDescription : CollectibleBehavior
 
         if (inSlot.Itemstack.Collectible is ItemTreeSeed item)
         {
-            Block block = world.GetBlock(AssetLocation.Create("sapling-" + item.Variant["type"] + "-free", item.Code.Domain));
+            Block block = world.GetBlock($"{item.Code.Domain}:sapling-{item.Variant["type"]}-free");
             if (block == null) return;
 
             sproutDays = block.Attributes[Constants.Text.SproutDaysAttr].AsObject<NatFloat>();
@@ -30,11 +30,11 @@ public class CollectibleBehaviorTreeGrowthDescription : CollectibleBehavior
 
         if (sproutDays != null)
         {
-            dsc.AppendLine(ColorText(Constants.Text.WillSproutIn(GetMinMax(sproutDays))));
+            dsc.AppendLine(ColorText(Constants.Text.WillSproutIn(GetMin(sproutDays), GetMax(sproutDays))));
         }
         if (matureDays != null)
         {
-            dsc.AppendLine(ColorText(Constants.Text.WillMatureIn(GetMinMax(matureDays))));
+            dsc.AppendLine(ColorText(Constants.Text.WillMatureIn(GetMin(matureDays), GetMax(matureDays))));
         }
     }
 }

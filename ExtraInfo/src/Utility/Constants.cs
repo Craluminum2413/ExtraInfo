@@ -134,7 +134,7 @@ public static class Constants
         public static string TemperatureText(float temperature) => $"[<font color=\"{Colors.Yellow}\">{Temperature(temperature)}</font>]";
         public static string WorkableTemperature(float temperature) => Lang.Get("extrainfo:WorkableTemperature", (int)temperature);
 
-        public static string WillMatureIn(string text) => Lang.Get("Will mature in about {0} days", text);
-        public static string WillSproutIn(string text) => Lang.Get("Will sprout in about {0} days", text);
+        public static string WillMatureIn(int min, int max) => Lang.Get("extrainfo:mature-in-days", min, max);
+        public static string WillSproutIn(int min, int max) => Lang.Get("extrainfo:sprout-in-days", min, max);
     }
 }
