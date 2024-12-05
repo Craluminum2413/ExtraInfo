@@ -319,11 +319,17 @@ public static class HandbookExtensions
 
         bool any = false;
         List<RichTextComponentBase> richTextSellBy = new();
-        foreach ((AssetLocation trader, TradeProperties props) in TraderInfoSystem.unresolvedTradeProps)
+        foreach ((AssetLocation traderCode, TradeProperties props) in TraderInfoSystem.unresolvedTradeProps)
         {
             if (props.Buying.List.Any(x => x.Code == collObj.Code) == true)
             {
-                ItemStack traderStack = new ItemStack(capi.World.GetItem(trader));
+                Item traderItem = capi.World.GetItem(traderCode);
+                if (traderItem == null)
+                {
+                    continue;
+                }
+
+                ItemStack traderStack = new ItemStack(traderItem);
                 richTextSellBy.AddStack(capi, openDetailPageFor, traderStack);
                 any = true;
             }
@@ -336,11 +342,17 @@ public static class HandbookExtensions
 
         any = false;
         List<RichTextComponentBase> richTextBuyBy = new();
-        foreach ((AssetLocation trader, TradeProperties props) in TraderInfoSystem.unresolvedTradeProps)
+        foreach ((AssetLocation traderCode, TradeProperties props) in TraderInfoSystem.unresolvedTradeProps)
         {
             if (props.Selling.List.Any(x => x.Code == collObj.Code) == true)
             {
-                ItemStack traderStack = new ItemStack(capi.World.GetItem(trader));
+                Item traderItem = capi.World.GetItem(traderCode);
+                if (traderItem == null)
+                {
+                    continue;
+                }
+
+                ItemStack traderStack = new ItemStack(traderItem);
                 richTextBuyBy.AddStack(capi, openDetailPageFor, traderStack);
                 any = true;
             }
