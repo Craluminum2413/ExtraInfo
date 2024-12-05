@@ -209,9 +209,9 @@ public static class HandbookExtensions
         EntityProperties entityType = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
 
         List<BlockDropItemStack> harvestStacks = GetHarvestableDrops(capi, entityType);
-        if (harvestStacks?.Count != 0)
+        if (harvestStacks != null && harvestStacks.Count != 0)
         {
-            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.HarvestableDropsText);
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.ObtainedByKillingAndHarvesting);
 
             List<RichTextComponentBase> richTextHarvest = new();
 
@@ -227,9 +227,9 @@ public static class HandbookExtensions
             list.AddRange(richTextHarvest);
         }
 
-        if (entityType.Drops?.Length != 0)
+        if (entityType.Drops != null && entityType.Drops.Length != 0)
         {
-            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.OtherDropsText);
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.ObtainedByKilling);
 
             List<RichTextComponentBase> richTextOther = new();
 
@@ -275,13 +275,13 @@ public static class HandbookExtensions
 
         if (richTextHarvest?.Count != 0)
         {
-            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.HarvestableDropsText);
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.ObtainedByKillingAndHarvesting);
             list.AddRange(richTextHarvest);
         }
 
         if (richTextDrop?.Count != 0)
         {
-            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.OtherDropsText);
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.ObtainedByKilling);
             list.AddRange(richTextDrop);
         }
     }
@@ -296,39 +296,33 @@ public static class HandbookExtensions
                 return;
             }
 
-        EntityProperties entityProperties = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
-        if (entityProperties.Class != "EntityTrader") return;
+            ItemStack gear = new(capi.World.GetItem(new AssetLocation("gear-rusty")));
+            List<TradeItem> buyingStacks = tradeProps.Buying.List.Where(tradeItem => tradeItem.Resolve(capi.World, "")).ToList();
+            List<TradeItem> sellingStacks = tradeProps.Selling.List.Where(tradeItem2 => tradeItem2.Resolve(capi.World, "")).ToList();
 
-        TradeProperties tradeProps = GetTradeProps(entityProperties);
-        if (tradeProps == null) return;
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.YouCanSell);
+            List<RichTextComponentBase> richTextSell = new();
+            foreach (TradeItem item in buyingStacks)
+            {
+                richTextSell.AddTraderInfo(capi, item, openDetailPageFor, gear);
+            }
+            list.AddRange(richTextSell);
 
-        ItemStack gear = new(capi.World.GetItem(new AssetLocation("gear-rusty")));
-        List<TradeItem> buyingStacks = tradeProps.Buying.List.Where(tradeItem => tradeItem.Resolve(capi.World, "")).ToList();
-        List<TradeItem> sellingStacks = tradeProps.Selling.List.Where(tradeItem2 => tradeItem2.Resolve(capi.World, "")).ToList();
-
-        list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.YouCanSell);
-        List<RichTextComponentBase> richTextSell = new();
-        foreach (TradeItem item in buyingStacks)
-        {
-            richTextSell.AddTraderInfo(capi, item, openDetailPageFor, gear);
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.YouCanBuy);
+            List<RichTextComponentBase> richTextBuy = new();
+            foreach (TradeItem item in sellingStacks)
+            {
+                richTextBuy.AddTraderInfo(capi, item, openDetailPageFor, gear);
+            }
+            list.AddRange(richTextBuy);
         }
-        list.AddRange(richTextSell);
-
-        list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.YouCanBuy);
-        List<RichTextComponentBase> richTextBuy = new();
-        foreach (TradeItem item in sellingStacks)
-        {
-            richTextBuy.AddTraderInfo(capi, item, openDetailPageFor, gear);
-        }
-        list.AddRange(richTextBuy);
-    }
 
         bool any = false;
         List<RichTextComponentBase> richTextSellBy = new();
         foreach ((AssetLocation trader, TradeProperties props) in TraderInfoSystem.unresolvedTradeProps)
-    {
-            if (props.Buying.List.Any(x => x.Code == collObj.Code) == true)
         {
+            if (props.Buying.List.Any(x => x.Code == collObj.Code) == true)
+            {
                 ItemStack traderStack = new ItemStack(capi.World.GetItem(trader));
                 richTextSellBy.AddStack(capi, openDetailPageFor, traderStack);
                 any = true;
@@ -437,7 +431,7 @@ public static class HandbookExtensions
             }
             BlockDropItemStack[] array = harvestableDrops;
             foreach (BlockDropItemStack hstack in array)
-                {
+            {
                 hstack.Resolve(capi.World, "handbook info", new AssetLocation());
             }
             return array.ToList();

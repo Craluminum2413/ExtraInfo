@@ -66,6 +66,7 @@ public static class Constants
         public static readonly string Fuel = Lang.Get("extrainfo:Fuel");
         public static readonly string Harvestable = Lang.Get("Harvestable");
         public static readonly string ObtainedByKilling = Lang.Get("Obtained by killing");
+        public static readonly string ObtainedByKillingAndHarvesting = Lang.Get("Obtained by killing & harvesting");
         public static readonly string One = Lang.Get("extrainfo:One");
         public static readonly string Other = Lang.Get("blockmaterial-Other");
         public static readonly string PanningDrops = Lang.Get("extrainfo:PanningDrops");
@@ -75,9 +76,6 @@ public static class Constants
         public static readonly string WarmingUp = Lang.Get("Warming up...");
         public static readonly string YouCanBuy = Lang.Get("You can Buy");
         public static readonly string YouCanSell = Lang.Get("You can Sell");
-
-        public static readonly string HarvestableDropsText = string.Format(FormatSndBrackets, ObtainedByKilling, Harvestable);
-        public static readonly string OtherDropsText = string.Format(FormatSndBrackets, ObtainedByKilling, Other);
 
         public static string Damage(float damage) => Lang.Get("extrainfo:Damage", damage);
         public static string DamageTier(int damageTier) => Lang.Get("Damage tier: {0}", damageTier);
