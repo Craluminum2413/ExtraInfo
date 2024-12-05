@@ -4,8 +4,8 @@ namespace ExtraInfo;
 [HarmonyPatch(typeof(ModSystemSurvivalHandbook), methodName: "OnSurvivalHandbookHotkey")]
 public static class OpenHandbookForEntityPatch
 {
-    [HarmonyPostfix]
-    public static void Postfix(ref bool __result, ModSystemSurvivalHandbook __instance)
+    [HarmonyPrefix]
+    public static bool Prefix(ref bool __result, ModSystemSurvivalHandbook __instance)
     {
         GuiDialogHandbook dialog = __instance.GetField<GuiDialogHandbook>("dialog");
         ICoreClientAPI capi = __instance.GetField<ICoreClientAPI>("capi");
@@ -18,7 +18,7 @@ public static class OpenHandbookForEntityPatch
             if (stack == null)
             {
                 __result = true;
-                return;
+                return false;
             }
 
             if (!dialog.OpenDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(stack)))
@@ -26,6 +26,7 @@ public static class OpenHandbookForEntityPatch
                 dialog.OpenDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(new ItemStack(stack.Collectible)));
             }
         }
-        __result = true;
+
+        return true;
     }
 }
