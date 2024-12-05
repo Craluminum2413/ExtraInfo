@@ -11,7 +11,6 @@ public class HarmonyPatches : ModSystem
         HarmonyInstance.Patch(original: typeof(BlockEntityShelf).GetMethod(nameof(BlockEntityShelf.CrockInfoCompact)), postfix: typeof(CrockInfoCompactShelfPatch).GetMethod(nameof(CrockInfoCompactShelfPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(CollectibleBehaviorHandbookTextAndExtraInfo).GetMethod(nameof(CollectibleBehaviorHandbookTextAndExtraInfo.GetHandbookInfo)), postfix: typeof(GetHandbookInfoPatch).GetMethod(nameof(GetHandbookInfoPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetHeldItemInfo)), postfix: typeof(HeldItemInfoPatch).GetMethod(nameof(HeldItemInfoPatch.Postfix)));
-        HarmonyInstance.Patch(original: typeof(ModSystemSurvivalHandbook).GetMethod("OnSurvivalHandbookHotkey", AccessTools.all), postfix: typeof(OpenHandbookForEntityPatch).GetMethod(nameof(OpenHandbookForEntityPatch.Postfix)));
 
         HarmonyInstance.Patch(original: typeof(BlockEntity).GetMethod(nameof(BlockEntity.GetBlockInfo)), postfix: typeof(BlockEntityInfoPatch).GetMethod(nameof(BlockEntityInfoPatch.Postfix)));
         HarmonyInstance.Patch(original: typeof(BlockEntityAnvil).GetMethod(nameof(BlockEntityAnvil.GetBlockInfo)), postfix: typeof(AnvilInfoPatch).GetMethod(nameof(AnvilInfoPatch.Postfix)));
@@ -28,6 +27,7 @@ public class HarmonyPatches : ModSystem
         HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetRemainingDurability)), postfix: typeof(DurabilityBar_Current_Patch).GetMethod(nameof(DurabilityBar_Current_Patch.Postfix)));
         HarmonyInstance.Patch(original: typeof(CollectibleObject).GetMethod(nameof(CollectibleObject.GetMaxDurability)), postfix: typeof(DurabilityBar_Max_Patch).GetMethod(nameof(DurabilityBar_Max_Patch.Postfix)));
 
+        HarmonyInstance.PatchCategory("OpenHandbookForEntity");
         HarmonyInstance.PatchCategory("RemoveTradeHandbookInfo");
     }
 
