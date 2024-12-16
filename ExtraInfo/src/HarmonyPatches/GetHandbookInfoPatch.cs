@@ -1,8 +1,10 @@
 namespace ExtraInfo;
 
+[HarmonyPatchCategory("Other")]
 [HarmonyPatch(typeof(CollectibleBehaviorHandbookTextAndExtraInfo), nameof(CollectibleBehaviorHandbookTextAndExtraInfo.GetHandbookInfo))]
 public static class GetHandbookInfoPatch
 {
+    [HarmonyPostfix]
     public static void Postfix(ref RichTextComponentBase[] __result, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
     {
         List<RichTextComponentBase> list = __result.ToList();
