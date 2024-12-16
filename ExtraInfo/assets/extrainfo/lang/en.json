@@ -1,5 +1,6 @@
 {
     "Config.Category.Handbook": "Handbook",
+    "Config.Setting.OpenHandbookPageForEntity": "Enable the option to open the handbook page for the entity you are looking at",
     "Config.Setting.ShowHandbookBeehiveKiln": "Show the colors an item can be baked into using the Beehive Kiln",
     "Config.Setting.ShowHandbookEntityDrops": "Show the items harvested from creatures",
     "Config.Setting.ShowHandbookEntityStats": "Show a creature's health, damage, and damage tier",

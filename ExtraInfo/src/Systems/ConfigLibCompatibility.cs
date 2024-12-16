@@ -27,6 +27,7 @@ public class ConfigLibCompatibility
     private void Edit(ICoreAPI api, Configuration.Config config, string id)
     {
         ImGui.TextWrapped(Lang.Get(categoryHandbook));
+        config.OpenHandbookPageForEntity = OnCheckBox(id, config.OpenHandbookPageForEntity, nameof(config.OpenHandbookPageForEntity));
         config.ShowHandbookBeehiveKiln = OnCheckBox(id, config.ShowHandbookBeehiveKiln, nameof(config.ShowHandbookBeehiveKiln));
         config.ShowHandbookEntityDrops = OnCheckBox(id, config.ShowHandbookEntityDrops, nameof(config.ShowHandbookEntityDrops));
         config.ShowHandbookEntityStats = OnCheckBox(id, config.ShowHandbookEntityStats, nameof(config.ShowHandbookEntityStats));

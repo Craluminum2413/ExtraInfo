@@ -2,6 +2,7 @@ namespace ExtraInfo.Configuration;
 
 public class Config
 {
+    public bool OpenHandbookPageForEntity { get; set; } = true;
     public bool ShowHandbookBeehiveKiln { get; set; } = true;
     public bool ShowHandbookEntityDrops { get; set; } = true;
     public bool ShowHandbookEntityStats { get; set; } = true;
@@ -36,6 +37,7 @@ public class Config
 
     public Config(Config previousConfig)
     {
+        OpenHandbookPageForEntity = previousConfig.OpenHandbookPageForEntity;
         ShowHandbookBeehiveKiln = previousConfig.ShowHandbookBeehiveKiln;
         ShowHandbookEntityDrops = previousConfig.ShowHandbookEntityDrops;
         ShowHandbookEntityStats = previousConfig.ShowHandbookEntityStats;

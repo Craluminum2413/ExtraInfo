@@ -7,6 +7,11 @@ public static class OpenHandbookForEntityPatch
     [HarmonyPrefix]
     public static bool Prefix(ref bool __result, ModSystemSurvivalHandbook __instance)
     {
+        if (Core.Config == null || !Core.Config.OpenHandbookPageForEntity)
+        {
+            return true;
+        }
+
         GuiDialogHandbook dialog = __instance.GetField<GuiDialogHandbook>("dialog");
         ICoreClientAPI capi = __instance.GetField<ICoreClientAPI>("capi");
 
