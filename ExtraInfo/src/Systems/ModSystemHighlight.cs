@@ -28,7 +28,7 @@ public class ModSystemHighlight : ModSystem, IThreadHighlight
             Enabled = false;
         }
 
-        capi.TriggerChatMessage(Constants.StringToggle(Enabled, Name));
+        capi.TriggerChatMessage(StringToggle(Enabled, Name));
 
         return true;
     }

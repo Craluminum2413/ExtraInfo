@@ -6,14 +6,17 @@ public class CollectibleBehaviorCrockSealedInName : CollectibleBehavior
 
     public override void GetHeldItemName(StringBuilder sb, ItemStack itemStack)
     {
-        StringBuilder dsc = new();
-
-        if (itemStack.Attributes.GetBool(Constants.Text.SealedAttr))
+        if (Core.Config == null || !Core.Config.ShowSealedCrockName)
         {
-            dsc.Append(Constants.Text.SealedText);
-            dsc.Append(' ');
+            return;
         }
 
+        StringBuilder dsc = new();
+        if (itemStack.Attributes.GetBool(Text.SealedAttr))
+        {
+            dsc.Append(Text.SealedText);
+            dsc.Append(' ');
+        }
         sb.Insert(0, dsc);
     }
 }

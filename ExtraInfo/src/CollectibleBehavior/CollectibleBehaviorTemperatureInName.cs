@@ -6,19 +6,23 @@ public class CollectibleBehaviorTemperatureInName : CollectibleBehavior
 
     public override void GetHeldItemName(StringBuilder sb, ItemStack itemStack)
     {
-        StringBuilder dsc = new();
+        if (Core.Config == null || !Core.Config.ShowTemperatureInName)
+        {
+            return;
+        }
 
+        StringBuilder dsc = new();
         if (!itemStack.Collectible.HasTemperature(itemStack))
         {
             return;
         }
 
-        ITreeAttribute attr = itemStack.Attributes.GetTreeAttribute(Constants.Text.TemperatureAttr);
+        ITreeAttribute attr = itemStack.Attributes.GetTreeAttribute(Text.TemperatureAttr);
 
-        float temperature = attr.GetFloat(Constants.Text.TemperatureAttr, 20f);
+        float temperature = attr.GetFloat(Text.TemperatureAttr, 20f);
         if (temperature > 20f)
         {
-            dsc.Append(Constants.Text.TemperatureText(temperature));
+            dsc.Append(Text.TemperatureText(temperature));
             dsc.Append(' ');
         }
 

@@ -9,11 +9,11 @@ public class HighlightMycelium : ModSystemHighlight
 
     public static int Radius => 64;
 
-    public static int HighlightColor => Constants.ColorsRGBA.Yellow;
+    public static int HighlightColor => ColorsRGBA.Yellow;
 
     public override void StartClientSide(ICoreClientAPI api)
     {
-        api.Input.RegisterHotKey(HotkeyCode, Constants.ToggleName(Name), GlKeys.M, HotkeyType.HelpAndOverlays, shiftPressed: true);
+        api.Input.RegisterHotKey(HotkeyCode, ToggleName(Name), GlKeys.M, HotkeyType.HelpAndOverlays, shiftPressed: true);
         api.Input.SetHotKeyHandler(HotkeyCode, _ => ToggleRun(api));
     }
 

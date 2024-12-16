@@ -9,13 +9,13 @@ public class HighlightReinforced : ModSystemHighlight
 
     public static int Radius => 10;
 
-    public static int HighlightColor => Constants.ColorsRGBA.Cyan;
+    public static int HighlightColor => ColorsRGBA.Cyan;
 
     public ModSystemBlockReinforcement ModSysBlockReinforcement { get; protected set; }
 
     public override void StartClientSide(ICoreClientAPI api)
     {
-        api.Input.RegisterHotKey(HotkeyCode, Constants.ToggleName(Name), GlKeys.T, HotkeyType.HelpAndOverlays, ctrlPressed: true);
+        api.Input.RegisterHotKey(HotkeyCode, ToggleName(Name), GlKeys.T, HotkeyType.HelpAndOverlays, ctrlPressed: true);
         api.Input.SetHotKeyHandler(HotkeyCode, _ => ToggleRun(api));
 
         ModSysBlockReinforcement = api.ModLoader.GetModSystem<ModSystemBlockReinforcement>();

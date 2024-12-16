@@ -13,11 +13,25 @@ global using Vintagestory.API.Util;
 global using Vintagestory.Client.NoObf;
 global using Vintagestory.GameContent;
 global using static ExtraInfo.TextExtensions;
+global using static ExtraInfo.Constants;
+using ExtraInfo.Configuration;
 
 namespace ExtraInfo;
 
 public class Core : ModSystem
 {
+    public static Config Config { get; set; }
+
+    public override void StartPre(ICoreAPI api)
+    {
+        Config = ModConfig.ReadConfig(api);
+
+        if (api.ModLoader.IsModEnabled("configlib"))
+        {
+            _ = new ConfigLibCompatibility(api);
+        }
+    }
+
     public override void Start(ICoreAPI api)
     {
         api.RegisterCollectibleBehaviorClass("ExtraInfo:TreeGrowthDescription", typeof(CollectibleBehaviorTreeGrowthDescription));
