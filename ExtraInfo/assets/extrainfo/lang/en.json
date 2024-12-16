@@ -9,6 +9,7 @@
     "Config.Setting.ShowHandbookWorkableTemp": "Show the workable temperature",
 
     "Config.Category.Crafting": "Crafting",
+    "Config.Setting.ShowAnvilWorkableTemp": "Show the workable temperature on the anvil",
     "Config.Setting.ShowBloomeryProgress": "Show progress of the bloomery",
     "Config.Setting.ShowCementationFurnaceProgress": "Show progress for steel production in the cementation furnace",
     "Config.Setting.ShowCharcoalPitProgress": "Show progress of charcoal production in the charcoal pit",
@@ -18,7 +19,6 @@
     "Config.Setting.ShowSkepProgress": "Show progress of honey production in the skep",
 
     "Config.Category.Miscellaneous": "Miscellaneous",
-    "Config.Setting.ShowAnvilWorkableTemp": "Show the workable temperature on the anvil",
     "Config.Setting.ShowBlockBreakingTime": "Show block breaking time",
     "Config.Setting.ShowBlockTransitionInfo": "Show the number of hours left for a block's transition state to complete",
     "Config.Setting.ShowBombStats": "Show detailed information about bombs",

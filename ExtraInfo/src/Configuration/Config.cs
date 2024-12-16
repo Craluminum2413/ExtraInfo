@@ -10,6 +10,7 @@ public class Config
     public bool ShowHandbookTraderGoods { get; set; } = true;
     public bool ShowHandbookWorkableTemp { get; set; } = true;
 
+    public bool ShowAnvilWorkableTemp { get; set; } = true;
     public bool ShowBloomeryProgress { get; set; } = true;
     public bool ShowCementationFurnaceProgress { get; set; } = true;
     public bool ShowCharcoalPitProgress { get; set; } = true;
@@ -18,7 +19,6 @@ public class Config
     public bool ShowQuernGrindingProgress { get; set; } = true;
     public bool ShowSkepProgress { get; set; } = true;
 
-    public bool ShowAnvilWorkableTemp { get; set; } = true;
     public bool ShowBlockBreakingTime { get; set; } = true;
     public bool ShowBlockTransitionInfo { get; set; } = true;
     public bool ShowBombStats { get; set; } = true;
@@ -43,6 +43,7 @@ public class Config
         ShowHandbookTraderGoods = previousConfig.ShowHandbookTraderGoods;
         ShowHandbookWorkableTemp = previousConfig.ShowHandbookWorkableTemp;
 
+        ShowAnvilWorkableTemp = previousConfig.ShowAnvilWorkableTemp;
         ShowBloomeryProgress = previousConfig.ShowBloomeryProgress;
         ShowCementationFurnaceProgress = previousConfig.ShowCementationFurnaceProgress;
         ShowCharcoalPitProgress = previousConfig.ShowCharcoalPitProgress;
@@ -51,7 +52,6 @@ public class Config
         ShowQuernGrindingProgress = previousConfig.ShowQuernGrindingProgress;
         ShowSkepProgress = previousConfig.ShowSkepProgress;
 
-        ShowAnvilWorkableTemp = previousConfig.ShowAnvilWorkableTemp;
         ShowBlockBreakingTime = previousConfig.ShowBlockBreakingTime;
         ShowBlockTransitionInfo = previousConfig.ShowBlockTransitionInfo;
         ShowBombStats = previousConfig.ShowBombStats;
