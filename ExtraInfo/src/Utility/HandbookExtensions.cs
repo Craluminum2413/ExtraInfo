@@ -178,6 +178,37 @@ public static class HandbookExtensions
     //    list.AddRange(richText);
     //}
 
+    public static void AddBeehiveKilnInfo(this List<RichTextComponentBase> list, ItemStack stack, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        JsonObject attributes = stack.ItemAttributes;
+        if (attributes?["beehivekiln"].Exists == true)
+        {
+            Dictionary<string, JsonItemStack> beehivekilnProps = attributes["beehivekiln"].AsObject<Dictionary<string, JsonItemStack>>();
+            list.AddMarginAndTitle(capi, marginTop: 7, titletext: Lang.Get("game:smeltdesc-beehivekiln-title"));
+
+            foreach (JsonItemStack firesIntoStack in beehivekilnProps.Values)
+            {
+                if (firesIntoStack != null && firesIntoStack.Resolve(capi.World, "beehivekiln-burn"))
+                {
+                    list.Add(new ItemstackTextComponent(capi, firesIntoStack.ResolvedItemstack.Clone(), 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs))));
+                }
+            }
+        }
+
+        // More fancy info
+        //foreach ((string _doorOpen, JsonItemStack firesIntoStack) in beehivekilnProps)
+        //{
+        //    if (firesIntoStack != null && firesIntoStack.Resolve(capi.World, "beehivekiln-burn"))
+        //    {
+        //        list.AddStack(capi, openDetailPageFor, firesIntoStack.ResolvedItemstack.Clone());
+        //        list.AddEqualSign(capi);
+        //        list.Add(new RichTextComponent(capi, Lang.Get("{0} doors open", _doorOpen), CairoFont.WhiteSmallText().WithWeight(FontWeight.Bold)) { VerticalAlign = EnumVerticalAlign.Middle });
+        //        list.AddStack(capi, openDetailPageFor, new ItemStack(capi.World.GetBlock("cokeovendoor-closed-north")));
+        //        list.Add(new RichTextComponent(capi, "\n", CairoFont.WhiteSmallText()) { VerticalAlign = EnumVerticalAlign.Middle });
+        //    }
+        //}
+    }
+
     public static void AddEntityHealthAndDamageInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi)
     {
         if (inSlot.Itemstack.Collectible is not ItemCreature itemCreature) return;

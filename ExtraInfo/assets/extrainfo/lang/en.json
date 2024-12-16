@@ -21,7 +21,9 @@
     "Color.Cyan": "<font color=\"#00FFF0\">{0}</font>",
 
 	  "sprout-in-days": "Will sprout in about {0} - {p1:# days|# day|# days}",
-	  "mature-in-days": "Will mature in about {0} - {p1:# days|# day|# days}"
+	  "mature-in-days": "Will mature in about {0} - {p1:# days|# day|# days}",
+
+    "game:smeltdesc-beehivekiln-title": "Fires into in beehive kiln"
 
     // "mechanics-Speed": "Speed: {0:G4}",
     // "mechanics-TotalAvailableTorque": "Available Torque: {0:G4}",
