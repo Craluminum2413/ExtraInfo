@@ -9,6 +9,6 @@ public static class BlockEntityInfoPatch
     {
         dsc.GetBombInfo(null, __instance as BlockEntityBomb);
         dsc.GetTransientInfo(__instance as BlockEntityTransient);
-        // dsc.GetMechanicalBlockInfo(__instance);
+        dsc.GetMechanicalBlockInfo(__instance);
     }
 }

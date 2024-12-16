@@ -51,6 +51,7 @@ public class ConfigLibCompatibility
         config.ShowBombStats = OnCheckBox(id, config.ShowBombStats, nameof(config.ShowBombStats));
         config.ShowFarmlandDropsSoil = OnCheckBox(id, config.ShowFarmlandDropsSoil, nameof(config.ShowFarmlandDropsSoil));
         config.ShowFarmlandProgress = OnCheckBox(id, config.ShowFarmlandProgress, nameof(config.ShowFarmlandProgress));
+        config.ShowMechanicalBlockInfo = OnCheckBox(id, config.ShowMechanicalBlockInfo, nameof(config.ShowMechanicalBlockInfo));
         config.ShowPileTotalItems = OnCheckBox(id, config.ShowPileTotalItems, nameof(config.ShowPileTotalItems));
         config.ShowSealedCrockName = OnCheckBox(id, config.ShowSealedCrockName, nameof(config.ShowSealedCrockName));
         config.ShowStackMetalUnits = OnCheckBox(id, config.ShowStackMetalUnits, nameof(config.ShowStackMetalUnits));

@@ -24,6 +24,7 @@ public class Config
     public bool ShowBombStats { get; set; } = true;
     public bool ShowFarmlandDropsSoil { get; set; } = true;
     public bool ShowFarmlandProgress { get; set; } = true;
+    public bool ShowMechanicalBlockInfo { get; set; }
     public bool ShowPileTotalItems { get; set; } = true;
     public bool ShowSealedCrockName { get; set; } = true;
     public bool ShowStackMetalUnits { get; set; } = true;
@@ -57,6 +58,7 @@ public class Config
         ShowBombStats = previousConfig.ShowBombStats;
         ShowFarmlandDropsSoil = previousConfig.ShowFarmlandDropsSoil;
         ShowFarmlandProgress = previousConfig.ShowFarmlandProgress;
+        ShowMechanicalBlockInfo = previousConfig.ShowMechanicalBlockInfo;
         ShowPileTotalItems = previousConfig.ShowPileTotalItems;
         ShowSealedCrockName = previousConfig.ShowSealedCrockName;
         ShowStackMetalUnits = previousConfig.ShowStackMetalUnits;

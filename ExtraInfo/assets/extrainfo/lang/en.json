@@ -24,6 +24,7 @@
     "Config.Setting.ShowBombStats": "Show detailed information about bombs",
     "Config.Setting.ShowFarmlandDropsSoil": "Show the chance of farmland dropping soil (for the 'Farmland Drops Soil' mod)",
     "Config.Setting.ShowFarmlandProgress": "Show the hours remaining until the next crop stage on farmland",
+    "Config.Setting.ShowMechanicalBlockInfo": "Show mechanical info, such as speed, torque and resistance",
     "Config.Setting.ShowPileTotalItems": "Show the total number of items in a pile",
     "Config.Setting.ShowSealedCrockName": "Show sealed status in the name of a crock",
     "Config.Setting.ShowStackMetalUnits": "Show the total metal units based on an item's stack size",
@@ -55,10 +56,10 @@
 	  "sprout-in-days": "Will sprout in about {0} - {p1:# days|# day|# days}",
 	  "mature-in-days": "Will mature in about {0} - {p1:# days|# day|# days}",
 
-    "game:smeltdesc-beehivekiln-title": "Fires into in beehive kiln"
+    "game:smeltdesc-beehivekiln-title": "Fires into in beehive kiln",
 
-    // "mechanics-Speed": "Speed: {0:G4}",
-    // "mechanics-TotalAvailableTorque": "Available Torque: {0:G4}",
-    // "mechanics-NetworkTorque": "Total Torque: {0:G4}",
-    // "mechanics-NetworkResistance": "Resistance: {0:G4}",
+    "Mechanics.Speed": "Speed: {0:G4}",
+    "Mechanics.TotalAvailableTorque": "Available Torque: {0:G4}",
+    "Mechanics.NetworkTorque": "Total Torque: {0:G4}",
+    "Mechanics.NetworkResistance": "Resistance: {0:G4}"
 }

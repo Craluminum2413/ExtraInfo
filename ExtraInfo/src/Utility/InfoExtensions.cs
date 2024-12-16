@@ -1,3 +1,5 @@
+using Vintagestory.GameContent.Mechanics;
+
 namespace ExtraInfo;
 
 public static class InfoExtensions
@@ -60,7 +62,7 @@ public static class InfoExtensions
             _ => dsc.AppendLine(ColorText(Text.WorkableTemperature(workableTemp)))
         };
 
-        if (inSlot is DummySlot || inSlot is ItemSlotCreative) return; // do not show in handbook and creative inventory
+        if (inSlot is DummySlot || inSlot is ItemSlotCreative) return;
 
         if (temperature < workableTemp)
         {
@@ -550,17 +552,19 @@ public static class InfoExtensions
         dsc.AppendLine(ColorText(Text.TeleportsTo(targetpos)));
     }
 
-    // /// <summary>
-    // /// Mechanical block info (speed, total torque, available torque, resistance)
-    // /// </summary>
-    // private static void GetMechanicalBlockInfo(this StringBuilder sb, BlockEntity blockEntity)
-    // {
-    //     var network = blockEntity.GetBehavior<BEBehaviorMPBase>().Network;
-    //     if (network == null) return;
+    public static void GetMechanicalBlockInfo(this StringBuilder sb, BlockEntity blockEntity)
+    {
+        if (Core.Config == null || !Core.Config.ShowMechanicalBlockInfo)
+        {
+            return;
+        }
 
-    //     sb.AppendLine(ColorText(Lang.Get("extrainfo:mechanics-Speed", network.Speed)));
-    //     sb.AppendLine(ColorText(Lang.Get("extrainfo:mechanics-TotalAvailableTorque", network.TotalAvailableTorque)));
-    //     sb.AppendLine(ColorText(Lang.Get("extrainfo:mechanics-NetworkTorque", network.NetworkTorque)));
-    //     sb.AppendLine(ColorText(Lang.Get("extrainfo:mechanics-NetworkResistance", network.NetworkResistance)));
-    // }
+        MechanicalNetwork network = blockEntity?.GetBehavior<BEBehaviorMPBase>()?.Network;
+        if (network == null) return;
+
+        sb.AppendLine(ColorText(Lang.Get("extrainfo:Mechanics.Speed", network.Speed)));
+        sb.AppendLine(ColorText(Lang.Get("extrainfo:Mechanics.TotalAvailableTorque", network.TotalAvailableTorque)));
+        sb.AppendLine(ColorText(Lang.Get("extrainfo:Mechanics.NetworkTorque", network.NetworkTorque)));
+        sb.AppendLine(ColorText(Lang.Get("extrainfo:Mechanics.NetworkResistance", network.NetworkResistance)));
+    }
 }
