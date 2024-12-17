@@ -7,6 +7,7 @@
     "Config.Setting.ShowHandbookPanningDrops": "Show potential drops when using a wooden pan",
     "Config.Setting.ShowHandbookPitKiln": "Show burn times for each type of pit kiln fuel",
     "Config.Setting.ShowHandbookTraderGoods": "Show the goods available from traders",
+    "Config.Setting.ShowHandbookTroughFeedOptions": "Show the types of feed that can be added to a trough",
     "Config.Setting.ShowHandbookWorkableTemp": "Show the workable temperature",
 
     "Config.Category.Crafting": "Crafting",
@@ -42,7 +43,7 @@
     "Fuel": "Fuel",
     "Food": "Food",
     "PanningDrops": "Loot From Panning",
-    "AvailableFood": "Available Food",
+    "trough-validfeed": "Valid animal feed",
     "bomb-BlastRadius": "Blast Radius: {0}",
     "bomb-InjureRadius": "Radius of Injures: {0}",
     "bomb-BlastType": "Blast Type: {0}",

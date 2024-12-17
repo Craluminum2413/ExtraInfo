@@ -9,6 +9,7 @@ public class Config
     public bool ShowHandbookPanningDrops { get; set; } = true;
     public bool ShowHandbookPitKiln { get; set; } = true;
     public bool ShowHandbookTraderGoods { get; set; } = true;
+    public bool ShowHandbookTroughFeedOptions { get; set; } = true;
     public bool ShowHandbookWorkableTemp { get; set; } = true;
 
     public bool ShowAnvilWorkableTemp { get; set; } = true;
@@ -44,6 +45,7 @@ public class Config
         ShowHandbookPanningDrops = previousConfig.ShowHandbookPanningDrops;
         ShowHandbookPitKiln = previousConfig.ShowHandbookPitKiln;
         ShowHandbookTraderGoods = previousConfig.ShowHandbookTraderGoods;
+        ShowHandbookTroughFeedOptions = previousConfig.ShowHandbookTroughFeedOptions;
         ShowHandbookWorkableTemp = previousConfig.ShowHandbookWorkableTemp;
 
         ShowAnvilWorkableTemp = previousConfig.ShowAnvilWorkableTemp;

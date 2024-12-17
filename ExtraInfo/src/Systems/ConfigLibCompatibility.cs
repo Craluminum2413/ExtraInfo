@@ -34,6 +34,7 @@ public class ConfigLibCompatibility
         config.ShowHandbookPanningDrops = OnCheckBox(id, config.ShowHandbookPanningDrops, nameof(config.ShowHandbookPanningDrops));
         config.ShowHandbookPitKiln = OnCheckBox(id, config.ShowHandbookPitKiln, nameof(config.ShowHandbookPitKiln));
         config.ShowHandbookTraderGoods = OnCheckBox(id, config.ShowHandbookTraderGoods, nameof(config.ShowHandbookTraderGoods));
+        config.ShowHandbookTroughFeedOptions = OnCheckBox(id, config.ShowHandbookTroughFeedOptions, nameof(config.ShowHandbookTroughFeedOptions));
         config.ShowHandbookWorkableTemp = OnCheckBox(id, config.ShowHandbookWorkableTemp, nameof(config.ShowHandbookWorkableTemp));
         ImGui.NewLine();
         ImGui.TextWrapped(Lang.Get(categoryCrafting));

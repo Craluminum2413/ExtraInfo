@@ -80,46 +80,30 @@ public static class HandbookExtensions
         list.AddRange(richText);
     }
 
-    // // TODO: AddTroughInfoForEntity, AddTroughInfoForFood
-    // public static void AddTroughInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
-    // {
-    //     if (inSlot.Itemstack.Collectible is not BlockTroughBase blockTrough) return;
+    public static void AddTroughInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        if (Core.Config == null || !Core.Config.ShowHandbookTroughFeedOptions)
+        {
+            return;
+        }
 
-    //     list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.AvailableFood);
+        if (inSlot.Itemstack.Collectible is not BlockTroughBase blockTrough) return;
 
-    //     List<RichTextComponentBase> richText = new();
+        list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.ValidAnimalFeed);
 
-    //     foreach (ContentConfig config in blockTrough.contentConfigs)
-    //     {
-    //         if (config.Foodfor?.Length == 0) continue;
-
-    //         if (config.Content.Code.ToShortString().Contains("-*"))
-    //         {
-    //             List<ItemStack> stacks = GetWildcardTroughStacks(capi, config);
-    //             richText.AddStacks(capi, openDetailPageFor, stacks.ToArray());
-    //         }
-    //         else
-    //         {
-    //             richText.AddStack(capi, openDetailPageFor, config.Content.ResolvedItemstack);
-    //         }
-
-    //         richText.AddEqualSign(capi);
-
-    //         foreach (EntityProperties entityType in capi.World.EntityTypes)
-    //         {
-    //             if (RegistryObjectType.WildCardMatches(entityType.Code.ToString(), config.Foodfor.ToList().ConvertAll(x => x.ToString()), out _))
-    //             {
-    //                 ItemStack stack = entityType.GetCreatureStack(capi);
-    //                 if (stack == null) continue;
-    //                 richText.AddStack(capi, openDetailPageFor, stack);
-    //             }
-    //         }
-
-    //         richText.Add(new ClearFloatTextComponent(capi, unScaleMarginTop: 7));
-    //     }
-
-    //     list.AddRange(richText);
-    // }
+        foreach (ContentConfig config in blockTrough.contentConfigs)
+        {
+            if (config.Content.Code.ToShortString().Contains("-*"))
+            {
+                List<ItemStack> stacks = GetWildcardTroughStacks(capi, config);
+                list.AddStacks(capi, openDetailPageFor, stacks.ToArray());
+            }
+            else
+            {
+                list.AddStack(capi, openDetailPageFor, config.Content.ResolvedItemstack);
+            }
+        }
+    }
 
     // TODO
     //public static void AddEntityDietInfoForBlock(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)

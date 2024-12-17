@@ -44,7 +44,7 @@ public static class Constants
         public const string FormatPercent = "{0}: {1}%";
 
         public static readonly string AlwaysWorkable = Lang.Get("extrainfo:AlwaysWorkable");
-        public static readonly string AvailableFood = Lang.Get("extrainfo:AvailableFood");
+        public static readonly string ValidAnimalFeed = Lang.Get("extrainfo:trough-validfeed");
         public static readonly string CharcoalPit = Lang.Get("block-charcoalpit");
         public static readonly string Coke = Lang.Get("item-coke");
         public static readonly string Current = Lang.Get("extrainfo:Current");
