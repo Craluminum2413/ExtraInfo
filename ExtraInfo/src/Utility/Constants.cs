@@ -49,6 +49,8 @@ public static class Constants
         public static readonly string Coke = Lang.Get("item-coke");
         public static readonly string Current = Lang.Get("extrainfo:Current");
         public static readonly string EatenByWildAnimals = Lang.Get("Eaten by wild animals.");
+        public static readonly string EatenByAnimals = Lang.Get("Eaten by animals");
+        public static readonly string EatenBy = Lang.Get("Eaten by");
         public static readonly string Everything = Lang.Get("tabname-general");
         public static readonly string Food = Lang.Get("extrainfo:Food");
         public static readonly string Fuel = Lang.Get("extrainfo:Fuel");

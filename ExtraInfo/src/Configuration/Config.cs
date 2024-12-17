@@ -4,6 +4,8 @@ public class Config
 {
     public bool OpenHandbookPageForEntity { get; set; } = true;
     public bool ShowHandbookBeehiveKiln { get; set; } = true;
+    public bool ShowHandbookCreatureDiet { get; set; } = true;
+    public bool ShowHandbookEatableByCreatures { get; set; } = true;
     public bool ShowHandbookEntityDrops { get; set; } = true;
     public bool ShowHandbookEntityStats { get; set; } = true;
     public bool ShowHandbookPanningDrops { get; set; } = true;
@@ -40,6 +42,8 @@ public class Config
     {
         OpenHandbookPageForEntity = previousConfig.OpenHandbookPageForEntity;
         ShowHandbookBeehiveKiln = previousConfig.ShowHandbookBeehiveKiln;
+        ShowHandbookCreatureDiet = previousConfig.ShowHandbookCreatureDiet;
+        ShowHandbookEatableByCreatures = previousConfig.ShowHandbookEatableByCreatures;
         ShowHandbookEntityDrops = previousConfig.ShowHandbookEntityDrops;
         ShowHandbookEntityStats = previousConfig.ShowHandbookEntityStats;
         ShowHandbookPanningDrops = previousConfig.ShowHandbookPanningDrops;

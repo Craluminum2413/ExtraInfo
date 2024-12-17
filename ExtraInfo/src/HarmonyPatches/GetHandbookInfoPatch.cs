@@ -16,8 +16,8 @@ public static class GetHandbookInfoPatch
         list.AddTroughInfo(inSlot, capi, openDetailPageFor);
         list.AddPitKilnInfo(inSlot, capi, openDetailPageFor);
         list.AddTraderInfo(inSlot, capi, openDetailPageFor);
-        //list.AddEntityDietInfoForBlock(inSlot, capi, openDetailPageFor);
-        //list.AddEntityDietInfo(inSlot, capi, openDetailPageFor);
+        list.AddEntitiesThatEatCollectible(inSlot, capi, openDetailPageFor);
+        list.AddEntityDietInfo(inSlot, capi, openDetailPageFor);
 
         __result = list.ToArray();
     }

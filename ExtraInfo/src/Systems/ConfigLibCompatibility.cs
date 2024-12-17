@@ -29,6 +29,8 @@ public class ConfigLibCompatibility
         ImGui.TextWrapped(Lang.Get(categoryHandbook));
         config.OpenHandbookPageForEntity = OnCheckBox(id, config.OpenHandbookPageForEntity, nameof(config.OpenHandbookPageForEntity));
         config.ShowHandbookBeehiveKiln = OnCheckBox(id, config.ShowHandbookBeehiveKiln, nameof(config.ShowHandbookBeehiveKiln));
+        config.ShowHandbookCreatureDiet = OnCheckBox(id, config.ShowHandbookCreatureDiet, nameof(config.ShowHandbookCreatureDiet));
+        config.ShowHandbookEatableByCreatures = OnCheckBox(id, config.ShowHandbookEatableByCreatures, nameof(config.ShowHandbookEatableByCreatures));
         config.ShowHandbookEntityDrops = OnCheckBox(id, config.ShowHandbookEntityDrops, nameof(config.ShowHandbookEntityDrops));
         config.ShowHandbookEntityStats = OnCheckBox(id, config.ShowHandbookEntityStats, nameof(config.ShowHandbookEntityStats));
         config.ShowHandbookPanningDrops = OnCheckBox(id, config.ShowHandbookPanningDrops, nameof(config.ShowHandbookPanningDrops));

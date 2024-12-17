@@ -105,74 +105,77 @@ public static class HandbookExtensions
         }
     }
 
-    // TODO
-    //public static void AddEntityDietInfoForBlock(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
-    //{
-    //    if (inSlot.Itemstack.Collectible is not Block block) return;
+    public static void AddEntitiesThatEatCollectible(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        List<EntityProperties> entityTypes = new();
+        for (int i = 0; i < capi.World.EntityTypes.Count; i++)
+        {
+            CreatureDiet creatureDiet = capi.World.EntityTypes[i].Attributes?["creatureDiet"].AsObject<CreatureDiet>();
+            if (creatureDiet?.Matches(inSlot.Itemstack) == true)
+            {
+                entityTypes.Add(capi.World.EntityTypes[i]);
+            }
+        }
 
-    //    List<ItemStack> stacks = new();
-    //    foreach (EntityProperties entityType in capi.World.EntityTypes)
-    //    {
-    //        string[] blockDiet = entityType?.Attributes?["blockDiet"].AsObject<string[]>();
-    //        if (blockDiet == null) continue;
+        if (entityTypes?.Count == 0) return;
 
-    //        if (block.WildCardMatch(blockDiet)
-    //            || (block is BlockBerryBush && blockDiet.Contains("Berry"))
-    //            || (block is BlockBeehive && blockDiet.Contains("Honey")))
-    //        {
-    //            ItemStack stack = entityType.GetCreatureStack(capi);
-    //            if (stack == null) continue;
-    //            stacks.Add(stack);
-    //        }
-    //    }
+        list.AddMarginAndTitle(capi, marginTop: 7, titletext: Text.EatenBy);
 
-    //    if (stacks?.Count == 0) return;
+        List<List<ItemStack>> groupedStacks = entityTypes.GetGroupedCreatureStacks(capi);
+        for (int i = 0; i < groupedStacks.Count; i++)
+        {
+            if (groupedStacks[i].Count == 1)
+            {
+                list.AddStack(capi, openDetailPageFor, groupedStacks[i].First());
+            }
+            else
+            {
+                list.AddStacks(capi, openDetailPageFor, groupedStacks[i].ToArray());
+            }
+        }
+    }
 
-    //    list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.EatenByWildAnimals);
+    public static void AddEntityDietInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
+    {
+        if (inSlot.Itemstack.Collectible is not ItemCreature itemCreature) return;
 
-    //    List<RichTextComponentBase> richText = new();
+        EntityProperties entityType = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
+        CreatureDiet creatureDiet = entityType?.Attributes?["creatureDiet"].AsObject<CreatureDiet>();
+        if (creatureDiet == null)
+        {
+            return;
+        }
 
-    //    foreach (ItemStack stack in stacks)
-    //    {
-    //        richText.AddStack(capi, openDetailPageFor, stack);
-    //    }
+        List<ItemStack> stacks = new();
+        for (int i = 0; i < capi.World.Collectibles.Count; i++)
+        {
+            if (creatureDiet.Matches(capi.World.Collectibles[i]))
+            {
+                List<ItemStack> _stacks = capi.World.Collectibles[i].GetHandBookStacks(capi);
+                if (_stacks != null)
+                {
+                    stacks.AddRange(_stacks);
+                }
+            }
+        }
 
-    //    list.AddRange(richText);
-    //}
+        if (stacks?.Count == 0) return;
 
-    // TODO
-    //public static void AddEntityDietInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
-    //{
-    //    if (inSlot.Itemstack.Collectible is not ItemCreature itemCreature) return;
+        list.AddMarginAndTitle(capi, marginTop: 7, titletext: Text.Food);
 
-    //    EntityProperties entity = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
-
-    //    string[] blockDiet = entity?.Attributes?["blockDiet"].AsObject<string[]>();
-    //    if (blockDiet == null) return;
-
-    //    List<ItemStack> stacks = new();
-    //    foreach (Block block in capi.World.Blocks)
-    //    {
-    //        if (block.WildCardMatch(blockDiet)
-    //            || (block is BlockBerryBush && blockDiet.Contains("Berry"))
-    //            || (block is BlockBeehive && blockDiet.Contains("Honey")))
-    //        {
-    //            ItemStack stack = new(block);
-    //            stacks.Add(stack);
-    //        }
-    //    }
-
-    //    list.AddMarginAndTitle(capi, marginTop: 7, titletext: Constants.Text.Food);
-
-    //    List<RichTextComponentBase> richText = new();
-
-    //    foreach (ItemStack stack in stacks)
-    //    {
-    //        richText.AddStack(capi, openDetailPageFor, stack);
-    //    }
-
-    //    list.AddRange(richText);
-    //}
+        List<List<ItemStack>> groupedStacks = stacks.GroupStacksByFirstCodePart();
+        for (int i = 0; i < groupedStacks.Count; i++)
+        {
+            if (groupedStacks[i].Count == 1)
+            {
+                list.AddStack(capi, openDetailPageFor, groupedStacks[i].First());
+            }
+            else
+            {
+                list.AddStacks(capi, openDetailPageFor, groupedStacks[i].ToArray());
+            }
+        }
+    }
 
     public static void AddBeehiveKilnInfo(this List<RichTextComponentBase> list, ItemStack stack, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
     {
