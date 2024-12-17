@@ -1,6 +1,6 @@
 {
     "Config.Category.Handbook": "Handbook",
-    "Config.Setting.OpenHandbookPageForEntity": "Enable the option to open the handbook page for the entity you are looking at",
+    "Config.Setting.OpenHandbookPageForEntity": "Enable the option to open the handbook page for the creature you are looking at",
     "Config.Setting.ShowHandbookCreatureDiet": "Show the diet of a creature",
     "Config.Setting.ShowHandbookEatableByCreatures": "Show the creatures that can consume a specific food item",
     "Config.Setting.ShowHandbookEntityDrops": "Show the items harvested from creatures",
@@ -24,8 +24,8 @@
     "Config.Category.Miscellaneous": "Miscellaneous",
     "Config.Setting.ShowBlockBreakingTime": "Show block breaking time",
     "Config.Setting.ShowBlockTransitionInfo": "Show the number of hours left for a block's transition state to complete",
-    "Config.Setting.ShowBombStats": "Show detailed information about bombs",
-    "Config.Setting.ShowFarmlandDropsSoil": "Show the chance of farmland dropping soil (for the 'Farmland Drops Soil' mod)",
+    "Config.Setting.ShowBombStats": "Show detailed information about bombs, such as explosion radius, explosion type, fuse time etc.",
+    "Config.Setting.ShowFarmlandDropsSoil": "Show the chance of farmland dropping soil (for Farmland Drops Soil mod)",
     "Config.Setting.ShowFarmlandProgress": "Show the hours remaining until the next crop stage on farmland",
     "Config.Setting.ShowMechanicalBlockInfo": "Show mechanical info, such as speed, torque and resistance",
     "Config.Setting.ShowPileTotalItems": "Show the total number of items in a pile",
