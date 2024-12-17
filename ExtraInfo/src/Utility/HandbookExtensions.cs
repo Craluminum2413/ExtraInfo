@@ -107,6 +107,11 @@ public static class HandbookExtensions
 
     public static void AddEntitiesThatEatCollectible(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
     {
+        if (Core.Config == null || !Core.Config.ShowHandbookEatableByCreatures)
+        {
+            return;
+        }
+
         List<EntityProperties> entityTypes = new();
         for (int i = 0; i < capi.World.EntityTypes.Count; i++)
         {
@@ -137,6 +142,11 @@ public static class HandbookExtensions
 
     public static void AddEntityDietInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
     {
+        if (Core.Config == null || !Core.Config.ShowHandbookCreatureDiet)
+        {
+            return;
+        }
+
         if (inSlot.Itemstack.Collectible is not ItemCreature itemCreature) return;
 
         EntityProperties entityType = capi.World.GetEntityType(new AssetLocation(itemCreature.Code.Domain, itemCreature.CodeEndWithoutParts(1)));
