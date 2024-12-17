@@ -3,7 +3,6 @@ namespace ExtraInfo.Configuration;
 public class Config
 {
     public bool OpenHandbookPageForEntity { get; set; } = true;
-    public bool ShowHandbookBeehiveKiln { get; set; } = true;
     public bool ShowHandbookCreatureDiet { get; set; } = true;
     public bool ShowHandbookEatableByCreatures { get; set; } = true;
     public bool ShowHandbookEntityDrops { get; set; } = true;
@@ -41,7 +40,6 @@ public class Config
     public Config(Config previousConfig)
     {
         OpenHandbookPageForEntity = previousConfig.OpenHandbookPageForEntity;
-        ShowHandbookBeehiveKiln = previousConfig.ShowHandbookBeehiveKiln;
         ShowHandbookCreatureDiet = previousConfig.ShowHandbookCreatureDiet;
         ShowHandbookEatableByCreatures = previousConfig.ShowHandbookEatableByCreatures;
         ShowHandbookEntityDrops = previousConfig.ShowHandbookEntityDrops;

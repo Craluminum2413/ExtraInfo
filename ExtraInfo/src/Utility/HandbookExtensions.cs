@@ -177,34 +177,6 @@ public static class HandbookExtensions
         }
     }
 
-    public static void AddBeehiveKilnInfo(this List<RichTextComponentBase> list, ItemStack stack, ICoreClientAPI capi, ActionConsumable<string> openDetailPageFor)
-    {
-        if (Core.Config == null || !Core.Config.ShowHandbookBeehiveKiln)
-        {
-            return;
-        }
-
-        if (stack.Collectible.Attributes?["beehivekiln"].Exists == true)
-        {
-            Dictionary<string, JsonItemStack> beehivekilnProps = stack.Collectible.Attributes["beehivekiln"].AsObject<Dictionary<string, JsonItemStack>>();
-
-            list.Add(new ClearFloatTextComponent(capi, 7));
-            list.Add(new RichTextComponent(capi, Lang.Get("game:smeltdesc-beehivekiln-title") + "\n", CairoFont.WhiteSmallText().WithWeight(FontWeight.Bold)));
-
-            foreach ((string doorOpen, JsonItemStack firesIntoStack) in beehivekilnProps)
-            {
-                if (firesIntoStack != null && firesIntoStack.Resolve(capi.World, "beehivekiln-burn"))
-                {
-                    list.Add(new ItemstackTextComponent(capi, firesIntoStack.ResolvedItemstack.Clone(), 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs))));
-                    list.Add(new RichTextComponent(capi, " = ", CairoFont.WhiteMediumText()) { VerticalAlign = EnumVerticalAlign.Middle });
-                    list.Add(new RichTextComponent(capi, Lang.Get("{0} doors open", doorOpen), CairoFont.WhiteSmallText().WithWeight(Cairo.FontWeight.Bold)) { VerticalAlign = EnumVerticalAlign.Middle });
-                    list.Add(new ItemstackTextComponent(capi, new ItemStack(capi.World.GetBlock("cokeovendoor-closed-north")), 40, 0, EnumFloat.Inline, (cs) => openDetailPageFor(GuiHandbookItemStackPage.PageCodeForStack(cs))));
-                    list.Add(new RichTextComponent(capi, "\n", CairoFont.WhiteSmallText()) { VerticalAlign = EnumVerticalAlign.Middle });
-                }
-            }
-        }
-    }
-
     public static void AddEntityHealthAndDamageInfo(this List<RichTextComponentBase> list, ItemSlot inSlot, ICoreClientAPI capi)
     {
         if (Core.Config == null || !Core.Config.ShowHandbookEntityStats)

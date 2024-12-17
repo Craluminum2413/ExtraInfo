@@ -1,7 +1,6 @@
 {
     "Config.Category.Handbook": "Handbook",
     "Config.Setting.OpenHandbookPageForEntity": "Enable the option to open the handbook page for the entity you are looking at",
-    "Config.Setting.ShowHandbookBeehiveKiln": "Show the colors an item can be baked into using the Beehive Kiln",
     "Config.Setting.ShowHandbookCreatureDiet": "Show the diet of a creature",
     "Config.Setting.ShowHandbookEatableByCreatures": "Show the creatures that can consume a specific food item",
     "Config.Setting.ShowHandbookEntityDrops": "Show the items harvested from creatures",
@@ -59,8 +58,6 @@
 
 	  "sprout-in-days": "Will sprout in about {0} - {p1:# days|# day|# days}",
 	  "mature-in-days": "Will mature in about {0} - {p1:# days|# day|# days}",
-
-    "game:smeltdesc-beehivekiln-title": "Fires into in beehive kiln",
 
     "Mechanics.Speed": "Speed: {0:G4}",
     "Mechanics.TotalAvailableTorque": "Available Torque: {0:G4}",
