@@ -433,7 +433,7 @@ public static class HandbookExtensions
 
                     ItemStack stack = new(block);
                     if (!stack.ResolveBlockOrItem(capi.World)) continue;
-                    if (stack.Collectible.Variant["layer"] != null) continue; // Ignore layer variants
+                    if (stack.Collectible.Variant["layer"] != null) continue;
                     blockStacks.Add(stack);
                 }
                 panningDrops.Add(blockStacks.ToArray(), dropsBySourceMat[key]);
