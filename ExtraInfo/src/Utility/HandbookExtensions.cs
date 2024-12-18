@@ -1,5 +1,3 @@
-using Cairo;
-
 namespace ExtraInfo;
 
 public static class HandbookExtensions
