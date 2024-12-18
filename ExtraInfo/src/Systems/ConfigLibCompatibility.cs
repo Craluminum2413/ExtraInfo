@@ -12,6 +12,7 @@ public class ConfigLibCompatibility
     private const string categoryCrafting = $"{Modid}:Config.Category.Crafting";
     private const string categoryHandbook = $"{Modid}:Config.Category.Handbook";
     private const string categoryMisc = $"{Modid}:Config.Category.Miscellaneous";
+    private const string categoryFixes = $"{Modid}:Config.Category.Fixes";
 
     public ConfigLibCompatibility(ICoreAPI api)
     {
@@ -26,6 +27,9 @@ public class ConfigLibCompatibility
 
     private void Edit(ICoreAPI api, Configuration.Config config, string id)
     {
+        ImGui.TextWrapped(Lang.Get(categoryFixes));
+        config.FixVTMLInBlockTooltip = OnCheckBox(id, config.FixVTMLInBlockTooltip, nameof(config.FixVTMLInBlockTooltip));
+        ImGui.NewLine();
         ImGui.TextWrapped(Lang.Get(categoryHandbook));
         config.OpenHandbookPageForEntity = OnCheckBox(id, config.OpenHandbookPageForEntity, nameof(config.OpenHandbookPageForEntity));
         config.ShowHandbookCreatureDiet = OnCheckBox(id, config.ShowHandbookCreatureDiet, nameof(config.ShowHandbookCreatureDiet));

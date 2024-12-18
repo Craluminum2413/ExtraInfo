@@ -2,6 +2,8 @@ namespace ExtraInfo.Configuration;
 
 public class Config
 {
+    public bool FixVTMLInBlockTooltip { get; set; } = true;
+
     public bool OpenHandbookPageForEntity { get; set; } = true;
     public bool ShowHandbookCreatureDiet { get; set; } = true;
     public bool ShowHandbookEatableByCreatures { get; set; } = true;
@@ -39,6 +41,8 @@ public class Config
 
     public Config(Config previousConfig)
     {
+        FixVTMLInBlockTooltip = previousConfig.FixVTMLInBlockTooltip;
+
         OpenHandbookPageForEntity = previousConfig.OpenHandbookPageForEntity;
         ShowHandbookCreatureDiet = previousConfig.ShowHandbookCreatureDiet;
         ShowHandbookEatableByCreatures = previousConfig.ShowHandbookEatableByCreatures;
