@@ -72,17 +72,17 @@ public static class ComposeBlockInfoHudPatch
                 ___composer.Clear(dialogBounds);
             }
             __instance.Composers["blockinfohud"] = ___composer;
-            ___composer.AddGameOverlay(overlayBounds).BeginChildElements(overlayBounds)
+            ___composer.AddGameOverlay(overlayBounds).BeginChildElements(overlayBounds);
 
 
-                
-                .AddRichtext(___title,CairoFont.WhiteSmallishText(), textBounds)
-                //.AddStaticTextAutoBoxSize(___title, CairoFont.WhiteSmallishText(), EnumTextOrientation.Left, textBounds)
-                
+            GuiElementRichtext element = new(___composer.Api, VtmlUtil.Richtextify(___composer.Api, ___title, CairoFont.WhiteSmallishText()), textBounds);
+            ___composer.AddInteractiveElement(element);
+            element.CalcHeightAndPositions();
+            ___composer.AddRichtext(___title, CairoFont.WhiteSmallishText(), textBounds);
 
-                
-                .AddRichtext(___detail, CairoFont.WhiteDetailText(), detailTextBounds, "rt")
-                .EndChildElements();
+
+            ___composer.AddRichtext(___detail, CairoFont.WhiteDetailText(), detailTextBounds, "rt");
+                ___composer.EndChildElements();
             rtElem = ___composer.GetRichtext("rt");
             if (___detail.Length == 0)
             {
@@ -95,6 +95,11 @@ public static class ComposeBlockInfoHudPatch
             }
             rtElem.BeforeCalcBounds();
             detailTextBounds.fixedWidth = Math.Min(500.0, rtElem.MaxLineWidth / (double)RuntimeEnv.GUIScale + 1.0);
+
+
+            textBounds.fixedWidth = Math.Min(500.0, element.MaxLineWidth / (double)RuntimeEnv.GUIScale + 1.0);
+
+
             ___composer.Compose();
         }
 
