@@ -1,4 +1,7 @@
 {
+    "Config.Setting.HighlightReinforcedBlocks": "Enable 'Highlight reinforced blocks' hotkey",
+    "Config.Setting.HighlightMycelium": "Enable 'Mycelium highlighting' hotkey",
+
     "Config.Category.Fixes": "Fixes",
     "Config.Setting.FixVTMLInBlockTooltip": "Fix VTML formatting issues in block tooltips, such as incorrect <font color> tag rendering",
 

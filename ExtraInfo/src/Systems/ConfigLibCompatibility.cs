@@ -27,6 +27,9 @@ public class ConfigLibCompatibility
 
     private void Edit(ICoreAPI api, Configuration.Config config, string id)
     {
+        config.HighlightReinforcedBlocks = OnCheckBox(id, config.HighlightReinforcedBlocks, nameof(config.HighlightReinforcedBlocks));
+        config.HighlightMycelium = OnCheckBox(id, config.HighlightMycelium, nameof(config.HighlightMycelium));
+        ImGui.NewLine();
         ImGui.TextWrapped(Lang.Get(categoryFixes));
         config.FixVTMLInBlockTooltip = OnCheckBox(id, config.FixVTMLInBlockTooltip, nameof(config.FixVTMLInBlockTooltip));
         ImGui.NewLine();

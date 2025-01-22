@@ -13,6 +13,11 @@ public class HighlightMycelium : ModSystemHighlight
 
     public override void StartClientSide(ICoreClientAPI api)
     {
+        if (Core.Config == null || !Core.Config.HighlightMycelium)
+        {
+            return;
+        }
+
         api.Input.RegisterHotKey(HotkeyCode, ToggleName(Name), GlKeys.M, HotkeyType.HelpAndOverlays, shiftPressed: true);
         api.Input.SetHotKeyHandler(HotkeyCode, _ => ToggleRun(api));
     }

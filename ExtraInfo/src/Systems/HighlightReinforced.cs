@@ -15,6 +15,11 @@ public class HighlightReinforced : ModSystemHighlight
 
     public override void StartClientSide(ICoreClientAPI api)
     {
+        if (Core.Config == null || !Core.Config.HighlightReinforcedBlocks)
+        {
+            return;
+        }
+
         api.Input.RegisterHotKey(HotkeyCode, ToggleName(Name), GlKeys.T, HotkeyType.HelpAndOverlays, ctrlPressed: true);
         api.Input.SetHotKeyHandler(HotkeyCode, _ => ToggleRun(api));
 
